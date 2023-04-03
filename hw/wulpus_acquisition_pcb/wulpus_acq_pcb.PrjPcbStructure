@@ -1,0 +1,6 @@
+Record=TopLevelDocument|FileName=00_POWER.SchDoc|SheetNumber=1
+Record=NoMainPathDocument|SourceDocument=00_POWER.SchDoc|FileName=01_NRF52.SchDoc|SheetNumber=2
+Record=NoMainPathDocument|SourceDocument=00_POWER.SchDoc|FileName=02_MSP430.SchDoc|SheetNumber=3
+Record=NoMainPathDocument|SourceDocument=00_POWER.SchDoc|FileName=03_MSP430_AFE.SchDoc|SheetNumber=4
+Record=NoMainPathDocument|SourceDocument=00_POWER.SchDoc|FileName=04_MR_WOLF.SchDoc|SheetNumber=5
+Record=NoMainPathDocument|SourceDocument=00_POWER.SchDoc|FileName=05_IMU.SchDoc|SheetNumber=6
