@@ -36,7 +36,8 @@
     #define NUMBER_OF_XFERS 4
     //#define DELAY_BETWEEN_TRANSFERS 1
 
-
+    // Max number of US frames to buffer
+    #define MAX_BUFFER_NUMBER_OF_US_FRAMES 35
 
     typedef struct ArrayList
     {

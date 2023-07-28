@@ -61,6 +61,7 @@
 // Buffers to store US data
 ArrayList_type m_rx_buf_1[NUMBER_OF_XFERS] = {0};
 ArrayList_type m_rx_buf_2[NUMBER_OF_XFERS] = {0};
+ArrayList_type m_rx_buf[NUMBER_OF_XFERS*MAX_BUFFER_NUMBER_OF_US_FRAMES] = {0};
 
 // Buffer to store commands from python
 ArrayList_type m_tx_buf_1[NUMBER_OF_XFERS] = {0};
@@ -71,6 +72,7 @@ volatile bool flag_use_buf_1 = true;
 // Timer and counter to control SPI transactions
 extern nrf_drv_timer_t timer_timer;
 extern nrf_drv_timer_t timer_counter;
+extern int buffer_counter;
 
 // To check if SPI data can be relayed to BLE dongle
 volatile bool ble_connected = false;
@@ -127,28 +129,23 @@ static void idle_state_handle(void)
 }
 
 
-
+/**
+ * @brief Interrupt handler for data ready pin. The data ready signal comes
+ * the MSP430 and signals a the availability of a new US frame. The SPI transaction to 
+ * receive this US frame is started from here.
+ */
 void in_pin_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
 {
     // Check if the interrupt is from the data ready pin. If yes, start the SPI transactions
     if (pin == PIN_DATA_READY)
     {
-        // Switch between buffers each time
-        if(flag_use_buf_1)
-        {
-            flag_use_buf_1 = false;
-            NRF_SPIM0->RXD.PTR = (uint32_t)&m_rx_buf_1;
-        }
-        else
-        {
-            flag_use_buf_1 = true;
-            NRF_SPIM0->RXD.PTR = (uint32_t)&m_rx_buf_2;
-        }
+        NRF_SPIM0->RXD.PTR = (uint32_t)&m_rx_buf[buffer_counter*NUMBER_OF_XFERS].buffer[0];
         // Enable timer and counter to start the four SPI transactions
         nrf_drv_timer_enable(&timer_timer);
         nrf_drv_timer_enable(&timer_counter);
     }
 }
+
 /**
  * @brief Function for configuring: PIN_IN pin for input, PIN_OUT pin for output,
  * and configures GPIOTE to give an interrupt on pin change.
@@ -178,8 +175,6 @@ static void gpio_init(void)
     
     // Enable interrupt for data ready
     nrf_drv_gpiote_in_event_enable(PIN_DATA_READY, true);
-
-    
 
 }
 
@@ -215,13 +210,16 @@ int main(void)
     {
         // Wait for MSP430 config to be received from host PC
     }
+    //msp_conf_received = false;
 
     // Now the BLE connection is ready to send US data
     nrf_drv_gpiote_out_set(PIN_BLE_CONN_READY);
 
     // Enter main loop.
-    for (;;)
+    while(1)
     {
+        send_pending_frames();
         idle_state_handle();
     }
 }
+

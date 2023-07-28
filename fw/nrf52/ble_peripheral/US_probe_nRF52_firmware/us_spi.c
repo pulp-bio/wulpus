@@ -58,6 +58,7 @@
 #define PIN_SPI_MOSI 10
 #define PIN_SPI_SCK 8
 
+extern ArrayList_type m_rx_buf[NUMBER_OF_XFERS*MAX_BUFFER_NUMBER_OF_US_FRAMES];
 extern ArrayList_type m_rx_buf_1[NUMBER_OF_XFERS];
 extern ArrayList_type m_rx_buf_2[NUMBER_OF_XFERS];
 extern ArrayList_type m_tx_buf_1[NUMBER_OF_XFERS];
@@ -68,8 +69,15 @@ extern bool flag_use_buf_1;
 // Flag to know if BLE is connected (-> and therefore US measurements can start)
 extern volatile bool ble_connected;
 
+extern volatile bool msp_conf_received;
+
+extern int buffer_content;
+extern int buffer_counter;
+
 // Function to send one BLE packet
 void send_packet(uint8_t* start_address, uint16_t length);
+void send_packet(uint8_t* start_address, uint16_t length);
+
 
 //Time(in microseconds) between consecutive compare events. (257 us is absolute min for 255Bytes at 8Mbps)
 uint32_t time_us = 300; 
@@ -89,7 +97,7 @@ uint32_t timer0_timeout_cc0_evt_addr;
 uint32_t counter1_count_task_addr;
 uint32_t counter1_cc0_evt_addr;
 
-
+int BLE_packet_ready = 0;
 
 void spi_event_handler(nrf_drv_spi_evt_t const * p_event,
                        void *                    p_context)
@@ -119,7 +127,7 @@ void spi_init()
     APP_ERROR_CHECK(err_code);
     
     // Setting up an SPI transfer using EasyDMA
-    nrf_drv_spi_xfer_desc_t xfer = NRF_DRV_SPI_XFER_TRX((uint8_t *)m_tx_buf_1, BYTES_PR_XFER_TX, (uint8_t *)m_rx_buf_1, BYTES_PR_XFER_RX);
+    nrf_drv_spi_xfer_desc_t xfer = NRF_DRV_SPI_XFER_TRX((uint8_t *)m_tx_buf_1, BYTES_PR_XFER_TX, (uint8_t *)m_rx_buf, BYTES_PR_XFER_RX);
     
     uint32_t flags = NRF_DRV_SPI_FLAG_HOLD_XFER           |
                      NRF_DRV_SPI_FLAG_RX_POSTINC          |
@@ -151,6 +159,45 @@ void timer_timeout_event_handler(nrf_timer_event_t event_type, void* p_context)
  *
  */
 void counter_cc0_event_handler(nrf_timer_event_t event_type, void* p_context)
+{
+    // Stop timers and hence, stop SPI transfers.
+    nrf_drv_timer_disable(&timer_timer);
+    nrf_drv_timer_disable(&timer_counter);
+    
+    buffer_content++;
+
+    if(buffer_content>3)
+    {
+        // Just for testing
+        nrf_drv_gpiote_out_set(23);
+    }
+    else
+    {
+        nrf_drv_gpiote_out_clear(23);
+    }
+
+    
+    if(buffer_content>MAX_BUFFER_NUMBER_OF_US_FRAMES-1)
+    {
+        // Buffer overflow error handling 
+        //APP_ERROR_CHECK(1);
+    }
+
+    buffer_counter++;
+    if(buffer_counter == MAX_BUFFER_NUMBER_OF_US_FRAMES)
+        buffer_counter = 0;
+
+    BLE_packet_ready = 1;
+    //msp_conf_received = false;
+    
+    // Relay the received SPI data to the BLE dongle
+    uint32_t err_code;
+    uint16_t length;
+
+    length = BYTES_PR_XFER_RX;
+
+}
+void counter_cc0_event_handler_old(nrf_timer_event_t event_type, void* p_context)
 {
     // Stop timers and hence, stop SPI transfers.
     nrf_drv_timer_disable(&timer_timer);

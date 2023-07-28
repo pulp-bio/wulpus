@@ -22,6 +22,8 @@
   <ProjectSessionItem path="US_probe_nRF52_firmware"/>
   <ProjectSessionItem path="US_probe_nRF52_firmware;US_probe_nRF52_firmware"/>
   <ProjectSessionItem path="US_probe_nRF52_firmware;US_probe_nRF52_firmware;Application"/>
+  <ProjectSessionItem path="US_probe_nRF52_firmware;US_probe_nRF52_firmware;nRF_BLE_Services"/>
+  <ProjectSessionItem path="US_probe_nRF52_firmware;US_probe_nRF52_firmware;nRF_Drivers"/>
   <ProjectSessionItem path="US_probe_nRF52_firmware;US_probe_nRF52_firmware;nRF_Libraries"/>
  </Project>
  <Register1>
@@ -55,13 +57,19 @@
   <Watches active="0" update="Never"/>
  </Watch4>
  <Files>
-  <SessionOpenFile windowGroup="DockEditLeft" x="55" y="38" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../us_ble.c" selected="1" top="25" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="15" y="77" useTextEdit="1" openedFrom="C:/Users/Sergey/Downloads/WULPUS/ultra-low-power-ultrasound-probe/dev_nrf52/nRF5_SDK_17.1.0/examples/ble_peripheral/US_probe_nRF52_firmware/us_spi.c" useBinaryEdit="0" left="0" path="../../../main.c" selected="0" top="5" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="33" y="12" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../us_ble.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="15" y="23" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../us_spi.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="24" y="152" useTextEdit="1" openedFrom="C:/Users/Sergey/Downloads/WULPUS/ultra-low-power-ultrasound-probe/dev_nrf52/nRF5_SDK_17.1.0/examples/ble_peripheral/US_probe_nRF52_firmware/us_spi.h" useBinaryEdit="0" left="0" path="../../../us_spi.c" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="0" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../us_defines.h" selected="0" top="0" codecName="Default"/>
-  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="99" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/util/app_error_weak.c" selected="0" top="65" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="43" y="193" useTextEdit="1" openedFrom="C:/Users/s-fre/Downloads/nRF5_SDK_17.1.0_ddde560/examples/ble_peripheral/US_probe_nRF52_firmware/us_spi.c" useBinaryEdit="0" left="0" path="../../../us_ble.c" selected="0" top="157" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="10" y="224" useTextEdit="1" openedFrom="C:/Users/s-fre/Downloads/nRF5_SDK_17.1.0_ddde560/examples/ble_peripheral/US_probe_nRF52_firmware/us_ble.c" useBinaryEdit="0" left="0" path="../../../main.c" selected="0" top="184" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="28" y="31" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../us_ble.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="3" y="23" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../us_spi.h" selected="0" top="0" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="184" useTextEdit="1" openedFrom="C:/Users/Sergey/Downloads/WULPUS/ultra-low-power-ultrasound-probe/dev_nrf52/nRF5_SDK_17.1.0/examples/ble_peripheral/US_probe_nRF52_firmware/us_spi.h" useBinaryEdit="0" left="0" path="../../../us_spi.c" selected="1" top="150" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="51" y="22" useTextEdit="1" openedFrom="C:/Users/s-fre/Downloads/nRF5_SDK_17.1.0_ddde560/examples/ble_peripheral/US_probe_nRF52_firmware/main.c" useBinaryEdit="0" left="0" path="../../../us_defines.h" selected="0" top="9" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="0" y="110" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/util/app_error_weak.c" selected="0" top="50" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="1" y="244" useTextEdit="1" openedFrom="C:/Users/s-fre/Downloads/nRF5_SDK_17.1.0_ddde560/examples/ble_peripheral/US_probe_nRF52_firmware/us_ble.c" useBinaryEdit="0" left="0" path="../../../../../../components/ble/ble_services/ble_nus/ble_nus.c" selected="0" top="221" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="11" y="486" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../../../../../../modules/nrfx/drivers/src/nrfx_spim.c" selected="0" top="464" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="32" y="98" useTextEdit="1" openedFrom="C:/Users/s-fre/Downloads/nRF5_SDK_17.1.0_ddde560/examples/ble_peripheral/US_probe_nRF52_firmware/us_ble.c" useBinaryEdit="0" left="0" path="../../../../../../integration/nrfx/legacy/nrf_drv_gpiote.h" selected="0" top="73" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="40" y="11545" useTextEdit="1" openedFrom="" useBinaryEdit="0" left="0" path="../config/sdk_config.h" selected="0" top="11527" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="18" y="147" useTextEdit="1" openedFrom="C:/Users/s-fre/Downloads/nRF5_SDK_17.1.0_ddde560/examples/ble_peripheral/US_probe_nRF52_firmware/us_spi.c" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/util/app_error.h" selected="0" top="137" codecName="Default"/>
+  <SessionOpenFile windowGroup="DockEditLeft" x="5" y="46" useTextEdit="1" openedFrom="C:/Users/s-fre/Downloads/nRF5_SDK_17.1.0_ddde560/components/libraries/util/app_error.h" useBinaryEdit="0" left="0" path="../../../../../../components/libraries/util/app_error_handler_gcc.c" selected="0" top="0" codecName="Default"/>
  </Files>
  <ARMCrossStudioWindow activeProject="US_probe_nRF52_firmware" fileDialogDefaultFilter="*.c" autoConnectTarget="J-Link" buildConfiguration="Debug" sessionSettings="" debugSearchFileMap="" fileDialogInitialDirectory="" debugSearchPath="" autoConnectCapabilities="3711"/>
 </session>

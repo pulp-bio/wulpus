@@ -26,6 +26,10 @@
      */
     void us_ble_init(void);
 
+    /**
+     * Function to send all the US frame that are currently buffered in the m_rx_buf ringbuffer
+     */
+    void send_pending_frames(void);
 
     /**
      * Function to start BLE advertising, called from main
