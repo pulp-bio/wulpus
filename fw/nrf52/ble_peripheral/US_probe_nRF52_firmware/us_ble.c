@@ -77,7 +77,6 @@
 
 #define APP_BLE_CONN_CFG_TAG            1                                           /**< A tag identifying the SoftDevice BLE configuration. */
 
-#define DEVICE_NAME                     "WULPUS_PROBE_3"                            /**< Name of device. Will be included in the advertising data. */
 #define NUS_SERVICE_UUID_TYPE           BLE_UUID_TYPE_VENDOR_BEGIN                  /**< UUID type for the Nordic UART Service (vendor specific). */
 
 #define APP_BLE_OBSERVER_PRIO           3                                           /**< Application's BLE observer priority. You shouldn't need to modify this value. */
@@ -90,16 +89,18 @@
 #define MAX_CONN_INTERVAL               MSEC_TO_UNITS(7.5, UNIT_1_25_MS)             /**< Maximum acceptable connection interval (75 ms), Connection interval uses 1.25 ms units. */
 #define SLAVE_LATENCY                   5                                           /**< Slave latency. */
 #define CONN_SUP_TIMEOUT                MSEC_TO_UNITS(4000, UNIT_10_MS)             /**< Connection supervisory timeout (4 seconds), Supervision Timeout uses 10 ms units. */
-#define FIRST_CONN_PARAMS_UPDATE_DELAY  APP_TIMER_TICKS(400)                       /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called (1000 ms). */
-#define NEXT_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(600)                   /**< Time between each call to sd_ble_gap_conn_param_update after the first call (10 h). */
+#define FIRST_CONN_PARAMS_UPDATE_DELAY  APP_TIMER_TICKS(400)                        /**< Time from initiating event (connect or start of notification) to first time sd_ble_gap_conn_param_update is called (1000 ms). */
+#define NEXT_CONN_PARAMS_UPDATE_DELAY   APP_TIMER_TICKS(600)                        /**< Time between each call to sd_ble_gap_conn_param_update after the first call (10 h). */
 #define MAX_CONN_PARAMS_UPDATE_COUNT    3                                           /**< Number of attempts before giving up the connection parameter negotiation. */
 
 #define DEAD_BEEF                       0xDEADBEEF                                  /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
 extern ArrayList_type m_tx_buf_1[NUMBER_OF_XFERS];
+extern ArrayList_type m_rx_buf[NUMBER_OF_XFERS*MAX_BUFFER_NUMBER_OF_US_FRAMES];
 
 extern volatile bool ble_connected;
 extern volatile bool msp_conf_received;
+extern int BLE_packet_ready;
 
 void sleep_mode_enter(void);
 
@@ -115,7 +116,9 @@ static ble_uuid_t m_adv_uuids[]          =                                      
     {BLE_UUID_NUS_SERVICE, NUS_SERVICE_UUID_TYPE}
 };
 
-
+int buffer_content = 0;
+int buffer_counter = 0;
+int current_buffer = 0;
 
 /**@brief Function for assert macro callback.
  *
@@ -192,8 +195,13 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
         // Copy received command from python to the SPI transmit buffer
         memcpy(m_tx_buf_1, p_evt->params.rx_data.p_data, p_evt->params.rx_data.length);
         msp_conf_received = true;
-    }
 
+        // Clear the BLE buffers to send US data with the received configuration
+        current_buffer = 0;
+        buffer_counter = 0;
+        buffer_content = 0;
+        BLE_packet_ready = 0;
+    }
 }
 /**@snippet [Handling the data received over BLE] */
 
@@ -521,28 +529,46 @@ void advertising_start(void)
  */
 void send_packet(uint8_t* start_address, uint16_t length)
 {
-    uint32_t err_code;
-    uint16_t attemt_nr;
-    attemt_nr = 0;
-
-    // Send the BLE packet
-    // Stop trying to send it if:
-    //    1) It was sent (NRF_ERROR_RESOURCES==false)
-    //    2) attemt_nr is too high -> No more time to try sending, have to drop the
-    //       packet to keep real time operation
-    do
-    {
-        err_code = ble_nus_data_send(&m_nus, start_address, &length, m_conn_handle);
-        attemt_nr++;
-        if ((err_code != NRF_ERROR_INVALID_STATE) &&
-            (err_code != NRF_ERROR_RESOURCES) &&
-            (err_code != NRF_ERROR_NOT_FOUND))
+        uint32_t err_code;
+        do
         {
-            // would trap the code in case of overloaded BLE
-            // Left here for future debugging
-            //APP_ERROR_CHECK(err_code);
-        }
-    } while ((err_code == NRF_ERROR_RESOURCES) && attemt_nr<100);
+            err_code = ble_nus_data_send(&m_nus, start_address, &length, m_conn_handle);
+            if ((err_code != NRF_ERROR_INVALID_STATE) &&
+                (err_code != NRF_ERROR_RESOURCES) &&
+                (err_code != NRF_ERROR_NOT_FOUND))
+            {
+                APP_ERROR_CHECK(err_code);
+            }
+        } while (err_code==NRF_ERROR_RESOURCES); //while (err_code==NRF_ERROR_RESOURCES && msp_conf_received==false);  
+}
+
+
+/**
+ * Function to send all the US frame that are currently buffered in the m_rx_buf ringbuffer
+ */
+void send_pending_frames()
+{
+
+  if(ble_connected)
+  {
+      if (BLE_packet_ready==1)
+      { 
+          
+          while(current_buffer !=  buffer_counter)
+          {
+            // Send all 4 BLE packets that make up one US frame
+            send_packet(&m_rx_buf[0+current_buffer*NUMBER_OF_XFERS].buffer[0], BYTES_PR_XFER_RX+1);
+            send_packet(&m_rx_buf[1+current_buffer*NUMBER_OF_XFERS].buffer[0], BYTES_PR_XFER_RX);
+            send_packet(&m_rx_buf[2+current_buffer*NUMBER_OF_XFERS].buffer[0], BYTES_PR_XFER_RX);
+            send_packet(&m_rx_buf[3+current_buffer*NUMBER_OF_XFERS].buffer[0], BYTES_PR_XFER_RX);
+            current_buffer++;
+            buffer_content--;
+            if(current_buffer == MAX_BUFFER_NUMBER_OF_US_FRAMES)
+              current_buffer = 0;
+          }
+          BLE_packet_ready=0;
+      }
+  }
 }
 
 /** 
