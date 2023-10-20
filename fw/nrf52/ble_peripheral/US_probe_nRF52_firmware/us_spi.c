@@ -2,6 +2,7 @@
  * Copyright (C) 2023 ETH Zurich. All rights reserved.
  *
  * Authors: Sebastian Frey, ETH Zurich
+ *          Sergei Vostrikov, ETH Zurich
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,20 +52,8 @@
 #include "us_defines.h"
 #include "us_spi.h"
 
-
-// Define SPI pins
-#define PIN_SPI_SS 7
-#define PIN_SPI_MISO 9
-#define PIN_SPI_MOSI 10
-#define PIN_SPI_SCK 8
-
 extern ArrayList_type m_rx_buf[NUMBER_OF_XFERS*MAX_BUFFER_NUMBER_OF_US_FRAMES];
-extern ArrayList_type m_rx_buf_1[NUMBER_OF_XFERS];
-extern ArrayList_type m_rx_buf_2[NUMBER_OF_XFERS];
 extern ArrayList_type m_tx_buf_1[NUMBER_OF_XFERS];
-
-// Flag to implement double buffering
-extern bool flag_use_buf_1;
 
 // Flag to know if BLE is connected (-> and therefore US measurements can start)
 extern volatile bool ble_connected;
@@ -165,16 +154,17 @@ void counter_cc0_event_handler(nrf_timer_event_t event_type, void* p_context)
     nrf_drv_timer_disable(&timer_counter);
     
     buffer_content++;
-
-    if(buffer_content>3)
-    {
-        // Just for testing
-        nrf_drv_gpiote_out_set(23);
-    }
-    else
-    {
-        nrf_drv_gpiote_out_clear(23);
-    }
+    
+    // LED for Debug
+    //if(buffer_content>3)
+    //{
+    //    // Just for testing
+    //    nrf_drv_gpiote_out_set(LED_NRF52);
+    //}
+    //else
+    //{
+    //    nrf_drv_gpiote_out_clear(LED_NRF52);
+    //}
 
     
     if(buffer_content>MAX_BUFFER_NUMBER_OF_US_FRAMES-1)
@@ -196,42 +186,6 @@ void counter_cc0_event_handler(nrf_timer_event_t event_type, void* p_context)
 
     length = BYTES_PR_XFER_RX;
 
-}
-void counter_cc0_event_handler_old(nrf_timer_event_t event_type, void* p_context)
-{
-    // Stop timers and hence, stop SPI transfers.
-    nrf_drv_timer_disable(&timer_timer);
-    nrf_drv_timer_disable(&timer_counter);
-
-
-    if(ble_connected)
-    {
-        // Relay the received SPI data to the BLE dongle
-        uint32_t err_code;
-        uint16_t length;
-
-        length = BYTES_PR_XFER_RX;
-
-        //nrf_drv_gpiote_out_set(LED_NRF52);
-        if(flag_use_buf_1)
-        {
-            // flag_use_buf_1 is true -> data in m_rx_buf_2 should be sent to BLE dongle
-            send_packet(&m_rx_buf_2[0].buffer[0], length+1);
-            send_packet(&m_rx_buf_2[1].buffer[0], length);
-            send_packet(&m_rx_buf_2[2].buffer[0], length);
-            send_packet(&m_rx_buf_2[3].buffer[0], length);
-        }
-        else
-        {
-            // flag_use_buf_1 is false -> data in m_rx_buf_1 should be sent to BLE dongle
-            send_packet(&m_rx_buf_1[0].buffer[0], length+1);
-            send_packet(&m_rx_buf_1[1].buffer[0], length);
-            send_packet(&m_rx_buf_1[2].buffer[0], length);
-            send_packet(&m_rx_buf_1[3].buffer[0], length);
-        }
-        //nrf_drv_gpiote_out_clear(LED_NRF52);
-        //nrf_drv_gpiote_out_toggle(LED_NRF52);
-    }
 }
 
 /**@brief Function to initialize timer and counter for SPI transfers

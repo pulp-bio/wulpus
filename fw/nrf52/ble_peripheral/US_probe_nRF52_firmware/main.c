@@ -52,22 +52,11 @@
 #include "us_ble.h"
 #include "us_defines.h"
 
-
-// Define GPIOs
-#define LED_NRF52 23
-#define PIN_DATA_READY 29
-#define PIN_BLE_CONN_READY 25
-
 // Buffers to store US data
-ArrayList_type m_rx_buf_1[NUMBER_OF_XFERS] = {0};
-ArrayList_type m_rx_buf_2[NUMBER_OF_XFERS] = {0};
 ArrayList_type m_rx_buf[NUMBER_OF_XFERS*MAX_BUFFER_NUMBER_OF_US_FRAMES] = {0};
 
 // Buffer to store commands from python
 ArrayList_type m_tx_buf_1[NUMBER_OF_XFERS] = {0};
-
-// Flag to implement double buffering
-volatile bool flag_use_buf_1 = true;
 
 // Timer and counter to control SPI transactions
 extern nrf_drv_timer_t timer_timer;

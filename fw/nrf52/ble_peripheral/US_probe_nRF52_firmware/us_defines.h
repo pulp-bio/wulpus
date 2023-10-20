@@ -27,6 +27,9 @@
 #ifndef US_DEFINES_H
 #define US_DEFINES_H
 
+    // Name of device. Will be included in the advertising data.
+    #define DEVICE_NAME  "WULPUS_PROBE_0"
+
     // Number of bytes per transfer to send to SPI slave
     #define BYTES_PR_XFER_TX   201
     // Number of bytes per transfer to receive from SPI slave
@@ -38,6 +41,18 @@
 
     // Max number of US frames to buffer
     #define MAX_BUFFER_NUMBER_OF_US_FRAMES 35
+
+    // Define GPIOs
+    #define LED_NRF52 23
+    #define PIN_DATA_READY 29
+    #define PIN_BLE_CONN_READY 25
+
+    // Define SPI pins
+    #define PIN_SPI_SS 7
+    #define PIN_SPI_MISO 9
+    #define PIN_SPI_MOSI 10
+    #define PIN_SPI_SCK 8
+
 
     typedef struct ArrayList
     {
