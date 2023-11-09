@@ -348,13 +348,13 @@ class WulpusRxTxConfigGenGUI(widgets.VBox):
         conf_gen = WulpusRxTxConfigGen()
 
         # add configs and check if at least one config is enabled
-        # config_found = False
+        config_found = False
         for config in self.configs:
             if config.enabled:
                 conf_gen.add_config(config.tx_channels, config.rx_channels)
-        #         config_found = True
-        # if not config_found:
-        #     raise ValueError('No enabled config found.')
+                config_found = True
+        if not config_found:
+            raise ValueError('No enabled config found.')
 
         # return TX configs
         return conf_gen.get_tx_configs()
@@ -371,13 +371,13 @@ class WulpusRxTxConfigGenGUI(widgets.VBox):
         conf_gen = WulpusRxTxConfigGen()
 
         # add configs and check if at least one config is enabled
-        # config_found = False
+        config_found = False
         for config in self.configs:
             if config.enabled:
                 conf_gen.add_config(config.tx_channels, config.rx_channels)
-                # config_found = True
-        # if not config_found:
-        #     raise ValueError('No enabled config found.')
+                config_found = True
+        if not config_found:
+            raise ValueError('No enabled config found.')
 
         # return RX configs
         return conf_gen.get_rx_configs()

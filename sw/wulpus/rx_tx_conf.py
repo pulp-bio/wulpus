@@ -35,21 +35,33 @@ class WulpusRxTxConfigGen():
         self.tx_rx_len = 0
         
     def add_config(self, tx_channels, rx_channels):
+        """
+        Add a new configuration to the list of configurations.
         
+        Args:
+            tx_channels: List of TX channel IDs (0...7)
+            rx_channels: List of RX channel IDs (0...7)
+        """
         if self.tx_rx_len >= TX_RX_MAX_NUM_OF_CONFIGS:
             raise ValueError('Maximum number of configs is ' + str(TX_RX_MAX_NUM_OF_CONFIGS))
             
-        if (max(tx_channels) > MAX_CH_ID) or (max(rx_channels) > MAX_CH_ID):
-            raise ValueError('Maximum RX and TX channel id is ' + str(MAX_CH_ID))
-            
-        if (max(tx_channels) < 0) or (max(rx_channels) < 0):
+        if (any(channel > MAX_CH_ID for channel in tx_channels) or any(channel > MAX_CH_ID for channel in rx_channels)):
+            raise ValueError('RX and TX channel ID must be less than ' + str(MAX_CH_ID))
+        
+        if (any(channel < 0 for channel in tx_channels) or any(channel < 0 for channel in rx_channels)):
             raise ValueError('RX and TX channel ID must be positive.')
         
-        # Shift 1 left by the provided switch TX indices and then apply OR bitwise operation along the array
-        self.tx_configs[self.tx_rx_len] = np.bitwise_or.reduce(np.left_shift(1, TX_MAP[tx_channels]))
+        if (len(tx_channels) == 0):
+            self.tx_configs[self.tx_rx_len] = 0
+        else:
+            # Shift 1 left by the provided switch TX indices and then apply OR bitwise operation along the array
+            self.tx_configs[self.tx_rx_len] = np.bitwise_or.reduce(np.left_shift(1, TX_MAP[tx_channels]))
         
-        # Shift 1 left by the provided switch RX indices and then apply OR bitwise operation along the array
-        self.rx_configs[self.tx_rx_len] = np.bitwise_or.reduce(np.left_shift(1, RX_MAP[rx_channels]))
+        if (len(rx_channels) == 0):
+            self.rx_configs[self.tx_rx_len] = 0
+        else:
+            # Shift 1 left by the provided switch RX indices and then apply OR bitwise operation along the array
+            self.rx_configs[self.tx_rx_len] = np.bitwise_or.reduce(np.left_shift(1, RX_MAP[rx_channels]))
         
         self.tx_rx_len += 1
         
