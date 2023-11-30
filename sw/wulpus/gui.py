@@ -14,6 +14,7 @@
    SPDX-License-Identifier: Apache-2.0
 """
 
+import copy
 from scipy import signal as ss
 from scipy.signal import hilbert
 import ipywidgets as widgets
@@ -24,6 +25,10 @@ from threading import Thread
 import os.path
 
 # plt.ioff()
+
+V_TISSUE = 1540 # m/s
+
+LOWER_BOUNDS_MM = 7 # data below this depth will be discarded
 
 LINE_N_SAMPLES = 400
 
@@ -47,12 +52,9 @@ class WulpusGuiSingleCh(widgets.VBox):
         
         # Allocate memory to store the data and other parameters
         self.data_arr = np.zeros((self.com_link.acq_length, uss_conf.num_acqs), dtype='<i2')
+        self.data_arr_bmode = np.zeros((8, self.com_link.acq_length), dtype='<i2')
         self.acq_num_arr = np.zeros(uss_conf.num_acqs, dtype='<u2')
         self.tx_rx_id_arr = np.zeros(uss_conf.num_acqs, dtype=np.uint8)
-
-        # Setup Visualization
-        self.output = widgets.Output()
-        self.one_time_fig_config()
         
         # For visualization FPS control
         self.vis_fps_period = 1/max_vis_fps
@@ -62,9 +64,10 @@ class WulpusGuiSingleCh(widgets.VBox):
         self.rx_tx_conf_to_display = 0
         
         # For Signal Processing
-        self.f_low_cutoff = 300*10**3
-        self.f_high_cutoff = 3.5*10**6
-        self.design_filter(80*10**6/self.uss_conf.over_sampl_rate,
+        self.acq_freq = 80*10**6 / self.uss_conf.over_sampl_rate
+        self.f_low_cutoff = self.acq_freq / 2 * 0.1
+        self.f_high_cutoff = self.acq_freq / 2 * 0.9
+        self.design_filter(self.acq_freq,
                            self.f_low_cutoff,
                            self.f_high_cutoff)
  
@@ -98,6 +101,10 @@ class WulpusGuiSingleCh(widgets.VBox):
         self.env_data_check = widgets.Checkbox(value=False,
                                                description='Show Envelope',
                                                disabled=True)
+        
+        self.bmode_check = widgets.Checkbox(value=False,
+                                            description='Show B-Mode',
+                                            disabled=True)
         
         opt = [str(x) for x in range(self.uss_conf.tx_rx_conf_len)] 
         self.tx_rx_sel_dd = widgets.Dropdown(options=opt,
@@ -138,9 +145,13 @@ class WulpusGuiSingleCh(widgets.VBox):
         
         self.save_data_label = widgets.Label(value='')
 
+        # Setup Visualization
+        self.output = widgets.Output()
+        self.one_time_fig_config()
+
         
         # Construct GUI grid
-        controls_1 = widgets.VBox([self.ser_scan_button, self.raw_data_check, self.filt_data_check, self.env_data_check])
+        controls_1 = widgets.VBox([self.ser_scan_button, self.raw_data_check, self.filt_data_check, self.env_data_check, self.bmode_check])
  
         controls_2 = widgets.VBox([self.ser_open_button, self.ports_dd, self.tx_rx_sel_dd, self.band_pass_frs])
             
@@ -166,6 +177,7 @@ class WulpusGuiSingleCh(widgets.VBox):
         self.raw_data_check.observe(self.turn_on_off_raw_data_plot, 'value')
         self.filt_data_check.observe(self.turn_on_off_filt_data_plot, 'value')
         self.env_data_check.observe(self.turn_on_off_env_plot, 'value')
+        self.bmode_check.observe(self.toggle_bmode, 'value')
         
         # To TX RX select dropdown
         self.tx_rx_sel_dd.observe(self.select_rx_conf_to_plot, 'value')
@@ -182,14 +194,24 @@ class WulpusGuiSingleCh(widgets.VBox):
     def one_time_fig_config(self):
         
         with self.output:
-            self.fig, self.ax = plt.subplots(constrained_layout=True, figsize=(8, 3.5))
-            
+            self.fig, self.ax = plt.subplots(constrained_layout=True, figsize=(8, 4), ncols=1, nrows=1)
+        
+        if self.bmode_check.value:
+            self.setup_bmode_plot()
+        else:
+            self.setup_amode_plot()
+
+        self.fig.canvas.toolbar_position = 'bottom'
+     
+    def setup_amode_plot(self):
+        self.ax.clear()
+
         self.raw_data_line, = self.ax.plot(np.zeros(LINE_N_SAMPLES), 
                                            color='blue',
                                            marker='o',
                                            markersize=1,
                                            label='Raw data')
-        
+            
         self.filt_data_line, = self.ax.plot(np.zeros(LINE_N_SAMPLES), 
                                             color='green',
                                             marker='o',
@@ -206,15 +228,33 @@ class WulpusGuiSingleCh(widgets.VBox):
         
         self.ax.set_xlabel('Samples')
         self.ax.set_ylabel('ADC digital code')
-        self.ax.set_title('Acquired Ultrasound Data')
-        
-        self.filt_data_line.set_visible(False)
-        self.envelope_line.set_visible(False)
-        
+        self.ax.set_title('A-mode data')
+
+        self.filt_data_line.set_visible(self.filt_data_check.value)
+        self.envelope_line.set_visible(self.env_data_check.value)
+
         self.ax.set_ylim(-3000, 3000)
-        self.fig.canvas.toolbar_position = 'bottom'
         self.ax.grid(True)
-     
+
+    def setup_bmode_plot(self):
+        self.ax.clear()
+
+        self.bmode_image = self.ax.imshow(np.zeros((8, LINE_N_SAMPLES)),
+                                          aspect='auto',
+                                          vmin=0,
+                                          vmax=200,
+                                          extent=(0, LINE_N_SAMPLES, 0, 7))
+
+        self.ax.set_xlabel('Depth (mm)')
+        self.ax.set_ylabel('Channel number')
+        self.ax.set_title('B-mode data')
+        # self.bmode_image.set_clim(0, 2)
+        self.bmode_image.set_clim(0, 200)
+        
+        meas_time = LINE_N_SAMPLES / self.acq_freq
+        meas_depth = meas_time * V_TISSUE * 1000 / 2
+        self.bmode_image.set_extent((LOWER_BOUNDS_MM, meas_depth, 0, 7))
+
     # Callbacks
     
     def click_scan_ports(self, b):
@@ -255,6 +295,18 @@ class WulpusGuiSingleCh(widgets.VBox):
     def turn_on_off_env_plot(self, change):
         
         self.envelope_line.set_visible(change.new)
+
+    def toggle_bmode(self, change):
+ 
+        if change.new:
+            self.setup_bmode_plot()
+            self.tx_rx_sel_dd.disabled = True
+        else:
+            self.setup_amode_plot()
+            self.tx_rx_sel_dd.disabled = False
+            
+        self.fig.canvas.draw()
+        self.fig.canvas.flush_events()
         
     def select_rx_conf_to_plot(self, change):
         
@@ -273,6 +325,7 @@ class WulpusGuiSingleCh(widgets.VBox):
         self.raw_data_check.disabled  = False
         self.filt_data_check.disabled = False
         self.env_data_check.disabled  = False
+        self.bmode_check.disabled     = False
         self.tx_rx_sel_dd.disabled    = False
         self.band_pass_frs.disabled   = False
         self.save_data_check.disabled = False
@@ -289,11 +342,12 @@ class WulpusGuiSingleCh(widgets.VBox):
         b.disabled = True
 
         # Run data acquisition loop
+        self.current_data = None
         t1 = Thread(target=self.run_acquisition_loop)
         t1.start()
         
     def run_acquisition_loop(self):
-        
+
 #         self.fig.show()
         
         # Clean data buffer
@@ -309,6 +363,12 @@ class WulpusGuiSingleCh(widgets.VBox):
         
         # Generate and send a configuration package
         self.com_link.send_config_package(self.uss_conf.get_conf_package())
+
+        self.visualize = True
+        self.current_data = None
+        self.current_amode_data = None
+        t2 = Thread(target=self.visualization)
+        t2.start()
         
         # Readout data in a loop
         while self.data_cnt < (self.uss_conf.num_acqs):
@@ -316,6 +376,11 @@ class WulpusGuiSingleCh(widgets.VBox):
             # Receive the data
             data = self.com_link.receive_data()
             if data is not None:
+
+                self.current_data = data
+
+                if data[2] == self.rx_tx_conf_to_display and not self.bmode_check.value:
+                    self.current_amode_data = data[0]
                 
                 # Save data
                 self.data_arr[:, self.data_cnt] = data[0]
@@ -323,11 +388,18 @@ class WulpusGuiSingleCh(widgets.VBox):
                 # and other params
                 self.acq_num_arr[self.data_cnt] = data[1]
                 self.tx_rx_id_arr[self.data_cnt] = data[2]
+
+                # Save data to specific z
+                self.data_arr_bmode[self.tx_rx_id_arr[self.data_cnt]] = self.get_envelope(
+                    self.filter_data(data[0]))
                 
-                # Process data
-                self.process_data(data)
+                # # Process data --> moved to visualization thread
+                # self.process_data(data)
                 
                 self.data_cnt = self.data_cnt + 1
+
+        self.visualize = False
+        t2.join()
                 
                 
         # Save data to file if needed
@@ -340,12 +412,21 @@ class WulpusGuiSingleCh(widgets.VBox):
         # Change state of the start stop button
         self.start_stop_button.description = "Start acquisition"
         self.start_stop_button.disabled = False
+
+        self.raw_data_check.disabled  = True
+        self.filt_data_check.disabled = True
+        self.env_data_check.disabled  = True
+        self.bmode_check.disabled     = True
+        self.tx_rx_sel_dd.disabled    = True
+        self.band_pass_frs.disabled   = True
+        self.save_data_check.disabled = True
+
+        # self.click_open_port(self.ser_open_button) # if you want to close the port after acquisition
         
         
     def process_data(self, data):
         
         # Save the rf data, acq number and tx rx config id 
-        
         
         # Check we received the right TX RX config to visualize
         
@@ -356,6 +437,12 @@ class WulpusGuiSingleCh(widgets.VBox):
         filt_data = None
         
         # Update the visualization
+
+        # B-mode
+        if (self.bmode_check.value):
+            # self.bmode_image.set_data(np.log10(np.add(self.data_arr_bmode, 0.1)))       # log scale
+            self.bmode_image.set_data(self.data_arr_bmode)                                # linear scale
+
         # Raw RF data
         if (self.raw_data_check.value):
             self.raw_data_line.set_ydata(data[0])
@@ -389,6 +476,54 @@ class WulpusGuiSingleCh(widgets.VBox):
             self.last_timestamp = timestamp
             
         return
+    
+    def visualization(self):
+        print('Visualization thread started')
+
+        while self.visualize:
+            # Update the visualization
+
+            # B-mode
+            if (self.bmode_check.value):
+                if self.current_data is None:
+                    continue
+                # self.bmode_image.set_data(np.log10(np.add(self.data_arr_bmode, 0.1)))       # log scale
+                self.bmode_image.set_data(self.data_arr_bmode[:,10*LOWER_BOUNDS_MM:])                                # linear scale
+
+            # Check the id of RX TX config
+            else:
+                if self.current_amode_data is None:
+                    continue
+                filt_data = None
+
+                # Raw RF data
+                if (self.raw_data_check.value):
+                    self.raw_data_line.set_ydata(self.current_amode_data)
+                    
+                # Filtered data 
+                if (self.filt_data_check.value):
+                    filt_data = self.filter_data(self.current_amode_data)
+                    self.filt_data_line.set_ydata(filt_data)
+                    
+                # Envelope
+                if (self.env_data_check.value):
+                    if filt_data is None:
+                        filt_data = self.filter_data(self.current_amode_data)
+                    self.envelope_line.set_ydata(self.get_envelope(filt_data))
+
+            self.fig.canvas.draw()
+            # This will run the GUI event
+            # loop until all UI events
+            # currently waiting have been processed
+            self.fig.canvas.flush_events()
+            
+            # Update progress bar
+            self.frame_progr_bar.value = self.data_cnt
+            # self.save_data_label.value = 'FPS: ' + str(1/(time.time() - self.last_timestamp))
+
+            self.last_timestamp = time.time()
+
+        print('Visualization thread stopped')
             
     # Design bandpass filter
     def design_filter(self, 

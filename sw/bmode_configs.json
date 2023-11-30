@@ -1,0 +1,76 @@
+{
+    "configs": [
+        {
+            "config_id": 0,
+            "tx_channels": [
+                0
+            ],
+            "rx_channels": [
+                0
+            ]
+        },
+        {
+            "config_id": 1,
+            "tx_channels": [
+                1
+            ],
+            "rx_channels": [
+                1
+            ]
+        },
+        {
+            "config_id": 2,
+            "tx_channels": [
+                2
+            ],
+            "rx_channels": [
+                2
+            ]
+        },
+        {
+            "config_id": 3,
+            "tx_channels": [
+                3
+            ],
+            "rx_channels": [
+                3
+            ]
+        },
+        {
+            "config_id": 4,
+            "tx_channels": [
+                4
+            ],
+            "rx_channels": [
+                4
+            ]
+        },
+        {
+            "config_id": 5,
+            "tx_channels": [
+                5
+            ],
+            "rx_channels": [
+                5
+            ]
+        },
+        {
+            "config_id": 6,
+            "tx_channels": [
+                6
+            ],
+            "rx_channels": [
+                6
+            ]
+        },
+        {
+            "config_id": 7,
+            "tx_channels": [
+                7
+            ],
+            "rx_channels": [
+                7
+            ]
+        }
+    ]
+}
