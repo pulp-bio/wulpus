@@ -167,7 +167,7 @@ class _ConfigParser():
 # inherit from WulpusRxTxConfigGen
 class WulpusRxTxConfigGenGUI(widgets.VBox):
     """
-    A GUI for managing configurations of a system.
+    A GUI for managing the TX and RX configurations of Wulpus.
 
     Attributes:
         output (object): The output widget.

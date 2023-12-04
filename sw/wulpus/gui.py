@@ -24,6 +24,8 @@ import time
 from threading import Thread
 import os.path
 
+from wulpus.uss_conf import WulpusUssConfig
+
 # plt.ioff()
 
 V_TISSUE = 1540 # m/s
@@ -64,7 +66,7 @@ class WulpusGuiSingleCh(widgets.VBox):
         self.rx_tx_conf_to_display = 0
         
         # For Signal Processing
-        self.acq_freq = 80*10**6 / self.uss_conf.over_sampl_rate
+        self.acq_freq = 80*10**6 / self.uss_conf.oversampling_rate
         self.f_low_cutoff = self.acq_freq / 2 * 0.1
         self.f_high_cutoff = self.acq_freq / 2 * 0.9
         self.design_filter(self.acq_freq,
@@ -81,13 +83,23 @@ class WulpusGuiSingleCh(widgets.VBox):
                                               disabled=True)
         
         self.port_opened = False
+        self.acquisition_running = False
         
         ports = self.com_link.get_available_ports()
-        self.ports_dd = widgets.Dropdown(options=ports,
-                                         value=ports[0],
-                                         description='Serial port:',
-                                         disabled=True,
-                                         style= {'description_width': 'initial'})
+
+        if len(ports) == 0:
+            self.ports_dd = widgets.Dropdown(options=['No ports found'],
+                                             value='No ports found',
+                                             description='Serial port:',
+                                             disabled=True,
+                                             style= {'description_width': 'initial'})
+        else:
+            self.ports_dd = widgets.Dropdown(options=ports,
+                                             value=ports[0],
+                                             description='Serial port:',
+                                             disabled=True,
+                                             style= {'description_width': 'initial'})
+            self.click_scan_ports(self.ser_scan_button)
 
         # Visualization-related
         self.raw_data_check = widgets.Checkbox(value=True,
@@ -106,7 +118,7 @@ class WulpusGuiSingleCh(widgets.VBox):
                                             description='Show B-Mode',
                                             disabled=True)
         
-        opt = [str(x) for x in range(self.uss_conf.tx_rx_conf_len)] 
+        opt = [str(x) for x in range(self.uss_conf.num_txrx_configs)] 
         self.tx_rx_sel_dd = widgets.Dropdown(options=opt,
                                              value=opt[0],
                                              description='Active RX config:',
@@ -151,9 +163,9 @@ class WulpusGuiSingleCh(widgets.VBox):
 
         
         # Construct GUI grid
-        controls_1 = widgets.VBox([self.ser_scan_button, self.raw_data_check, self.filt_data_check, self.env_data_check, self.bmode_check])
+        controls_1 = widgets.VBox([self.raw_data_check, self.filt_data_check, self.env_data_check, self.bmode_check])
  
-        controls_2 = widgets.VBox([self.ser_open_button, self.ports_dd, self.tx_rx_sel_dd, self.band_pass_frs])
+        controls_2 = widgets.VBox([widgets.HBox([self.ser_open_button, self.ser_scan_button]) , self.ports_dd, self.tx_rx_sel_dd, self.band_pass_frs])
             
         controls = widgets.HBox([controls_1, controls_2])
          
@@ -240,10 +252,7 @@ class WulpusGuiSingleCh(widgets.VBox):
         self.ax.clear()
 
         self.bmode_image = self.ax.imshow(np.zeros((8, LINE_N_SAMPLES)),
-                                          aspect='auto',
-                                          vmin=0,
-                                          vmax=200,
-                                          extent=(0, LINE_N_SAMPLES, 0, 7))
+                                          aspect='auto')
 
         self.ax.set_xlabel('Depth (mm)')
         self.ax.set_ylabel('Channel number')
@@ -253,21 +262,26 @@ class WulpusGuiSingleCh(widgets.VBox):
         
         meas_time = LINE_N_SAMPLES / self.acq_freq
         meas_depth = meas_time * V_TISSUE * 1000 / 2
-        self.bmode_image.set_extent((LOWER_BOUNDS_MM, meas_depth, 0, 7))
+        self.bmode_image.set_extent((LOWER_BOUNDS_MM, meas_depth, 0.5, 7.5))
 
     # Callbacks
     
     def click_scan_ports(self, b):
         # Update drop-down for ports and make it enabked
         self.ports_dd.options = self.com_link.get_available_ports()
-        self.ports_dd.disabled = False
-        
-        # Enable open port button
-        self.ser_open_button.disabled = False
+
+        if len(self.ports_dd.options) == 0:
+            self.ports_dd.options = ['No ports found']
+            self.ports_dd.value = 'No ports found'
+            self.ports_dd.disabled = True
+            self.ser_open_button.disabled = True
+        else:
+            self.ports_dd.disabled = False
+            self.ser_open_button.disabled = False
         
     def click_open_port(self, b):
         
-        if not self.port_opened:
+        if not self.port_opened and self.ports_dd.value != 'No ports found':
         
             self.com_link.ser.port = self.ports_dd.value
             if not self.com_link.open_serial_port():
@@ -314,37 +328,59 @@ class WulpusGuiSingleCh(widgets.VBox):
  
     def update_band_pass_range(self, change):
         
-        self.design_filter(80*10**6/self.uss_conf.over_sampl_rate,
+        self.design_filter(80*10**6/self.uss_conf.oversampling_rate,
                            change.new[0]*10**6,
                            change.new[1]*10**6)
         
         
     def click_start_stop_acq(self, b):
-        
-        # Enable the widgets active during acquisition
-        self.raw_data_check.disabled  = False
-        self.filt_data_check.disabled = False
-        self.env_data_check.disabled  = False
-        self.bmode_check.disabled     = False
-        self.tx_rx_sel_dd.disabled    = False
-        self.band_pass_frs.disabled   = False
-        self.save_data_check.disabled = False
-        
-        # Disable serial port related widgets
-        self.ser_open_button.disabled = True
-        
-        # Clean Save data label
-        self.save_data_label.value = ''
-        
-        
-        # Change state of the button
-        b.description = "Acquisition running"
-        b.disabled = True
 
-        # Run data acquisition loop
-        self.current_data = None
-        t1 = Thread(target=self.run_acquisition_loop)
-        t1.start()
+        if not self.acquisition_running:
+            # Enable the widgets active during acquisition
+            self.raw_data_check.disabled  = False
+            self.filt_data_check.disabled = False
+            self.env_data_check.disabled  = False
+            self.bmode_check.disabled     = False
+            self.tx_rx_sel_dd.disabled    = False
+            self.band_pass_frs.disabled   = False
+            self.save_data_check.disabled = False
+            
+            # Disable serial port related widgets
+            self.ser_open_button.disabled = True
+            
+            # Clean Save data label
+            self.save_data_label.value = ''
+            
+            
+            # Change state of the button
+            b.description = "Stop acquisition"
+
+            # Declare that acquisition is running
+            self.acquisition_running = True
+
+            # Run data acquisition loop
+            self.current_data = None
+            self.acquisition_thread = Thread(target=self.run_acquisition_loop)
+            self.acquisition_thread.start()
+            
+        else:
+            # Stop acquisition, thread will stop by itself
+            self.acquisition_running = False
+            
+            # Change state of the button
+            b.description = "Start acquisition"
+
+            # Disable the widgets when not acquiring
+            self.raw_data_check.disabled  = True
+            self.filt_data_check.disabled = True
+            self.env_data_check.disabled  = True
+            self.bmode_check.disabled     = True
+            self.tx_rx_sel_dd.disabled    = True
+            self.band_pass_frs.disabled   = True
+            self.save_data_check.disabled = True
+            
+            # Enable serial port related widgets again
+            self.ser_open_button.disabled = False
         
     def run_acquisition_loop(self):
 
@@ -371,7 +407,7 @@ class WulpusGuiSingleCh(widgets.VBox):
         t2.start()
         
         # Readout data in a loop
-        while self.data_cnt < (self.uss_conf.num_acqs):
+        while self.data_cnt < (self.uss_conf.num_acqs) and self.acquisition_running:
             
             # Receive the data
             data = self.com_link.receive_data()
@@ -400,26 +436,18 @@ class WulpusGuiSingleCh(widgets.VBox):
 
         self.visualize = False
         t2.join()
-                
+
+        print("Sending stop command")
+        self.com_link.send_config_package(self.uss_conf.get_restart_package())   
+        print("Stop command sent")    
                 
         # Save data to file if needed
         if (self.save_data_check.value):
             self.save_data_to_file()
                 
-        # Enable serial port related widgets again
-        self.ser_open_button.disabled = False
-        
-        # Change state of the start stop button
-        self.start_stop_button.description = "Start acquisition"
-        self.start_stop_button.disabled = False
-
-        self.raw_data_check.disabled  = True
-        self.filt_data_check.disabled = True
-        self.env_data_check.disabled  = True
-        self.bmode_check.disabled     = True
-        self.tx_rx_sel_dd.disabled    = True
-        self.band_pass_frs.disabled   = True
-        self.save_data_check.disabled = True
+        # Stop acquisition
+        if self.ser_open_button.disabled:
+            self.click_start_stop_acq(self.start_stop_button)
 
         # self.click_open_port(self.ser_open_button) # if you want to close the port after acquisition
         
@@ -478,17 +506,20 @@ class WulpusGuiSingleCh(widgets.VBox):
         return
     
     def visualization(self):
-        print('Visualization thread started')
-
+        
         while self.visualize:
             # Update the visualization
 
             # B-mode
-            if (self.bmode_check.value):
+            if self.bmode_check.value:
                 if self.current_data is None:
                     continue
-                # self.bmode_image.set_data(np.log10(np.add(self.data_arr_bmode, 0.1)))       # log scale
-                self.bmode_image.set_data(self.data_arr_bmode[:,10*LOWER_BOUNDS_MM:])                                # linear scale
+                try:
+                    # self.bmode_image.set_data(np.log10(np.add(self.data_arr_bmode, 0.1)))                                # log scale
+                    self.bmode_image.set_data(self.data_arr_bmode[:,10*LOWER_BOUNDS_MM:])                                # linear scale
+                except:
+                    # B-mode graph is not initialized yet
+                    pass
 
             # Check the id of RX TX config
             else:
@@ -523,7 +554,6 @@ class WulpusGuiSingleCh(widgets.VBox):
 
             self.last_timestamp = time.time()
 
-        print('Visualization thread stopped')
             
     # Design bandpass filter
     def design_filter(self, 
