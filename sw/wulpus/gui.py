@@ -66,10 +66,9 @@ class WulpusGuiSingleCh(widgets.VBox):
         self.rx_tx_conf_to_display = 0
         
         # For Signal Processing
-        self.acq_freq = 80*10**6 / self.uss_conf.oversampling_rate
-        self.f_low_cutoff = self.acq_freq / 2 * 0.1
-        self.f_high_cutoff = self.acq_freq / 2 * 0.9
-        self.design_filter(self.acq_freq,
+        self.f_low_cutoff = self.uss_conf.sampling_freq / 2 * 0.1
+        self.f_high_cutoff = self.uss_conf.sampling_freq / 2 * 0.9
+        self.design_filter(self.uss_conf.sampling_freq,
                            self.f_low_cutoff,
                            self.f_high_cutoff)
  
@@ -260,7 +259,7 @@ class WulpusGuiSingleCh(widgets.VBox):
         # self.bmode_image.set_clim(0, 2)
         self.bmode_image.set_clim(0, 200)
         
-        meas_time = LINE_N_SAMPLES / self.acq_freq
+        meas_time = LINE_N_SAMPLES / self.uss_conf.sampling_freq
         meas_depth = meas_time * V_TISSUE * 1000 / 2
         self.bmode_image.set_extent((LOWER_BOUNDS_MM, meas_depth, 0.5, 7.5))
 
@@ -327,7 +326,7 @@ class WulpusGuiSingleCh(widgets.VBox):
  
     def update_band_pass_range(self, change):
         
-        self.design_filter(80*10**6/self.uss_conf.oversampling_rate,
+        self.design_filter(self.uss_conf.sampling_freq,
                            change.new[0]*10**6,
                            change.new[1]*10**6)
         

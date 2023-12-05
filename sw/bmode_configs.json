@@ -1,4 +1,5 @@
 {
+    "info": "This is a sample configuration for acquiring in B-mode.",
     "configs": [
         {
             "config_id": 0,

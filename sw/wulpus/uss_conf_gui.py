@@ -68,6 +68,17 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
 
             # Add the widget to the list of widgets
             self.entries_b.append(widget)
+
+        for param in configuration_package[2]:
+            # Add GUI settings
+
+            # Get the value of the parameter and create a widget for it
+            value = getattr(self, param.config_name)
+            widget = param.get_as_widget(value)
+            widget.style = input_style
+
+            # Add the widget to the list of widgets
+            self.entries_b.append(widget)
         
         # Add a callback to each widget to update the configuration
         for entry in self.entries_a + self.entries_b:
@@ -153,6 +164,9 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
             for param in configuration_package[1]:
                 # save advanced settings
                 data[param.config_name] = getattr(self, param.config_name)
+            for param in configuration_package[2]:
+                # save GUI settings
+                data[param.config_name] = getattr(self, param.config_name)
 
             # Write the JSON file
             json.dump(data, f, indent=4)
@@ -193,6 +207,22 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
 
                 for param in configuration_package[1]:
                     # Check if the parameter is an advanced setting
+
+                    try:
+                        setattr(self, param.config_name, data[param.config_name])
+                    except KeyError:
+                        # If the parameter is not in the JSON file,
+                        # just keep the current value
+                        continue
+
+                    # update widget value
+                    for entry in self.entries_b:
+                        if entry.description == param.friendly_name:
+                            entry.value = data[param.config_name]
+                            break
+
+                for param in configuration_package[2]:
+                    # Check if the parameter is a GUI setting
 
                     try:
                         setattr(self, param.config_name, data[param.config_name])

@@ -112,6 +112,7 @@ class _ConfigBytes():
 # Configuration package representation
 # The first list contains basic settings
 # The second list contains advanced settings
+# The third list contains GUI settings which are not sent to the HW
 # Between the two lists there is a list of TX/RX configurations
 #                     config_name,         friendly_name,                limit_type, min_val,                           max_val,                        format  
 configuration_package = [
@@ -121,7 +122,7 @@ configuration_package = [
         _ConfigBytes('trans_freq',        'Transmitter frequency [Hz]',     'limit', 0,                                 5000000,                        '<u4'),
         _ConfigBytes('pulse_freq',        'Pulse frequency [Hz]',           'limit', 0,                                 5000000,                        '<u4'),
         _ConfigBytes('num_pulses',        'Number of pulses',               'limit', 0,                                 30,                             '<u1'),
-        _ConfigBytes('oversampling_rate', 'Acquisition frequency',          'list',  USS_CAPT_OVER_SAMPLE_RATES_REG,    USS_CAPTURE_OVER_SAMPLE_RATES,  '<u2'),
+        _ConfigBytes('sampling_freq',     'Acquisition frequency [Hz]',     'list',  USS_CAPT_OVER_SAMPLE_RATES_REG,    USS_CAPTURE_ACQ_RATES,          '<u2'),
         _ConfigBytes('num_samples',       'Number of samples',              'limit', 0,                                 800,                            '<u2'),
         _ConfigBytes('rx_gain',           'RX gain [dB]',                   'list',  PGA_GAIN_REG,                      PGA_GAIN,                       '<u1'),
         _ConfigBytes('num_txrx_configs',  'Number of TX/RX configs',        'limit', 0,                                 16,                             '<u1')
@@ -134,5 +135,8 @@ configuration_package = [
         _ConfigBytes('start_adcsampl',    'ADC sampling start time [us]',   'limit', 0,                                 65535,                          '<u2'),
         _ConfigBytes('restart_capt',      'Capture restart time [us]',      'limit', 0,                                 65535,                          '<u2'),
         _ConfigBytes('capt_timeout',      'Capture timeout time [us]',      'limit', 0,                                 65535,                          '<u2')
+    ],
+    [
+        _ConfigBytes('num_acqs',          'Number of acquisitions',         'limit', 0,                                 10000000,                        None)
     ]
 ]

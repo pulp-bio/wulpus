@@ -89,7 +89,6 @@ class WulpusUssConfig():
         self.pulse_freq         = int(pulse_freq)
         self.num_pulses         = int(num_pulses)
         self.sampling_freq      = int(sampling_freq)
-        self.oversampling_rate  = int(USS_CAPTURE_OVER_SAMPLE_RATES[USS_CAPTURE_ACQ_RATES.index(self.sampling_freq)])
         self.num_samples        = int(num_samples)      
         self.rx_gain            = float(rx_gain)
         self.num_txrx_configs   = int(num_txrx_configs)
@@ -119,7 +118,7 @@ class WulpusUssConfig():
         self.trans_freq_reg         = int(self.trans_freq)
         self.pulse_freq_reg         = int(self.pulse_freq)
         self.num_pulses_reg         = int(self.num_pulses)
-        self.oversampling_rate_reg  = int(USS_CAPT_OVER_SAMPLE_RATES_REG[USS_CAPTURE_ACQ_RATES.index(self.sampling_freq)])
+        self.sampling_freq_reg      = int(USS_CAPT_OVER_SAMPLE_RATES_REG[USS_CAPTURE_ACQ_RATES.index(self.sampling_freq)])      # converted to oversampling rate, thus name is misleading
         self.num_samples_reg        = int(self.num_samples)
         self.rx_gain_reg            = int(PGA_GAIN_REG[PGA_GAIN.index(self.rx_gain)])
         self.num_txrx_configs_reg   = int(self.num_txrx_configs)
