@@ -20,6 +20,7 @@ import json
 
 DEFAULT_FILENAME = 'uss_config'
 
+
 class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
     """
     A GUI for managing the USS configuration parameters of Wulpus.
@@ -41,23 +42,40 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
         self.entries_a = []
         self.entries_b = []
 
+        # Add widgets for each parameter in the configuration package
         for param in configuration_package[0]:
+            # Add basic settings
+            
             if param.config_name == 'num_txrx_configs':
+                # Leave out the number of TX/RX configurations as this is not variable
                 continue
+            
+            # Get the value of the parameter and create a widget for it
             value = getattr(self, param.config_name)
             widget = param.get_as_widget(value)
             widget.style = input_style
+
+            # Add the widget to the list of widgets
             self.entries_a.append(widget)
+
         for param in configuration_package[1]:
+            # Add advanced settings
+
+            # Get the value of the parameter and create a widget for it
             value = getattr(self, param.config_name)
             widget = param.get_as_widget(value)
             widget.style = input_style
+
+            # Add the widget to the list of widgets
             self.entries_b.append(widget)
         
+        # Add a callback to each widget to update the configuration
         for entry in self.entries_a + self.entries_b:
             entry.observe(self.change_parameter, names='value')
 
         self.info_label = widgets.Label(value="")
+
+        # File management entries
 
         self.entry_filename = widgets.Text(
             value=DEFAULT_FILENAME,
@@ -81,29 +99,38 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
         )
         self.load_button.on_click(self.load_json)
 
+        # Arrange the widgets in a VBox
         self.children = [
-            widgets.HBox([widgets.VBox(self.entries_a),widgets.VBox(self.entries_b)]),
+            widgets.HBox([widgets.VBox(self.entries_a), widgets.VBox(self.entries_b)]),
             widgets.HBox([self.entry_filename, self.save_button, self.load_button]),
             self.info_label,
             self.output]
         
     def change_parameter(self, button):
         
+        # Update the configuration when a widget value changes
+        
         value = button['new']
         name = button['owner'].description
         for param in configuration_package[0]:
+            # Check if the parameter is a basic setting
+
             if param.friendly_name == name:
+                # Update the value of the parameter
                 setattr(self, param.config_name, value)
                 break
 
         for param in configuration_package[1]:
+            # Check if the parameter is an advanced setting
+
             if param.friendly_name == name:
+                # Update the value of the parameter
                 setattr(self, param.config_name, value)
                 break
-
+        
+        # Update register saveable values
         self.convert_to_registers()
 
-        print(f'Changed {name} to {value}')
 
     def save_json(self, button):
         """
@@ -113,6 +140,7 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
             filename (str): Path to the JSON file.
         """
 
+        # make sure the filename has the correct extension
         filename = self.entry_filename.value
         filename = filename.split('.')[0] + '.json'
 
@@ -120,10 +148,13 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
             data = {}
             
             for param in configuration_package[0]:
+                # save basic settings
                 data[param.config_name] = getattr(self, param.config_name)
             for param in configuration_package[1]:
+                # save advanced settings
                 data[param.config_name] = getattr(self, param.config_name)
 
+            # Write the JSON file
             json.dump(data, f, indent=4)
 
         self.info_label.value = f'Saved configuration to {filename}'
@@ -136,28 +167,49 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
             filename (str): Path to the JSON file.
         """
 
+        # make sure the filename has the correct extension
         filename = self.entry_filename.value
         filename = filename.split('.')[0] + '.json'
+
         try:
             with open(filename, 'r') as f:
+                # Read the JSON file
                 data = json.load(f)
 
                 for param in configuration_package[0]:
-                    setattr(self, param.config_name, data[param.config_name])
-                    # set widget value
+                    # load basic settings
+                    try:
+                        setattr(self, param.config_name, data[param.config_name])
+                    except KeyError:
+                        # If the parameter is not in the JSON file,
+                        # just keep the current value
+                        continue
+
+                    # update widget value
                     for entry in self.entries_a:
                         if entry.description == param.friendly_name:
                             entry.value = data[param.config_name]
                             break
+
                 for param in configuration_package[1]:
-                    setattr(self, param.config_name, data[param.config_name])
-                    # set widget value
+                    # Check if the parameter is an advanced setting
+
+                    try:
+                        setattr(self, param.config_name, data[param.config_name])
+                    except KeyError:
+                        # If the parameter is not in the JSON file,
+                        # just keep the current value
+                        continue
+
+                    # update widget value
                     for entry in self.entries_b:
                         if entry.description == param.friendly_name:
                             entry.value = data[param.config_name]
                             break
 
         except FileNotFoundError:
+            # Filename not found
+
             self.info_label.value = f'File {filename} not found'
             return
         
@@ -172,5 +224,6 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
         Args:
             filename (str): Path to the JSON file.
         """
+
         self.entry_filename.value = filename
         self.load_json(None)

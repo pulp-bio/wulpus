@@ -282,7 +282,6 @@ class WulpusGuiSingleCh(widgets.VBox):
     def click_open_port(self, b):
         
         if not self.port_opened and self.ports_dd.value != 'No ports found':
-        
             self.com_link.ser.port = self.ports_dd.value
             if not self.com_link.open_serial_port():
                 return
@@ -429,17 +428,12 @@ class WulpusGuiSingleCh(widgets.VBox):
                 self.data_arr_bmode[self.tx_rx_id_arr[self.data_cnt]] = self.get_envelope(
                     self.filter_data(data[0]))
                 
-                # # Process data --> moved to visualization thread
-                # self.process_data(data)
-                
                 self.data_cnt = self.data_cnt + 1
 
         self.visualize = False
         t2.join()
 
-        print("Sending stop command")
-        self.com_link.send_config_package(self.uss_conf.get_restart_package())   
-        print("Stop command sent")    
+        self.com_link.send_config_package(self.uss_conf.get_restart_package())    
                 
         # Save data to file if needed
         if (self.save_data_check.value):
@@ -450,60 +444,6 @@ class WulpusGuiSingleCh(widgets.VBox):
             self.click_start_stop_acq(self.start_stop_button)
 
         # self.click_open_port(self.ser_open_button) # if you want to close the port after acquisition
-        
-        
-    def process_data(self, data):
-        
-        # Save the rf data, acq number and tx rx config id 
-        
-        # Check we received the right TX RX config to visualize
-        
-        # Check the id of RX TX config
-        if (data[2] != self.rx_tx_conf_to_display):
-            return
-        
-        filt_data = None
-        
-        # Update the visualization
-
-        # B-mode
-        if (self.bmode_check.value):
-            # self.bmode_image.set_data(np.log10(np.add(self.data_arr_bmode, 0.1)))       # log scale
-            self.bmode_image.set_data(self.data_arr_bmode)                                # linear scale
-
-        # Raw RF data
-        if (self.raw_data_check.value):
-            self.raw_data_line.set_ydata(data[0])
-            
-        # Filtered data 
-        if (self.filt_data_check.value):
-            filt_data = self.filter_data(data[0])
-            self.filt_data_line.set_ydata(filt_data)
-            
-        # Envelope
-        if (self.env_data_check.value):
-            if filt_data is None:
-                filt_data = self.filter_data(data[0])
-            self.envelope_line.set_ydata(self.get_envelope(filt_data))
-            
-        timestamp = time.time()
-        
-        # An if statement to restrict visualization frame rate
-        # and unload CPU
-        if (timestamp - self.last_timestamp) > self.vis_fps_period:
-            
-            self.fig.canvas.draw()
-            # This will run the GUI event
-            # loop until all UI events
-            # currently waiting have been processed
-            self.fig.canvas.flush_events()
-            
-            # Update progress bar
-            self.frame_progr_bar.value = self.data_cnt
-            
-            self.last_timestamp = timestamp
-            
-        return
     
     def visualization(self):
         
