@@ -82,12 +82,21 @@ class _ConfigBytes():
 
             try:
                 # Convert to microseconds (if it needs to be)
-                min_val = self.min_val / us_to_ticks[self.config_name]
-                max_val = self.max_val / us_to_ticks[self.config_name]
+                min_val = int(self.min_val / us_to_ticks[self.config_name] + 1)
+                max_val = int(self.max_val / us_to_ticks[self.config_name] + 1)
             except:
                 # If it is not a time parameter, just use the values as they are
-                min_val = self.min_val
-                max_val = self.max_val
+                min_val = int(self.min_val)
+                max_val = int(self.max_val)
+
+            if value < min_val:
+                print("Warning: " + self.friendly_name + " is set to " + str(value) + " which is below the allowed range [" + str(min_val) + ", " + str(max_val) + "].")
+                value = min_val
+                print("Setting " + self.friendly_name + " to " + str(value) + ".")
+            elif value > max_val:
+                print("Warning: " + self.friendly_name + " is set to " + str(value) + " which is above the allowed range [" + str(min_val) + ", " + str(max_val) + "].")
+                value = max_val
+                print("Setting " + self.friendly_name + " to " + str(value) + ".")
 
             return widgets.BoundedIntText(
                 value=value,

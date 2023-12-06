@@ -201,16 +201,38 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
                 for param in configuration_package[0]:
                     # load basic settings
                     try:
-                        setattr(self, param.config_name, data[param.config_name])
+                        value = data[param.config_name]
                     except KeyError:
                         # If the parameter is not in the JSON file,
                         # just keep the current value
                         continue
 
+                    
+
                     # update widget value
                     for entry in self.entries_a:
                         if entry.description == param.friendly_name:
-                            entry.value = data[param.config_name]
+                            if param.limit_type == 'limit':
+                                # Check if value is within the allowed range
+                                if value < entry.min:
+                                    print("Warning: " + param.friendly_name + " is set to " + str(value) + " which is below the allowed range [" + str(entry.min) + ", " + str(entry.max) + "].")
+                                    value = entry.min
+                                    print("         Setting " + param.friendly_name + " to " + str(value) + ".")
+                                elif value > entry.max:
+                                    print("Warning: " + param.friendly_name + " is set to " + str(value) + " which is above the allowed range [" + str(entry.min) + ", " + str(entry.max) + "].")
+                                    value = entry.max
+                                    print("         Setting " + param.friendly_name + " to " + str(value) + ".")
+                            elif param.limit_type == 'list':
+                                # Check if value is located in the list of allowed values
+                                if value not in entry.options:
+                                    print("Warning: " + param.friendly_name + " is set to " + str(value) + " which is not allowed. Allowed values are: " + str(entry.options))
+                                    # Get nearest allowed value
+                                    value = min(entry.options, key=lambda x:abs(x-value))
+                                    print("         Setting " + param.friendly_name + " to " + str(value) + ".")
+
+                            setattr(self, param.config_name, value)
+
+                            entry.value = value
                             break
 
                 for param in configuration_package[1]:
