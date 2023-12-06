@@ -266,8 +266,8 @@ class WulpusGuiSingleCh(widgets.VBox):
     # Callbacks
     
     def click_scan_ports(self, b):
-        # Update drop-down for ports and make it enabked
-        self.ports_dd.options = self.com_link.get_available_ports()
+        # Update drop-down for ports and make it enabled
+        self.found_devices = self.com_link.get_available_ports()
 
         if len(self.ports_dd.options) == 0:
             self.ports_dd.options = ['No ports found']
@@ -275,13 +275,16 @@ class WulpusGuiSingleCh(widgets.VBox):
             self.ports_dd.disabled = True
             self.ser_open_button.disabled = True
         else:
+            self.ports_dd.options = [device.description for device in self.found_devices]
+            self.ports_dd.value = self.found_devices[0].description
             self.ports_dd.disabled = False
             self.ser_open_button.disabled = False
         
     def click_open_port(self, b):
         
-        if not self.port_opened and self.ports_dd.value != 'No ports found':
-            self.com_link.ser.port = self.ports_dd.value
+        if not self.port_opened and len(self.ports_dd.options) > 0:
+            device = self.found_devices[self.ports_dd.index]
+            self.com_link.ser.port = device.device
             if not self.com_link.open_serial_port():
                 return
             
@@ -488,6 +491,8 @@ class WulpusGuiSingleCh(widgets.VBox):
             self.fig.canvas.flush_events()
             
             # Update progress bar
+            self.frame_progr_bar.description = 'Progress: ' + str(self.data_cnt) + '/' + str(self.uss_conf.num_acqs)
+            self.frame_progr_bar.max = self.uss_conf.num_acqs
             self.frame_progr_bar.value = self.data_cnt
             # self.save_data_label.value = 'FPS: ' + str(1/(time.time() - self.last_timestamp))
 

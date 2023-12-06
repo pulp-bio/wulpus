@@ -43,7 +43,7 @@ class WulpusDongle():
     def get_available_ports(self):
         ports = serial.tools.list_ports.comports()
 
-        return [port.device for port in sorted(ports)]
+        return sorted(ports)
 
     def open_serial_port(self):
 

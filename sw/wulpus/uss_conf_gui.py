@@ -138,6 +138,14 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
                 # Update the value of the parameter
                 setattr(self, param.config_name, value)
                 break
+
+        for param in configuration_package[2]:
+            # Check if the parameter is a GUI setting
+
+            if param.friendly_name == name:
+                # Update the value of the parameter
+                setattr(self, param.config_name, value)
+                break
         
         # Update register saveable values
         self.convert_to_registers()
