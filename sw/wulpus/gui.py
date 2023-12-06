@@ -269,7 +269,7 @@ class WulpusGuiSingleCh(widgets.VBox):
         # Update drop-down for ports and make it enabled
         self.found_devices = self.com_link.get_available_ports()
 
-        if len(self.ports_dd.options) == 0:
+        if len(self.found_devices) == 0:
             self.ports_dd.options = ['No ports found']
             self.ports_dd.value = 'No ports found'
             self.ports_dd.disabled = True
@@ -388,7 +388,11 @@ class WulpusGuiSingleCh(widgets.VBox):
 #         self.fig.show()
         
         # Clean data buffer
-        self.data_arr[:] = 0
+        acq_length = self.com_link.acq_length
+        number_of_acq = self.uss_conf.num_acqs
+        self.data_arr = np.zeros((acq_length, number_of_acq), dtype='<i2')
+        self.acq_num_arr = np.zeros(number_of_acq, dtype='<u2')
+        self.tx_rx_id_arr = np.zeros(number_of_acq, dtype=np.uint8)
         # Acquisition counter
         self.data_cnt=0
         
@@ -399,17 +403,23 @@ class WulpusGuiSingleCh(widgets.VBox):
         time.sleep(2.5)
         
         # Generate and send a configuration package
-        self.com_link.send_config_package(self.uss_conf.get_conf_package())
+        try:
+            self.com_link.send_config_package(self.uss_conf.get_conf_package())
+        except ValueError as e:
+            self.save_data_label.value = str(e)
+            self.acquisition_running = False
+            if self.ser_open_button.disabled:
+                self.click_start_stop_acq(self.start_stop_button)
+            return
 
         self.visualize = True
         self.current_data = None
         self.current_amode_data = None
-        t2 = Thread(target=self.visualization)
+        t2 = Thread(target=self.visualization, args=(number_of_acq,))
         t2.start()
         
         # Readout data in a loop
-        while self.data_cnt < (self.uss_conf.num_acqs) and self.acquisition_running:
-            
+        while self.data_cnt < number_of_acq and self.acquisition_running:
             # Receive the data
             data = self.com_link.receive_data()
             if data is not None:
@@ -447,7 +457,9 @@ class WulpusGuiSingleCh(widgets.VBox):
 
         # self.click_open_port(self.ser_open_button) # if you want to close the port after acquisition
     
-    def visualization(self):
+    def visualization(self, number_of_acq):
+
+        self.frame_progr_bar.max = number_of_acq
         
         while self.visualize:
             # Update the visualization
@@ -491,11 +503,9 @@ class WulpusGuiSingleCh(widgets.VBox):
             self.fig.canvas.flush_events()
             
             # Update progress bar
-            self.frame_progr_bar.description = 'Progress: ' + str(self.data_cnt) + '/' + str(self.uss_conf.num_acqs)
-            self.frame_progr_bar.max = self.uss_conf.num_acqs
+            self.frame_progr_bar.description = 'Progress: ' + str(self.data_cnt) + '/' + str(number_of_acq)   
             self.frame_progr_bar.value = self.data_cnt
             # self.save_data_label.value = 'FPS: ' + str(1/(time.time() - self.last_timestamp))
-
             self.last_timestamp = time.time()
 
             
