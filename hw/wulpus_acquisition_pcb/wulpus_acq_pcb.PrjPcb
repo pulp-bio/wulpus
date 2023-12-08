@@ -362,17 +362,21 @@ ParamVariationCount=0
 DocumentPath=Project Outputs for wulpus_acq_pcb\Design Rule Check - PCB1.html
 DItemRevisionGUID=
 
+[GeneratedDocument2]
+DocumentPath=Project Outputs for wulpus_acq_pcb\BOM\wulpus_acq_pcb_bom.xlsx
+DItemRevisionGUID=
+
 [Parameter1]
 Name=documentnumber
-Value=*
+Value=
 
 [Parameter2]
-Name=title
-Value=Wearable Ultra Low-Power Ultrasound probe
-
-[Parameter3]
 Name=revision
 Value=v1.1
+
+[Parameter3]
+Name=title
+Value=Wearable Ultra Low-Power Ultrasound probe
 
 [Configuration1]
 Name=Sources
