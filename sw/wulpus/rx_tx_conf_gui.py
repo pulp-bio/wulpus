@@ -322,6 +322,26 @@ class WulpusRxTxConfigGenGUI(widgets.VBox):
             self.config_index_selected = 0
             self.dropdown_configs.index = 0
             self.update_buttons()
+
+    def add_config(self, tx_channels, rx_channels):
+        """
+        Adds a configuration to the list of configurations.
+
+        Args:
+            tx_channels (list): The TX channels of the configuration.
+            rx_channels (list): The RX channels of the configuration.
+        """
+
+        # check if there is a free config
+        for config in self.configs:
+            if not config.enabled:
+                config.enabled = True
+                config.tx_channels = tx_channels
+                config.rx_channels = rx_channels
+                return
+
+        # if not, display error message
+        self.label_info.value = 'No free config found.'
             
     def with_file(self, filename):
         """

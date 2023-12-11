@@ -39,8 +39,8 @@ PGA_GAIN_REG = tuple(np.arange(17, 64))
 # Lookup table for us to ticks conversion
 # Where HSPLL_CLOCK_FREQ = 80MHz
 us_to_ticks = {
-    "dcdc_turnon":       80,                # delay in s * 80MHz (TBC)
-    "meas_period":       65535 / 2000000,   # cycles of LFXT (655 - 20ms, 65535 - 2s)
+    "dcdc_turnon":       65535 / 2000000,   # cycles of LFXT (655 - 20ms, 65535 - 2s)
+    "meas_period":       65535 / 2000000,   # same as above
     "start_hvmuxrx":     8,                 # delay in s * 8MHz
     "start_ppg":         5,                 # delay in s * (HSPLL_CLOCK_FREQ / 16) = delay in s * (80MHz / 16)
     "turnon_adc":        5,                 # same as above

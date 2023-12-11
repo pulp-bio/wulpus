@@ -14,6 +14,7 @@
    SPDX-License-Identifier: Apache-2.0
 """
 
+from logging import config
 from wulpus.uss_conf import *
 import ipywidgets as widgets
 import json
@@ -37,52 +38,54 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
         
         self.output = widgets.Output()
 
-        input_style = {'description_width': '60%', 'width': '30%'}
+        # input_style = {'description_width': '60%', 'width': '30%'}
 
-        self.entries_a = []
-        self.entries_b = []
+        # self.entries_a = []
+        # self.entries_b = []
 
-        # Add widgets for each parameter in the configuration package
-        for param in configuration_package[0]:
-            # Add basic settings
+        # # Add widgets for each parameter in the configuration package
+        # for param in configuration_package[0]:
+        #     # Add basic settings
             
-            if param.config_name == 'num_txrx_configs':
-                # Leave out the number of TX/RX configurations as this is not variable
-                continue
+        #     if param.config_name == 'num_txrx_configs' or param.config_name == 'trans_freq':
+        #         # Leave out the number of TX/RX configurations as this is not variable
+        #         continue
             
-            # Get the value of the parameter and create a widget for it
-            value = getattr(self, param.config_name)
-            widget = param.get_as_widget(value)
-            widget.style = input_style
+        #     # Get the value of the parameter and create a widget for it
+        #     value = getattr(self, param.config_name)
+        #     widget = param.get_as_widget(value)
+        #     widget.style = input_style
 
-            # Add the widget to the list of widgets
-            self.entries_a.append(widget)
+        #     # Add the widget to the list of widgets
+        #     self.entries_a.append(widget)
 
-        for param in configuration_package[1]:
-            # Add advanced settings
+        # for param in configuration_package[1]:
+        #     # Add advanced settings
 
-            # Get the value of the parameter and create a widget for it
-            value = getattr(self, param.config_name)
-            widget = param.get_as_widget(value)
-            widget.style = input_style
+        #     # Get the value of the parameter and create a widget for it
+        #     value = getattr(self, param.config_name)
+        #     widget = param.get_as_widget(value)
+        #     widget.style = input_style
 
-            # Add the widget to the list of widgets
-            self.entries_b.append(widget)
+        #     # Add the widget to the list of widgets
+        #     self.entries_b.append(widget)
 
-        for param in configuration_package[2]:
-            # Add GUI settings
+        # for param in configuration_package[2]:
+        #     # Add GUI settings
 
-            # Get the value of the parameter and create a widget for it
-            value = getattr(self, param.config_name)
-            widget = param.get_as_widget(value)
-            widget.style = input_style
+        #     # Get the value of the parameter and create a widget for it
+        #     value = getattr(self, param.config_name)
+        #     widget = param.get_as_widget(value)
+        #     widget.style = input_style
 
-            # Add the widget to the list of widgets
-            self.entries_b.append(widget)
+        #     # Add the widget to the list of widgets
+        #     self.entries_b.append(widget)
         
-        # Add a callback to each widget to update the configuration
-        for entry in self.entries_a + self.entries_b:
-            entry.observe(self.change_parameter, names='value')
+        # # Add a callback to each widget to update the configuration
+        # for entry in self.entries_a + self.entries_b:
+        #     entry.observe(self.change_parameter, names='value')
+
+        self.init_inputs()
 
         self.info_label = widgets.Label(value="")
 
@@ -112,10 +115,99 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
 
         # Arrange the widgets in a VBox
         self.children = [
-            widgets.HBox([widgets.VBox(self.entries_a), widgets.VBox(self.entries_b)]),
+            widgets.HBox([widgets.VBox(self.entries_a)]), # , widgets.VBox(self.entries_b)]),
             widgets.HBox([self.entry_filename, self.save_button, self.load_button]),
             self.info_label,
             self.output]
+        
+    def init_inputs(self):
+        """
+        Initializes the input widgets.
+        """
+
+        # Three categories:
+        #   Acquisition settings
+        #     Number of acquisitions
+        #     Measurement period
+        #     Acquisition frequency
+        #     Number of samples
+        #     RX gain
+        #   Excitation settings
+        #     Transmitter frequency (placeholder only, dont display)
+        #     Pulse frequency
+        #     Number of pulses
+        #   Advanced settings
+        #     HV-MUX RX start time
+        #     DC-DC turn on time
+        #     (Placeholder input)
+        #     PPG start time
+        #     ADC turn on time
+        #     PGA in bias start time
+        #     ADC sampling start time
+        #     Capture restart time
+        #     Capture timeout time
+        # Left column: Acquisition settings, Excitation settings
+        # Right column: Advanced settings
+
+        input_style = {'description_width': '60%', 'width': '30%'}
+
+        self.entries_acq = []
+        self.entries_exc = []
+
+        # TODO: Add all parameters in order, as well as labels for each category
+
+        for entry in self.entries_acq:
+            entry.style = input_style
+            entry.observe(self.change_parameter, names='value')
+
+        self.entries_a = self.entries_acq
+        
+        # input_style = {'description_width': '60%', 'width': '30%'}
+
+        # self.entries_a = []
+        # self.entries_b = []
+
+        # # Add widgets for each parameter in the configuration package
+        # for param in configuration_package[0]:
+        #     # Add basic settings
+            
+        #     if param.config_name == 'num_txrx_configs' or param.config_name == 'trans_freq':
+        #         # Leave out the number of TX/RX configurations as this is not variable
+        #         continue
+            
+        #     # Get the value of the parameter and create a widget for it
+        #     value = getattr(self, param.config_name)
+        #     widget = param.get_as_widget(value)
+        #     widget.style = input_style
+
+        #     # Add the widget to the list of widgets
+        #     self.entries_a.append(widget)
+
+        # for param in configuration_package[1]:
+        #     # Add advanced settings
+
+        #     # Get the value of the parameter and create a widget for it
+        #     value = getattr(self, param.config_name)
+        #     widget = param.get_as_widget(value)
+        #     widget.style = input_style
+
+        #     # Add the widget to the list of widgets
+        #     self.entries_b.append(widget)
+
+        # for param in configuration_package[2]:
+        #     # Add GUI settings
+
+        #     # Get the value of the parameter and create a widget for it
+        #     value = getattr(self, param.config_name)
+        #     widget = param.get_as_widget(value)
+        #     widget.style = input_style
+
+        #     # Add the widget to the list of widgets
+        #     self.entries_b.append(widget)
+        
+        # # Add a callback to each widget to update the configuration
+        # for entry in self.entries_a + self.entries_b:
+        #     entry.observe(self.change_parameter, names='value')
         
     def change_parameter(self, button):
         

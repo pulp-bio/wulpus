@@ -56,13 +56,13 @@ class WulpusUssConfig():
 
     def __init__(self,
                  num_acqs=100,
-                 dcdc_turnon=80, 
+                 dcdc_turnon=195300, 
                  meas_period=321965,
                  trans_freq=225e4,
                  pulse_freq=225e4,
                  num_pulses=2,
                  sampling_freq=USS_CAPTURE_ACQ_RATES[0],
-                 num_samples=800,
+                 num_samples=400,
                  rx_gain=PGA_GAIN[-10],
                  num_txrx_configs= 1,
                  tx_configs = [0], 
@@ -120,7 +120,7 @@ class WulpusUssConfig():
         self.pulse_freq_reg         = int(self.pulse_freq)
         self.num_pulses_reg         = int(self.num_pulses)
         self.sampling_freq_reg      = int(USS_CAPT_OVER_SAMPLE_RATES_REG[USS_CAPTURE_ACQ_RATES.index(self.sampling_freq)])      # converted to oversampling rate, thus name is misleading
-        self.num_samples_reg        = int(self.num_samples)
+        self.num_samples_reg        = int(self.num_samples * 2)
         self.rx_gain_reg            = int(PGA_GAIN_REG[PGA_GAIN.index(self.rx_gain)])
         self.num_txrx_configs_reg   = int(self.num_txrx_configs)
         self.start_hvmuxrx_reg      = int(self.start_hvmuxrx * us_to_ticks["start_hvmuxrx"])

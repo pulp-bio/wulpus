@@ -3,4 +3,4 @@
 
 # .json are user config files and should not be tracked, except for the default b-mode config
 *.json
-!bmode_configs.json
+!tx_rx_configs_bmode.json
