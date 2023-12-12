@@ -15,7 +15,6 @@
    SPDX-License-Identifier: Apache-2.0
 """
 
-import copy
 from scipy import signal as ss
 from scipy.signal import hilbert
 import ipywidgets as widgets
@@ -24,8 +23,6 @@ import numpy as np
 import time
 from threading import Thread
 import os.path
-
-from wulpus.uss_conf import WulpusUssConfig
 
 # plt.ioff()
 

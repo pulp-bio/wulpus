@@ -17,7 +17,6 @@
 import serial
 import serial.tools.list_ports
 import numpy as np
-import sys
 
 ACQ_LENGTH_SAMPLES = 400
 
