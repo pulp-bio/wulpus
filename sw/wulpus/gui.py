@@ -58,7 +58,6 @@ class WulpusGuiSingleCh(widgets.VBox):
         
         # For visualization FPS control
         self.vis_fps_period = 1/max_vis_fps
-        self.last_timestamp = time.time()
         
         # Extra variables to control visualization
         self.rx_tx_conf_to_display = 0
@@ -440,6 +439,10 @@ class WulpusGuiSingleCh(widgets.VBox):
                 
                 self.data_cnt = self.data_cnt + 1
 
+                # Update progress bar
+                self.frame_progr_bar.description = 'Progress: ' + str(self.data_cnt) + '/' + str(number_of_acq)   
+                self.frame_progr_bar.value = self.data_cnt
+
         self.visualize = False
         t2.join()
 
@@ -461,6 +464,8 @@ class WulpusGuiSingleCh(widgets.VBox):
         
         while self.visualize:
             # Update the visualization
+
+            begin_time = time.time()
 
             # B-mode
             if self.bmode_check.value:
@@ -499,12 +504,11 @@ class WulpusGuiSingleCh(widgets.VBox):
             # loop until all UI events
             # currently waiting have been processed
             self.fig.canvas.flush_events()
-            
-            # Update progress bar
-            self.frame_progr_bar.description = 'Progress: ' + str(self.data_cnt) + '/' + str(number_of_acq)   
-            self.frame_progr_bar.value = self.data_cnt
-            # self.save_data_label.value = 'FPS: ' + str(1/(time.time() - self.last_timestamp))
-            self.last_timestamp = time.time()
+
+            # send thread to sleep for max_vis_fps_period
+            sleep_time = self.vis_fps_period - (time.time() - begin_time)
+            if sleep_time > 0:
+                time.sleep(sleep_time)
 
             
     # Design bandpass filter

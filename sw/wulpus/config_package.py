@@ -143,7 +143,7 @@ class _ConfigBytes():
 configuration_package = [
     [
         _ConfigBytes('dcdc_turnon',       'DC-DC turn on time [us]',        'limit', 0,                                 65535,                          '<u2'),
-        _ConfigBytes('meas_period',       'Measuring period [us]',          'limit', 655,                               65535,                          '<u2'),
+        _ConfigBytes('meas_period',       'Measurement Period [us]',        'limit', 655,                               65535,                          '<u2'),
         _ConfigBytes('trans_freq',        'Transmitter frequency [Hz]',     'limit', 0,                                 5000000,                        '<u4'),
         _ConfigBytes('pulse_freq',        'Pulse frequency [Hz]',           'limit', 0,                                 5000000,                        '<u4'),
         _ConfigBytes('num_pulses',        'Number of pulses',               'limit', 0,                                 30,                             '<u1'),
