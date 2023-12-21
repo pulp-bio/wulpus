@@ -1,6 +1,7 @@
-# .npz are user output files and should not be tracked
+# .npz are user output files and should not be tracked, except for the data in examples
 *.npz
+!examples/*/*.npz
 
-# .json are user config files and should not be tracked, except for the default b-mode config
+# .json are user config files and should not be tracked, except for the configs in examples
 *.json
-!tx_rx_configs_bmode.json
+!examples/*/*.json

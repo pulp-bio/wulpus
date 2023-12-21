@@ -1,10 +1,16 @@
 {
-    "info": "This is a sample configuration for acquiring in B-mode.",
     "configs": [
         {
             "config_id": 0,
             "tx_channels": [
-                0
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
             ],
             "rx_channels": [
                 0
@@ -13,7 +19,14 @@
         {
             "config_id": 1,
             "tx_channels": [
-                1
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
             ],
             "rx_channels": [
                 1
@@ -22,7 +35,14 @@
         {
             "config_id": 2,
             "tx_channels": [
-                2
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
             ],
             "rx_channels": [
                 2
@@ -31,7 +51,14 @@
         {
             "config_id": 3,
             "tx_channels": [
-                3
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
             ],
             "rx_channels": [
                 3
@@ -40,7 +67,14 @@
         {
             "config_id": 4,
             "tx_channels": [
-                4
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
             ],
             "rx_channels": [
                 4
@@ -49,7 +83,14 @@
         {
             "config_id": 5,
             "tx_channels": [
-                5
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
             ],
             "rx_channels": [
                 5
@@ -58,7 +99,14 @@
         {
             "config_id": 6,
             "tx_channels": [
-                6
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
             ],
             "rx_channels": [
                 6
@@ -67,6 +115,13 @@
         {
             "config_id": 7,
             "tx_channels": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
                 7
             ],
             "rx_channels": [
