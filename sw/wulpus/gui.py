@@ -24,6 +24,8 @@ import time
 from threading import Thread
 import os.path
 
+from wulpus.dongle import WulpusDongle
+
 # plt.ioff()
 
 V_TISSUE = 1540 # m/s
@@ -41,7 +43,7 @@ box_layout = widgets.Layout(display='flex',
 
 class WulpusGuiSingleCh(widgets.VBox):
      
-    def __init__(self, com_link, uss_conf, max_vis_fps = 20):
+    def __init__(self, com_link:WulpusDongle, uss_conf, max_vis_fps = 20):
         super().__init__()
         
         # Communication link
@@ -58,7 +60,6 @@ class WulpusGuiSingleCh(widgets.VBox):
         
         # For visualization FPS control
         self.vis_fps_period = 1/max_vis_fps
-        self.last_timestamp = time.time()
         
         # Extra variables to control visualization
         self.rx_tx_conf_to_display = 0
@@ -82,17 +83,17 @@ class WulpusGuiSingleCh(widgets.VBox):
         self.port_opened = False
         self.acquisition_running = False
         
-        ports = self.com_link.get_available_ports()
+        devices = self.com_link.get_available()
 
-        if len(ports) == 0:
+        if len(devices) == 0:
             self.ports_dd = widgets.Dropdown(options=['No ports found'],
                                              value='No ports found',
                                              description='Serial port:',
                                              disabled=True,
                                              style= {'description_width': 'initial'})
         else:
-            self.ports_dd = widgets.Dropdown(options=ports,
-                                             value=ports[0],
+            self.ports_dd = widgets.Dropdown(options=[device.description for device in devices],
+                                             value=devices[0].description,
                                              description='Serial port:',
                                              disabled=True,
                                              style= {'description_width': 'initial'})
@@ -266,7 +267,7 @@ class WulpusGuiSingleCh(widgets.VBox):
     
     def click_scan_ports(self, b):
         # Update drop-down for ports and make it enabled
-        self.found_devices = self.com_link.get_available_ports()
+        self.found_devices = self.com_link.get_available()
 
         if len(self.found_devices) == 0:
             self.ports_dd.options = ['No ports found']
@@ -283,8 +284,11 @@ class WulpusGuiSingleCh(widgets.VBox):
         
         if not self.port_opened and len(self.ports_dd.options) > 0:
             device = self.found_devices[self.ports_dd.index]
-            self.com_link.ser.port = device.device
-            if not self.com_link.open_serial_port():
+            
+            if not self.com_link.open(device):
+                b.description = "Open port"
+                self.port_opened = False
+                self.start_stop_button.disabled = True
                 return
             
             b.description = "Close port"
@@ -292,7 +296,7 @@ class WulpusGuiSingleCh(widgets.VBox):
             self.start_stop_button.disabled = False
             
         else :
-            self.com_link.ser.close()
+            self.com_link.close()
             b.description = "Open port"
             self.port_opened = False
             self.start_stop_button.disabled = True
@@ -396,14 +400,14 @@ class WulpusGuiSingleCh(widgets.VBox):
         self.data_cnt=0
         
         # Send a restart command (if system is already running)
-        self.com_link.send_config_package(self.uss_conf.get_restart_package())
+        self.com_link.send_config(self.uss_conf.get_restart_package())
         
         # Wait 2.5 seconds (much larger than max measurement period = 2s)
         time.sleep(2.5)
         
         # Generate and send a configuration package
         try:
-            self.com_link.send_config_package(self.uss_conf.get_conf_package())
+            self.com_link.send_config(self.uss_conf.get_conf_package())
         except ValueError as e:
             self.save_data_label.value = str(e)
             self.acquisition_running = False
@@ -441,10 +445,14 @@ class WulpusGuiSingleCh(widgets.VBox):
                 
                 self.data_cnt = self.data_cnt + 1
 
+                # Update progress bar
+                self.frame_progr_bar.description = 'Progress: ' + str(self.data_cnt) + '/' + str(number_of_acq)   
+                self.frame_progr_bar.value = self.data_cnt
+
         self.visualize = False
         t2.join()
 
-        self.com_link.send_config_package(self.uss_conf.get_restart_package())    
+        self.com_link.send_config(self.uss_conf.get_restart_package())    
                 
         # Save data to file if needed
         if (self.save_data_check.value):
@@ -462,6 +470,8 @@ class WulpusGuiSingleCh(widgets.VBox):
         
         while self.visualize:
             # Update the visualization
+
+            begin_time = time.time()
 
             # B-mode
             if self.bmode_check.value:
@@ -501,12 +511,11 @@ class WulpusGuiSingleCh(widgets.VBox):
             # loop until all UI events
             # currently waiting have been processed
             self.fig.canvas.flush_events()
-            
-            # Update progress bar
-            self.frame_progr_bar.description = 'Progress: ' + str(self.data_cnt) + '/' + str(number_of_acq)   
-            self.frame_progr_bar.value = self.data_cnt
-            # self.save_data_label.value = 'FPS: ' + str(1/(time.time() - self.last_timestamp))
-            self.last_timestamp = time.time()
+
+            # send thread to sleep for max_vis_fps_period
+            sleep_time = self.vis_fps_period - (time.time() - begin_time)
+            if sleep_time > 0:
+                time.sleep(sleep_time)
 
             
     # Design bandpass filter
