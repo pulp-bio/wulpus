@@ -1,10 +1,10 @@
 {
     "dcdc_turnon": 195315,
     "meas_period": 228885,
-    "trans_freq": 1000000,
-    "pulse_freq": 2250000,
+    "trans_freq": 2250000,
+    "pulse_freq": 1000000,
     "num_pulses": 10,
-    "sampling_freq": 4000000,
+    "sampling_freq": 4000000.0,
     "num_samples": 400,
     "rx_gain": 6.8,
     "num_txrx_configs": 1,

@@ -121,7 +121,7 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
         entries_exc = []
         entries_adv = []
 
-        entries_acq.append(widgets.HTML(value="<b>Acquisition settings</b>"))
+        entries_acq.append(widgets.HTML(value="<b>Measurement settings</b>"))
         entries_acq.append(self.get_param('num_acqs').get_as_widget(self.num_acqs))
         entries_acq.append(self.get_param('meas_period').get_as_widget(self.meas_period))
         entries_acq.append(self.get_param('sampling_freq').get_as_widget(self.sampling_freq))
@@ -143,6 +143,11 @@ class WulpusUssConfigGUI(widgets.VBox, WulpusUssConfig):
         entries_adv.append(self.get_param('start_adcsampl').get_as_widget(self.start_adcsampl))
         entries_adv.append(self.get_param('restart_capt').get_as_widget(self.restart_capt))
         entries_adv.append(self.get_param('capt_timeout').get_as_widget(self.capt_timeout))
+
+        # Disable capture restart, capture timeout and number of samples (per index is sloppy, but works for now)
+        entries_acq[4].disabled = True      # num_samples
+        entries_adv[7].disabled = True      # restart_capt
+        entries_adv[8].disabled = True      # capt_timeout
 
         self.entries_left = entries_acq + entries_exc
         self.entries_right = entries_adv

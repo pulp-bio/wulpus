@@ -146,7 +146,7 @@ class WulpusGuiSingleCh(widgets.VBox):
                                                    orientation='horizontal',
                                                    style= {'description_width': 'initial'})
         
-        self.start_stop_button = widgets.Button(description="Start acquisition",
+        self.start_stop_button = widgets.Button(description="Start measurement",
                                                 disabled=True)
         
         self.save_data_check = widgets.Checkbox(value=True,
@@ -357,7 +357,7 @@ class WulpusGuiSingleCh(widgets.VBox):
             
             
             # Change state of the button
-            b.description = "Stop acquisition"
+            b.description = "Stop measurement"
 
             # Declare that acquisition is running
             self.acquisition_running = True
@@ -372,7 +372,7 @@ class WulpusGuiSingleCh(widgets.VBox):
             self.acquisition_running = False
             
             # Change state of the button
-            b.description = "Start acquisition"
+            b.description = "Start measurement"
 
             # Disable the widgets when not acquiring
             self.raw_data_check.disabled  = True

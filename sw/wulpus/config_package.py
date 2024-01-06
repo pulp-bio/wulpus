@@ -143,13 +143,13 @@ class _ConfigBytes():
 configuration_package = [
     [
         _ConfigBytes('dcdc_turnon',       'DC-DC turn on time [us]',        'limit', 0,                                 65535,                          '<u2'),
-        _ConfigBytes('meas_period',       'Measurement Period [us]',        'limit', 655,                               65535,                          '<u2'),
+        _ConfigBytes('meas_period',       'Acquisition Period [us]',        'limit', 655,                               65535,                          '<u2'),
         _ConfigBytes('trans_freq',        'Transmitter frequency [Hz]',     'limit', 0,                                 5000000,                        '<u4'),
         _ConfigBytes('pulse_freq',        'Pulse frequency [Hz]',           'limit', 0,                                 5000000,                        '<u4'),
         _ConfigBytes('num_pulses',        'Number of pulses',               'limit', 0,                                 30,                             '<u1'),
-        _ConfigBytes('sampling_freq',     'Acquisition frequency [Hz]',     'list',  USS_CAPT_OVER_SAMPLE_RATES_REG,    USS_CAPTURE_ACQ_RATES,          '<u2'),
+        _ConfigBytes('sampling_freq',     'Sampling frequency [Hz]',     'list',  USS_CAPT_OVER_SAMPLE_RATES_REG,    USS_CAPTURE_ACQ_RATES,          '<u2'),
         _ConfigBytes('num_samples',       'Number of samples',              'limit', 0,                                 800,                            '<u2'),
-        _ConfigBytes('rx_gain',           'RX gain [dB]',                   'list',  PGA_GAIN_REG,                      PGA_GAIN,                       '<u1'),
+        _ConfigBytes('rx_gain',           'Receive (RX) gain [dB]',                   'list',  PGA_GAIN_REG,                      PGA_GAIN,                       '<u1'),
         _ConfigBytes('num_txrx_configs',  'Number of TX/RX configs',        'limit', 0,                                 16,                             '<u1')
     ],
     [

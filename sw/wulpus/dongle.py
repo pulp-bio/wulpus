@@ -87,7 +87,7 @@ class WulpusDongle():
         try: 
             self.__ser__.open()
         except:
-            print("Error while trying to open serial port ", str(self.ser.port))
+            print("Error while trying to open serial port ", str(self.__ser__.port))
             return False
 
         return True
@@ -104,7 +104,7 @@ class WulpusDongle():
         try:
             self.__ser__.close()
         except:
-            print("Error while trying to close serial port ", str(self.ser.port))
+            print("Error while trying to close serial port ", str(self.__ser__.port))
             return False
 
         return True
