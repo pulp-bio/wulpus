@@ -31,6 +31,7 @@ class _Config():
         tx_channels (list): The TX channels of the configuration.
         rx_channels (list): The RX channels of the configuration.
         enabled (bool): Whether the configuration is enabled.
+        optimized_switching (bool): Whether to use an algorithm to minimize switching artifacts.
     """
 
     def __init__(self, config_id):
@@ -38,6 +39,7 @@ class _Config():
         self.tx_channels = []
         self.rx_channels = []
         self.enabled = False
+        self.optimized_switching = False
 
 class _ConfigParser():
     """
@@ -94,7 +96,8 @@ class _ConfigParser():
                     data['configs'].append({
                         'config_id': aligned_id,
                         'tx_channels': config.tx_channels,
-                        'rx_channels': config.rx_channels
+                        'rx_channels': config.rx_channels,
+                        'optimized_switching': config.optimized_switching
                     })
                     aligned_id += 1
 
@@ -175,6 +178,7 @@ class WulpusRxTxConfigGenGUI(widgets.VBox):
         config_index_selected (int): The current index in the list of configurations.
         dropdown_configs (object): The dropdown widget for selecting a configuration.
         check_config_enabled (object): The checkbox widget for enabling/disabling a configuration.
+        check_config_optimized_switching (object): The checkbox widget for enabling/disabling switching optimization.
         label_info (object): The label widget for displaying information.
         buttons_channels_tx (list): The list of buttons for selecting TX channels.
         buttons_channels_rx (list): The list of buttons for selecting RX channels.
@@ -208,9 +212,16 @@ class WulpusRxTxConfigGenGUI(widgets.VBox):
             disabled = False
         )
         self.check_config_enabled.observe(self.on_check_config_enabled_change, names='value')
+        # checkbox for enabling/disabling the optimised switching for chosen config
+        self.check_config_optimized_switching = widgets.Checkbox(
+            value = self.configs[self.config_index_selected].optimized_switching,
+            description = 'Optimize Switching',
+            disabled = False
+        )
+        self.check_config_optimized_switching.observe(self.on_check_optimized_switching_change, names='value')
         # label for displaying information
         self.label_info = widgets.Label(value='')
-        config_hbox = widgets.HBox([self.dropdown_configs, self.check_config_enabled], layout=widgets.Layout(align_items='flex-start', justify_content='flex-start', width=GUI_WIDTH))
+        config_hbox = widgets.HBox([self.dropdown_configs, self.check_config_enabled, self.check_config_optimized_switching], layout=widgets.Layout(align_items='flex-start', justify_content='flex-start', width=GUI_WIDTH))
 
         # buttons for selecting TX and RX channels
         self.buttons_channels_tx = [widgets.Button(description=str(i), button_style='', layout=widgets.Layout(width='12%')) for i in range(0, MAX_CH_ID+1)]
@@ -253,6 +264,7 @@ class WulpusRxTxConfigGenGUI(widgets.VBox):
     def update_buttons(self):
         # update visualization of buttons
         self.check_config_enabled.value = self.configs[self.config_index_selected].enabled
+        self.check_config_optimized_switching.value = self.configs[self.config_index_selected].optimized_switching
         for i in range(0, MAX_CH_ID+1):
             self.buttons_channels_tx[i].button_style = 'success' if i in self.configs[self.config_index_selected].tx_channels else 'danger'
             self.buttons_channels_rx[i].button_style = 'success' if i in self.configs[self.config_index_selected].rx_channels else 'danger'
@@ -268,6 +280,11 @@ class WulpusRxTxConfigGenGUI(widgets.VBox):
         # update enabled status of currently chosen config from checkbox
         with self.output:
             self.configs[self.config_index_selected].enabled = change['new']
+
+    def on_check_optimized_switching_change(self, change):
+        # update optimized switching setting status of currently chosen config from checkbox
+        with self.output:
+            self.configs[self.config_index_selected].optimized_switching = change['new']
 
     def on_button_channel_tx_click(self, button):
         # update TX channels of currently chosen config from button
@@ -371,7 +388,7 @@ class WulpusRxTxConfigGenGUI(widgets.VBox):
         config_found = False
         for config in self.configs:
             if config.enabled:
-                conf_gen.add_config(config.tx_channels, config.rx_channels)
+                conf_gen.add_config(config.tx_channels, config.rx_channels, config.optimized_switching)
                 config_found = True
         if not config_found:
             raise ValueError('No enabled config found.')
@@ -394,7 +411,7 @@ class WulpusRxTxConfigGenGUI(widgets.VBox):
         config_found = False
         for config in self.configs:
             if config.enabled:
-                conf_gen.add_config(config.tx_channels, config.rx_channels)
+                conf_gen.add_config(config.tx_channels, config.rx_channels, config.optimized_switching)
                 config_found = True
         if not config_found:
             raise ValueError('No enabled config found.')

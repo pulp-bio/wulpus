@@ -7,16 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.1.0] - 2023-XX-XX
+## [1.1.0] - 2024-XX-XX
 
 ### Added
 
-- Stop GUI when given number of acquisitions is collected.
+- An opportunity to turn on algorithm for optimizing HV MUX switching. As a result, the switching artifacts are minimized.
+- Updated RX/TX API and Python GUI accordingly (optional tick box to activate optimal switching).
 - A STOP button to stop acquisition earlier.
 - A GUI to configure/save/load TX and RX configurations of the HV multiplexer.
 - A GUI to configure ultrasound subsytem's parameters, +save them to or load them from a file.
 - Comments/docstrings in the source files
 - Added B-mode visualization option.
+- The code in example jupyter notebook to load the data.
 
 ### Fixed
 

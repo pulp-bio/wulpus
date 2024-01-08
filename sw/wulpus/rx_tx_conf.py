@@ -34,13 +34,14 @@ class WulpusRxTxConfigGen():
         self.tx_configs = np.zeros(TX_RX_MAX_NUM_OF_CONFIGS, dtype='<u2')
         self.tx_rx_len = 0
         
-    def add_config(self, tx_channels, rx_channels):
+    def add_config(self, tx_channels, rx_channels, optimized_switching=False):
         """
         Add a new configuration to the list of configurations.
         
         Args:
             tx_channels: List of TX channel IDs (0...7)
             rx_channels: List of RX channel IDs (0...7)
+            optimized_switching: Bool value to activate an algorithm for minimizing switching artifacts
         """
         if self.tx_rx_len >= TX_RX_MAX_NUM_OF_CONFIGS:
             raise ValueError('Maximum number of configs is ' + str(TX_RX_MAX_NUM_OF_CONFIGS))
@@ -62,6 +63,31 @@ class WulpusRxTxConfigGen():
         else:
             # Shift 1 left by the provided switch RX indices and then apply OR bitwise operation along the array
             self.rx_configs[self.tx_rx_len] = np.bitwise_or.reduce(np.left_shift(1, RX_MAP[rx_channels]))
+
+
+        if optimized_switching:
+            # Optimize switching artifacts (less switching MUX activity after TX (pulsing) -> better SNR)
+            # Find which channels are active both for TX and RX.
+            rx_tx_intersect_ch = list(set(tx_channels) & set(rx_channels))
+            # Find which channels are only active for RX but not in TX.
+            rx_only_ch = list(set(rx_tx_intersect_ch) ^ set(rx_channels))
+            # Find which channels are only active for TX but not in RX.
+            tx_only_ch = list(set(rx_tx_intersect_ch) ^ set(tx_channels))
+
+            # Compare the number of channels in the sets
+            if len(rx_tx_intersect_ch) > len(rx_only_ch):
+                # Activate the channels from the rx_tx_intersect_ch set for RX already before the TX event
+                temp_switch_config = np.bitwise_or.reduce(np.left_shift(1, RX_MAP[rx_tx_intersect_ch]))
+                self.tx_configs[self.tx_rx_len] = np.bitwise_or(self.tx_configs[self.tx_rx_len], temp_switch_config)
+            elif len(rx_only_ch) > 0:
+                    # Create a group of receive only channels and enable them for RX already before the TX event
+                    temp_switch_config = np.bitwise_or.reduce(np.left_shift(1, RX_MAP[rx_only_ch]))
+                    self.tx_configs[self.tx_rx_len] = np.bitwise_or(self.tx_configs[self.tx_rx_len], temp_switch_config)
+
+            # Leave TX only channels on after the HV MUX switches to RX
+            if len(tx_only_ch) > 0:
+                self.rx_configs[self.tx_rx_len] = np.bitwise_or.reduce(np.left_shift(1, TX_MAP[tx_only_ch]))
+
         
         self.tx_rx_len += 1
         
