@@ -1,6 +1,7 @@
 """
    Copyright (C) 2023 ETH Zurich. All rights reserved.
    Author: Sergei Vostrikov, ETH Zurich
+           Cedric Hirschi, ETH Zurich
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at
@@ -15,48 +16,119 @@
 """
 
 import serial
-import serial.tools.list_ports
+from serial.tools.list_ports import comports
+from serial.tools.list_ports_common import ListPortInfo
 import numpy as np
-import sys
 
 ACQ_LENGTH_SAMPLES = 400
 
 class WulpusDongle():
-    def __init__(self, port='', timeout_write=3, baudrate=4000000):
+    """
+    Class representing the Wulpus dongle.
+    """
+
+
+    def __init__(self, port:str = '', timeout_write:int = 3, baudrate:int = 4000000):
+        """
+        Constructor.
+
+        Arguments
+        ---------
+        port : str
+            Serial port to use.
+        timeout_write : int
+            Timeout for write operations.
+        baudrate : int
+            Baudrate to use.
+        """
         
         # Initialization of the serial port
-        self.ser = serial.Serial()
-        self.ser.port = port
-        self.ser.baudrate = baudrate
-        self.ser.bytesize = serial.EIGHTBITS    # number of bits per bytes
-        self.ser.parity = serial.PARITY_NONE    # set parity check: no parity
-        self.ser.stopbits = serial.STOPBITS_ONE # number of stop bits
-        self.ser.timeout = None         # read timeout
-        self.ser.xonxoff = False                # disable software flow control
-        self.ser.rtscts = False                 # disable hardware (RTS/CTS) flow control
-        self.ser.dsrdtr = False                 # disable hardware (DSR/DTR) flow control
-        self.ser.writeTimeout = timeout_write   #timeout for write
+        self.__ser__ = serial.Serial()
+
+        self.__ser__.port = port                    # serial port
+        self.__ser__.baudrate = baudrate            # baudrate
+        self.__ser__.bytesize = serial.EIGHTBITS    # number of bits per bytes
+        self.__ser__.parity = serial.PARITY_NONE    # set parity check: no parity
+        self.__ser__.stopbits = serial.STOPBITS_ONE # number of stop bits
+        self.__ser__.timeout = None                 # read timeout
+        self.__ser__.xonxoff = False                # disable software flow control
+        self.__ser__.rtscts = False                 # disable hardware (RTS/CTS) flow control
+        self.__ser__.dsrdtr = False                 # disable hardware (DSR/DTR) flow control
+        self.__ser__.writeTimeout = timeout_write   # timeout for write
 
         self.acq_length = ACQ_LENGTH_SAMPLES
 
 
-    def get_available_ports(self):
-        ports = serial.tools.list_ports.comports()
+    def get_available(self):
+        """
+        Get a list of available devices.
+        """
 
-        return [port.device for port in sorted(ports)]
+        ports = comports()
 
-    def open_serial_port(self):
+        return sorted(ports)
+
+
+    def open(self, device:ListPortInfo = None):
+        """
+        Open the device connection.
+        """
+
+        if self.__ser__.is_open:
+            return True
+        
+        if device is not None:
+            self.__ser__.port = device.device
+
+        if self.__ser__.port == '':
+            print("Error: no serial port specified.")
+            return False
 
         try: 
-            self.ser.open()
+            self.__ser__.open()
         except:
-            print("Error while trying to open serial port ", str(self.ser.port))
+            print("Error while trying to open serial port ", str(self.__ser__.port))
             return False
 
         return True
-        
-        
-    def get_rf_data_and_info(self, bytes_arr):
+    
+
+    def close(self):
+        """
+        Close the device connection.
+        """
+
+        if not self.__ser__.is_open:
+            return True
+
+        try:
+            self.__ser__.close()
+        except:
+            print("Error while trying to close serial port ", str(self.__ser__.port))
+            return False
+
+        return True
+    
+    
+    def send_config(self, conf_bytes_pack:bytes):
+        """
+        Send a configuration package to the device.
+        """
+
+        if not self.__ser__.is_open:
+            print("Error: serial port is not open.")
+            return False
+
+        self.__ser__.flushInput()  #flush input buffer, discarding all its contents
+        self.__ser__.flushOutput() #flush output buffer, aborting current output 
+                               #and discard all that is in buffer
+
+        self.__ser__.write(conf_bytes_pack)
+
+        return True
+    
+
+    def __get_rf_data_and_info__(self, bytes_arr:bytes):
     
         rf_arr = np.frombuffer(bytes_arr[7:], dtype='<i2')    
         tx_rx_id = bytes_arr[4]
@@ -64,21 +136,23 @@ class WulpusDongle():
 
         return rf_arr, acq_nr, tx_rx_id
     
-    def send_config_package(self, conf_bytes_pack):
-        self.ser.flushInput()  #flush input buffer, discarding all its contents
-        self.ser.flushOutput() #flush output buffer, aborting current output 
-                               #and discard all that is in buffer
-
-        self.ser.write(conf_bytes_pack)
-
-        return
     
     def receive_data(self):
+        """
+        Receive a data package from the device.
+        """
+
+        if not self.__ser__.is_open:
+            print("Error: serial port is not open.")
+            return None
         
-        response_start = self.ser.readline()
+        response_start = self.__ser__.readline()
         
         if len(response_start) == 0:
             return None
         elif response_start[-6:] == b'START\n':
-            response = self.ser.read(self.acq_length*2 + 7)
-            return self.get_rf_data_and_info(response)
+            response = self.__ser__.read(self.acq_length*2 + 7)
+            return self.__get_rf_data_and_info__(response)
+        else:
+            return None
+        

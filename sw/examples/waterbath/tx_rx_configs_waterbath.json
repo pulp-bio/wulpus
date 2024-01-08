@@ -1,0 +1,13 @@
+{
+    "configs": [
+        {
+            "config_id": 0,
+            "tx_channels": [
+                7
+            ],
+            "rx_channels": [
+                7
+            ]
+        }
+    ]
+}
