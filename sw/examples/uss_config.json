@@ -1,0 +1,19 @@
+{
+    "dcdc_turnon": 100,
+    "meas_period": 50000,
+    "trans_freq": 2250000,
+    "pulse_freq": 2250000,
+    "num_pulses": 2,
+    "sampling_freq": 8000000,
+    "num_samples": 400,
+    "rx_gain": 13,
+    "num_txrx_configs": 1,
+    "start_hvmuxrx": 494,
+    "start_ppg": 500,
+    "turnon_adc": 5,
+    "start_pgainbias": 5,
+    "start_adcsampl": 509,
+    "restart_capt": 3000,
+    "capt_timeout": 3000,
+    "num_acqs": 100
+}
