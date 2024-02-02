@@ -306,20 +306,24 @@ DocumentPath=Project Outputs for wulpus_hv_mux\Gerber\PCB1.REP
 DItemRevisionGUID=
 
 [GeneratedDocument19]
+DocumentPath=Project Outputs for wulpus_hv_mux\Report Board Stack\PCB1.xls
+DItemRevisionGUID=
+
+[GeneratedDocument20]
 DocumentPath=Project Outputs for wulpus_hv_mux\Pick Place\Pick Place for PCB1(Fabrication_ready).txt
 DItemRevisionGUID=
 
 [Parameter1]
-Name=title
-Value=WULPUS High-voltage MUX PCB
+Name=documentnumber
+Value=
 
 [Parameter2]
 Name=revision
 Value=1.1
 
 [Parameter3]
-Name=documentnumber
-Value=*
+Name=title
+Value=WULPUS High-voltage MUX PCB
 
 [Configuration1]
 Name=Sources

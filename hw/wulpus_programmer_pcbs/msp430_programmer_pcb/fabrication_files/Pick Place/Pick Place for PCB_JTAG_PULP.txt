@@ -1,0 +1,15 @@
+Altium Designer Pick and Place Locations
+C:\Users\s-fre\Github\wulpus\hw\wulpus_programmer_pcbs\wulpus_msp430_programmer_pcb\Project Outputs for Jtag_Pulp\Pick Place for PCB_JTAG_PULP.txt
+
+========================================================================================================================
+File Design Information:
+
+Date:       02.02.24
+Time:       17:09
+Revision:   Not in VersionControl
+Variant:    No variations
+Units used: mm
+
+Designator Comment          Layer    Footprint        Center-X(mm) Center-Y(mm) Rotation Description                
+J_OLMX1    "Header 10X2"    TopLayer HDR2X10          13.2180      10.9090      0        "Header, 10-Pin, Dual row" 
+CONN_JW1   MOLEX_5051100892 TopLayer MOLEX_5051100892 13.7680      4.1760       180      ""                         

@@ -4,9 +4,9 @@ C:\Users\s-fre\Github\wulpus\hw\wulpus_hv_pcb\Project Outputs for wulpus_hv_mux\
 ========================================================================================================================
 File Design Information:
 
-Date:       27.11.23
-Time:       23:00
-Revision:   770c57a9f96f14f8edb16d39baa14da57df6ef86
+Date:       08.12.23
+Time:       19:16
+Revision:   b47f5fd7793061e1fd3fcd7b9ee7aef0aab4dbd7
 Variant:    Fabrication_ready
 Units used: mm
 

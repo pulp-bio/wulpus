@@ -1,0 +1,24 @@
+Output: Gerber Files
+Type  : Gerber
+From  : Variant [[No Variations]] of Project [msp430_programmer_pcb.PrjPcb]
+   Generated File[PCB_JTAG_PULP.GTO]
+   Generated File[PCB_JTAG_PULP.GTP]
+   Generated File[PCB_JTAG_PULP.GTS]
+   Generated File[PCB_JTAG_PULP.GTL]
+   Generated File[PCB_JTAG_PULP.GBL]
+   Generated File[PCB_JTAG_PULP.GBS]
+   Generated File[PCB_JTAG_PULP.GBP]
+   Generated File[PCB_JTAG_PULP.GBO]
+   Generated File[PCB_JTAG_PULP.GM1]
+   Generated File[PCB_JTAG_PULP.GD1]
+   Generated File[PCB_JTAG_PULP.GG1]
+   Generated File[PCB_JTAG_PULP.GM]
+   Generated File[PCB_JTAG_PULP.RUL]
+   Generated File[PCB_JTAG_PULP.EXTREP]
+   Generated File[PCB_JTAG_PULP.REP]
+
+
+Files Generated   : 15
+Documents Printed : 0
+
+Finished Output Generation At 17:08:06 On 02.02.2024

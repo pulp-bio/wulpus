@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [msp430_programmer_pcb.PrjPcb]
+   Generated File[PCB_JTAG_PULP.TXT]
+   Generated File[PCB_JTAG_PULP.LDP]
+   Generated File[PCB_JTAG_PULP.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 17:08:53 On 02.02.2024

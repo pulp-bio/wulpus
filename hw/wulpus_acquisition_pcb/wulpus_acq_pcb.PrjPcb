@@ -363,6 +363,82 @@ DocumentPath=Project Outputs for wulpus_acq_pcb\Design Rule Check - PCB1.html
 DItemRevisionGUID=
 
 [GeneratedDocument2]
+DocumentPath=Project Outputs for wulpus_acq_pcb\NC Drill\PCB1-NonPlated.TXT
+DItemRevisionGUID=
+
+[GeneratedDocument3]
+DocumentPath=Project Outputs for wulpus_acq_pcb\NC Drill\PCB1-Plated.TXT
+DItemRevisionGUID=
+
+[GeneratedDocument4]
+DocumentPath=Project Outputs for wulpus_acq_pcb\NC Drill\PCB1.DRR
+DItemRevisionGUID=
+
+[GeneratedDocument5]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Gerber\PCB1.EXTREP
+DItemRevisionGUID=
+
+[GeneratedDocument6]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Gerber\PCB1.G1
+DItemRevisionGUID=
+
+[GeneratedDocument7]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Gerber\PCB1.G2
+DItemRevisionGUID=
+
+[GeneratedDocument8]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Gerber\PCB1.GBL
+DItemRevisionGUID=
+
+[GeneratedDocument9]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Gerber\PCB1.GBO
+DItemRevisionGUID=
+
+[GeneratedDocument10]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Gerber\PCB1.GBP
+DItemRevisionGUID=
+
+[GeneratedDocument11]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Gerber\PCB1.GBS
+DItemRevisionGUID=
+
+[GeneratedDocument12]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Gerber\PCB1.GM
+DItemRevisionGUID=
+
+[GeneratedDocument13]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Gerber\PCB1.GTL
+DItemRevisionGUID=
+
+[GeneratedDocument14]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Gerber\PCB1.GTO
+DItemRevisionGUID=
+
+[GeneratedDocument15]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Gerber\PCB1.GTP
+DItemRevisionGUID=
+
+[GeneratedDocument16]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Gerber\PCB1.GTS
+DItemRevisionGUID=
+
+[GeneratedDocument17]
+DocumentPath=Project Outputs for wulpus_acq_pcb\NC Drill\PCB1.LDP
+DItemRevisionGUID=
+
+[GeneratedDocument18]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Gerber\PCB1.REP
+DItemRevisionGUID=
+
+[GeneratedDocument19]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Report Board Stack\PCB1.xls
+DItemRevisionGUID=
+
+[GeneratedDocument20]
+DocumentPath=Project Outputs for wulpus_acq_pcb\Pick Place\Pick Place for PCB1(Fabrication_ready).txt
+DItemRevisionGUID=
+
+[GeneratedDocument21]
 DocumentPath=Project Outputs for wulpus_acq_pcb\BOM\wulpus_acq_pcb_bom.xlsx
 DItemRevisionGUID=
 
