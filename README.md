@@ -34,7 +34,7 @@ This repository has the following folders:
 - `fw`, containing the firmware source code, namely:
     - source code for the nRF52832 MCU of the WULPUS probe, located at `fw/nrf52/ble_peripheral/US_probe_nRF52_firmware`
     - source code for the nRF52840 USB dongle, located at `fw/nrf52/peripheral/US_probe_dongle_firmware`
-    - source code for the MSP430 ultrasound MCU (will be added in the next release under the `fw/msp430` folder)
+    - source code for the MSP430 ultrasound MCU, located at `fw/msp430`
 - `sw`, containing the Python code for the WULPUS Graphical User Interface
  
 - `hw`, containing the Altium designer source files and pdf schematics for 
