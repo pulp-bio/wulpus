@@ -35,5 +35,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved visualization to a separate thread.
 
 ### Removed
+- Removed `./docs` folder with the old GUI guide. The information about the GUI is now available in the WULPUS user manual.
 
 - 
