@@ -1,0 +1,12 @@
+Output: NC Drill Files
+Type  : NC Drill
+From  : Project [nrf52_programmer_pcb.PrjPcb]
+   Generated File[PCB_CONN_NORDIC.TXT]
+   Generated File[PCB_CONN_NORDIC.LDP]
+   Generated File[PCB_CONN_NORDIC.DRR]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 17:34:18 On 02.02.2024

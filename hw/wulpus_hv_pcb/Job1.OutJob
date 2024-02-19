@@ -17,7 +17,7 @@ RevisionNamingSchemeGUID=
 [OutputGroup1]
 Name=Job1.OutJob
 Description=
-TargetOutputMedium=New Folder Structure
+TargetOutputMedium=Fabrication_outputs
 VariantName=Fabrication_ready
 VariantScope=1
 CurrentConfigurationName=
@@ -91,7 +91,7 @@ OutputName4=Gerber Files
 OutputCategory4=Fabrication
 OutputDocumentPath4=PCB1.PcbDoc
 OutputVariantName4=
-OutputEnabled4=0
+OutputEnabled4=1
 OutputEnabled4_OutputMedium1=0
 OutputEnabled4_OutputMedium2=1
 OutputEnabled4_OutputMedium3=0
@@ -107,7 +107,7 @@ OutputName5=NC Drill Files
 OutputCategory5=Fabrication
 OutputDocumentPath5=PCB1.PcbDoc
 OutputVariantName5=
-OutputEnabled5=0
+OutputEnabled5=1
 OutputEnabled5_OutputMedium1=0
 OutputEnabled5_OutputMedium2=2
 OutputEnabled5_OutputMedium3=0
@@ -123,7 +123,7 @@ OutputName6=Generates pick and place files
 OutputCategory6=Assembly
 OutputDocumentPath6=PCB1.PcbDoc
 OutputVariantName6=
-OutputEnabled6=0
+OutputEnabled6=1
 OutputEnabled6_OutputMedium1=0
 OutputEnabled6_OutputMedium2=3
 OutputEnabled6_OutputMedium3=0
@@ -156,7 +156,7 @@ OutputName8=Copy of Bill of Materials
 OutputCategory8=Report
 OutputDocumentPath8=PCB1.PcbDoc
 OutputVariantName8=
-OutputEnabled8=1
+OutputEnabled8=0
 OutputEnabled8_OutputMedium1=0
 OutputEnabled8_OutputMedium2=0
 OutputEnabled8_OutputMedium3=0
@@ -178,6 +178,23 @@ Configuration8_Name5=VisibleOrder
 Configuration8_Item5=Designator=100|Comment=100|Quantity=100|Manufacturer=100
 Configuration8_Name6=VisibleOrder_Flat
 Configuration8_Item6=Designator=100|Comment=100|Quantity=100|Manufacturer=100
+OutputType9=Board Stack Report
+OutputName9=Report Board Stack
+OutputCategory9=Fabrication
+OutputDocumentPath9=PCB1.PcbDoc
+OutputVariantName9=
+OutputEnabled9=1
+OutputEnabled9_OutputMedium1=0
+OutputEnabled9_OutputMedium2=4
+OutputEnabled9_OutputMedium3=0
+OutputEnabled9_OutputMedium4=0
+OutputEnabled9_OutputMedium5=0
+OutputEnabled9_OutputMedium6=0
+OutputEnabled9_OutputMedium7=0
+OutputDefault9=0
+PageOptions9=Record=PageOptions|CenterHorizontal=True|CenterVertical=True|PrintScale=1.00|XCorrection=1.00|YCorrection=1.00|PrintKind=0|BorderSize=5000000|LeftOffset=0|BottomOffset=0|Orientation=2|PaperLength=1000|PaperWidth=1000|Scale=100|PaperSource=7|PrintQuality=-3|MediaType=1|DitherType=10|PrintScaleMode=1|PaperKind=A4|PaperIndex=9
+Configuration9_Name1=OutputConfigurationParameter1
+Configuration9_Item1=Record=LayerStackReportView|Units=Metric|ColumnsCount=4|Column0Name=Name|Column0Title=Name|Column0Visible=True|Column1Name=Material|Column1Title=Material|Column1Visible=True|Column2Name=Thickness|Column2Title=Thickness|Column2Visible=True|Column3Name=Constant|Column3Title=Constant|Column3Visible=True|DocumentPath=C:\Users\s-fre\Github\wulpus\hw\wulpus_hv_pcb\PCB1.PcbDoc
 
 [PublishSettings]
 OutputFilePath2=C:\Users\s-fre\Github\wulpus\hw\wulpus_hv_pcb\Project Outputs for wulpus_hv_mux\

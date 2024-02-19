@@ -1,0 +1,15 @@
+Altium Designer Pick and Place Locations
+C:\Users\s-fre\Github\wulpus\hw\wulpus_programmer_pcbs\wulpus_nrf52_programmer_pcb\Project Outputs for nrf52_programmer_pcb\Pick Place for PCB_CONN_NORDIC.txt
+
+========================================================================================================================
+File Design Information:
+
+Date:       02.02.24
+Time:       17:34
+Revision:   Not in VersionControl
+Variant:    No variations
+Units used: mm
+
+Designator Comment                                                   Layer    Footprint        Center-X(mm) Center-Y(mm) Rotation Description                
+CONN_SWDN1 "FFC & FPC Connectors 0.5 FPC ZIF BTM CONT EMBT PKG 6Ckt" TopLayer MOLEX_5051100692 13.4100      4.3110       180      ""                         
+S_NRDC1    "Header 10X2"                                             TopLayer HDR2X10          13.4670      10.5060      0        "Header, 10-Pin, Dual row" 
