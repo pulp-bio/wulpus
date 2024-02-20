@@ -1,2 +1,2 @@
 # Folder for the documentation
-User Guide will be added in the next releases
+In this folder you can find the official wulpus user manual and the photos of the system. 

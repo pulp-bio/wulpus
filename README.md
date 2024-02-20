@@ -41,7 +41,7 @@ This repository has the following folders:
     - WULPUS Acquisition PCB (located at `hw/wulpus_acquisition_pcb`)
     - WULPUS High-Voltage PCB (located at `hw/wulpus_hv_pcb`)
 
-- `docs`, containing the project documentation (e.g., images of the device, user guide, ...)
+- `docs`, containing the project documentation (e.g., images of the device, user manual, ...)
 
 # How to reproduce?
 

@@ -145,19 +145,22 @@ class _ConfigParser():
                 # reset all configs
                 for i in range(0, TX_RX_MAX_NUM_OF_CONFIGS):
                     self.configs[i].enabled = False
+                    self.configs[i].optimized_switching = False
                     self.configs[i].tx_channels = []
                     self.configs[i].rx_channels = []
 
                 # parse configs
                 for config in configs:
                     # check if config has all required fields (should always be the case if GUI is used)
-                    if 'config_id' not in config or 'tx_channels' not in config or 'rx_channels' not in config:
+                    if 'config_id' not in config or 'tx_channels' not in config or \
+                        'rx_channels' not in config or 'optimized_switching' not in config:
                         print('Invalid config found in file.')
                         self.gui.label_info.value = 'Invalid config found in file.'
                         return
                     
                     # add config to list
                     self.configs[config['config_id']].enabled = True
+                    self.configs[config['config_id']].optimized_switching = config['optimized_switching']
                     self.configs[config['config_id']].tx_channels = config['tx_channels']
                     self.configs[config['config_id']].rx_channels = config['rx_channels']
 

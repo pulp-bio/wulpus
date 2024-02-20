@@ -84,9 +84,9 @@ class WulpusRxTxConfigGen():
                     temp_switch_config = np.bitwise_or.reduce(np.left_shift(1, RX_MAP[rx_only_ch]))
                     self.tx_configs[self.tx_rx_len] = np.bitwise_or(self.tx_configs[self.tx_rx_len], temp_switch_config)
 
-            # Leave TX only channels on after the HV MUX switches to RX
-            if len(tx_only_ch) > 0:
-                self.rx_configs[self.tx_rx_len] = np.bitwise_or.reduce(np.left_shift(1, TX_MAP[tx_only_ch]))
+            # # Leave TX only channels on after the HV MUX switches to RX
+            # if len(tx_only_ch) > 0:
+            #     self.rx_configs[self.tx_rx_len] = np.bitwise_or.reduce(np.left_shift(1, TX_MAP[tx_only_ch]))
 
         
         self.tx_rx_len += 1
