@@ -1,0 +1,167 @@
+*************************************************************
+FileName = PCB_CONN_NORDIC.GBR
+AutoAperture = True
+*************************************************************
+Generating : Top Layer
+      File : PCB_CONN_NORDIC.GTL
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D10
+    D13
+    D14
+    D19
+    D20
+*************************************************************
+
+*************************************************************
+Generating : Bottom Layer
+      File : PCB_CONN_NORDIC.GBL
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D19
+    D20
+*************************************************************
+
+*************************************************************
+Generating : Top Overlay
+      File : PCB_CONN_NORDIC.GTO
+
+    Adding Layer      : Top Overlay
+
+
+Used DCodes :
+    D10
+    D11
+    D12
+*************************************************************
+
+*************************************************************
+Generating : Top Paste
+      File : PCB_CONN_NORDIC.GTP
+
+    Adding Layer      : Top Paste
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D13
+    D14
+*************************************************************
+
+*************************************************************
+Generating : Bottom Paste
+      File : PCB_CONN_NORDIC.GBP
+
+    Adding Layer      : Bottom Paste
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+*************************************************************
+
+*************************************************************
+Generating : Bottom Overlay
+      File : PCB_CONN_NORDIC.GBO
+
+    Adding Layer      : Bottom Overlay
+
+
+Used DCodes :
+*************************************************************
+
+*************************************************************
+Generating : Mechanical 1
+      File : PCB_CONN_NORDIC.GM1
+
+    Adding Layer      : Mechanical 1
+
+
+Used DCodes :
+    D10
+*************************************************************
+
+*************************************************************
+Generating : Top Solder
+      File : PCB_CONN_NORDIC.GTS
+
+    Adding Layer      : Top Solder
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D15
+    D16
+    D17
+    D18
+*************************************************************
+
+*************************************************************
+Generating : Bottom Solder
+      File : PCB_CONN_NORDIC.GBS
+
+    Adding Layer      : Bottom Solder
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D17
+    D18
+*************************************************************
+
+*************************************************************
+Generating : Drill Drawing
+      File : PCB_CONN_NORDIC.GD1
+
+    Adding Drill Pair : Top Layer-Bottom Layer
+
+    Adding Layer      : Drill Drawing
+
+
+Used DCodes :
+    D21
+*************************************************************
+
+*************************************************************
+Generating : Drill Guide
+      File : PCB_CONN_NORDIC.GG1
+
+    Adding Drill Pair : Top Layer-Bottom Layer
+
+    Adding Layer      : Drill Guide
+
+
+Used DCodes :
+    D21
+*************************************************************
+
+*************************************************************
+Generating : Profile
+      File : PCB_CONN_NORDIC.GM
+
+
+Used DCodes :
+    D22
+*************************************************************
+

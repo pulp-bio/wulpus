@@ -1,0 +1,24 @@
+Output: Gerber Files
+Type  : Gerber
+From  : Variant [[No Variations]] of Project [nrf52_programmer_pcb.PrjPcb]
+   Generated File[PCB_CONN_NORDIC.GTO]
+   Generated File[PCB_CONN_NORDIC.GTP]
+   Generated File[PCB_CONN_NORDIC.GTS]
+   Generated File[PCB_CONN_NORDIC.GTL]
+   Generated File[PCB_CONN_NORDIC.GBL]
+   Generated File[PCB_CONN_NORDIC.GBS]
+   Generated File[PCB_CONN_NORDIC.GBP]
+   Generated File[PCB_CONN_NORDIC.GBO]
+   Generated File[PCB_CONN_NORDIC.GM1]
+   Generated File[PCB_CONN_NORDIC.GD1]
+   Generated File[PCB_CONN_NORDIC.GG1]
+   Generated File[PCB_CONN_NORDIC.GM]
+   Generated File[PCB_CONN_NORDIC.RUL]
+   Generated File[PCB_CONN_NORDIC.EXTREP]
+   Generated File[PCB_CONN_NORDIC.REP]
+
+
+Files Generated   : 15
+Documents Printed : 0
+
+Finished Output Generation At 17:33:48 On 02.02.2024

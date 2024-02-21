@@ -1,0 +1,168 @@
+*************************************************************
+FileName = PCB_JTAG_PULP.GBR
+AutoAperture = True
+*************************************************************
+Generating : Mechanical 1
+      File : PCB_JTAG_PULP.GM1
+
+    Adding Layer      : Mechanical 1
+
+
+Used DCodes :
+    D11
+*************************************************************
+
+*************************************************************
+Generating : Bottom Overlay
+      File : PCB_JTAG_PULP.GBO
+
+    Adding Layer      : Bottom Overlay
+
+
+Used DCodes :
+*************************************************************
+
+*************************************************************
+Generating : Bottom Paste
+      File : PCB_JTAG_PULP.GBP
+
+    Adding Layer      : Bottom Paste
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+*************************************************************
+
+*************************************************************
+Generating : Bottom Solder
+      File : PCB_JTAG_PULP.GBS
+
+    Adding Layer      : Bottom Solder
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D18
+    D19
+*************************************************************
+
+*************************************************************
+Generating : Top Solder
+      File : PCB_JTAG_PULP.GTS
+
+    Adding Layer      : Top Solder
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D16
+    D17
+    D18
+    D19
+*************************************************************
+
+*************************************************************
+Generating : Top Paste
+      File : PCB_JTAG_PULP.GTP
+
+    Adding Layer      : Top Paste
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D14
+    D15
+*************************************************************
+
+*************************************************************
+Generating : Top Overlay
+      File : PCB_JTAG_PULP.GTO
+
+    Adding Layer      : Top Overlay
+
+
+Used DCodes :
+    D10
+    D11
+    D12
+    D13
+*************************************************************
+
+*************************************************************
+Generating : Bottom Layer
+      File : PCB_JTAG_PULP.GBL
+
+    Adding Layer      : Bottom Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D20
+    D21
+*************************************************************
+
+*************************************************************
+Generating : Top Layer
+      File : PCB_JTAG_PULP.GTL
+
+    Adding Layer      : Top Layer
+
+    Adding Layer      : Multi-Layer
+
+
+Used DCodes :
+    D11
+    D14
+    D15
+    D20
+    D21
+*************************************************************
+
+*************************************************************
+Generating : Drill Drawing
+      File : PCB_JTAG_PULP.GD1
+
+    Adding Drill Pair : Top Layer-Bottom Layer
+
+    Adding Layer      : Drill Drawing
+
+
+Used DCodes :
+    D22
+*************************************************************
+
+*************************************************************
+Generating : Drill Guide
+      File : PCB_JTAG_PULP.GG1
+
+    Adding Drill Pair : Top Layer-Bottom Layer
+
+    Adding Layer      : Drill Guide
+
+
+Used DCodes :
+    D22
+*************************************************************
+
+*************************************************************
+Generating : Profile
+      File : PCB_JTAG_PULP.GM
+
+
+Used DCodes :
+    D23
+*************************************************************
+
