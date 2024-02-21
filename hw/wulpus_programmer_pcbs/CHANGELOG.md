@@ -11,13 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- WULPUS user manual Rev 1.
-- Added the new photos of the WULPUS PCBs v1.1 folder into the dedicated subfolder (`./images/v1_1`).
+- Initial release of the programmer PCBs.
 
 ### Fixed
 
+- 
+
 ### Changed
 
-- Moved `./images` folder into the dedicated subfolder (`./images/v1_0`)
+- 
 
 ### Removed
+
+- 
