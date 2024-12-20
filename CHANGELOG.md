@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Multiple inaccuraccies in the WULPUS User Manual Rev. 1 (issues #13, #15, #18, #22)
+- Addressed issue #17 (Power supply spikes exceeding the resistors power rating. Enable pin control of the U1)
 
 ### Changed
 
@@ -48,19 +49,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Removed `./sw/docs` folder with the old GUI guide. The information about the GUI is now available in the WULPUS user manual.
-
-## [1.1.1] - 2024-12-18
-
-### Added
-
-- 
-
-### Fixed
-
-- Addressed issue #17 (Power supply spikes exceeding the resistors power rating. Enable pin control of the U1)
-
-### Changed
-
-- 
-
-### Removed

@@ -5,7 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.1] - 2024-12-18
+
+### Added
+
+### Fixed
+
+- Placed a weak pull-down resistor (R2) to fix the disabled state of TLV62569 (U1) by default
+- Replaced R1, R5, R6, R8, R9, R10, R11, R13 with 0.1Ohm, 250mW resistors
+
+### Changed
+
+### Removed
+
 
 ## [1.1.0] - 2024-02-21
 
@@ -25,25 +37,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced R35 with 0 Ohm jumper
 
 ### Removed
-
- -
- 
-  
-## [1.1.1] - 2024-12-18
-
-### Added
-
-- 
-
-### Fixed
-
-- Placed a weak pull-down resistor (R2) to fix the disabled state of TLV62569 (U1) by default
-- Replaced R1, R5, R6, R8, R9, R10, R11, R13 with 0.1Ohm, 250mW resistors
-
-### Changed
-
--
-
-### Removed
-
- -
