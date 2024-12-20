@@ -6,7 +6,22 @@ For the detailed description, please explore nested folders and corresponding CH
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.2.0] - 2024-12-xx
+
+### Added
+
+- Fabrication instructions (see WULPUS User Manual Rev. 2) for WULPUS silicone package.
+- Source design files (`/hw/wulpus_silicone_package`) for WULPUS silicone package.
+- Updated description of the repository and updated list of contributors to the main `README.MD`
+- New publications using WULPUS probe to the main `README.MD`
+
+### Fixed
+
+- Multiple inaccuraccies in the WULPUS User Manual Rev. 1 (issues #13, #15, #18, #22)
+
+### Changed
+
+### Removed
 
 ## [1.1.0] - 2024-02-21
 
