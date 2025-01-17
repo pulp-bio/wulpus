@@ -49,3 +49,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 
 
 ### Removed
+
+## [1.2.0] - 2025-01-17
+
+### Added
+
+-
+
+### Fixed
+
+- Addressed issue #21 (Missing ground plane for microstrip)
+- Adjusted acquisition PCB layout and production files accordingly
+
+### Changed
+
+- Chip antenna
+- Matching curcuit
+
+### Removed
+
+- Mounting hole (to make space for RF routing and matching network)
