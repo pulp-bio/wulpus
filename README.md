@@ -1,6 +1,6 @@
 <img src="docs/images/wulpus_main.png" alt="WULPUS main" width="100%"/>
 
-# WULPUS: 
+# WULPUS v1.2.0
 ## Wearable Ultra Low-Power Ultrasound
 
 # Introduction
@@ -37,10 +37,11 @@ This repository has the following folders:
     - source code for the MSP430 ultrasound MCU, located at `fw/msp430`
 - `sw`, containing the Python code for the WULPUS Graphical User Interface
  
-- `hw`, containing the Altium designer source files and pdf schematics for 
+- `hw`, containing the CAD source files for 
     - WULPUS Acquisition PCB (located at `hw/wulpus_acquisition_pcb`)
     - WULPUS High-Voltage PCB (located at `hw/wulpus_hv_pcb`)
     - WULPUS Programmer PCBs (located at `hw/wulpus_programmer_pcbs`)
+    - WULPUS Silicone Rubber package (located at `hw/wulpus_silicone_package`)
 
 - `docs`, containing the project documentation (e.g., images of the device, user manual, ...)
 
@@ -92,6 +93,10 @@ If you would like to reference the project, please cite the following paper:
 
 [3] Frey, Sebastian, et al. "A wearable ultra-low-power semg-triggered ultrasound system for long-term muscle activity monitoring." 2023 IEEE International Ultrasonics Symposium (IUS). IEEE, 2023.
 
+[4] Vostrikov S, Anderegg M, Benini L, Cossettini A. "Unsupervised Feature Extraction from Raw Data for Gesture Recognition with Wearable Ultra Low-Power Ultrasound." IEEE Transactions on Ultrasonics, Ferroelectrics, and Frequency Control. 2024 May 24.
+
+[5] Spacone G, Vostrikov S, Kartsch V, Benatti S, Benini L, Cossettini A. "Tracking of Wrist and Hand Kinematics with Ultra Low Power Wearable A-mode Ultrasound." IEEE Transactions on Biomedical Circuits and Systems. 2024 Sep 23.
+
 # Authors
 
 The WULPUS system was developed at the [Integrated Systems Laboratory (IIS)](https://iis.ee.ethz.ch/) at ETH Zurich by:
@@ -102,6 +107,7 @@ The WULPUS system was developed at the [Integrated Systems Laboratory (IIS)](htt
 
 Thanks to all the people who contributed to the WULPUS platform:
 - [Cédric Hirschi](https://www.linkedin.com/in/c%C3%A9dric-cyril-hirschi-09624021b/) (GUI improvements, Documentation)
+- [Josquin Tille](https://www.linkedin.com/in/josquin-tille-829a341a7/) (Silicone package design, Documentation)
 - [William Bruderer](https://www.linkedin.com/in/william-bruderer-59ba9b26b/) (Documentation)
 
 
