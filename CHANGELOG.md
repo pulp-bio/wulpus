@@ -6,7 +6,7 @@ For the detailed description, please explore nested folders and corresponding CH
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.0] - 2024-12-xx
+## [1.2.0] - 2025-01-20
 
 ### Added
 
@@ -19,10 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Multiple inaccuraccies in the WULPUS User Manual Rev. 1 (issues #13, #15, #18, #22)
 - Addressed issue #17 (Power supply spikes exceeding the resistors power rating. Enable pin control of the U1)
+- Addressed issue #21 (Missing ground plane for microstrip)
+- Adjusted acquisition PCB layout and production files accordingly
 
 ### Changed
 
+- Chip antenna
+- Matching curcuit
+
 ### Removed
+
+- Mounting hole (to make space for RF routing and matching network)
 
 ## [1.1.0] - 2024-02-21
 
@@ -49,3 +56,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Removed `./sw/docs` folder with the old GUI guide. The information about the GUI is now available in the WULPUS user manual.
+
+## [1.1.1] - 2024-12-18
+
+### Added
+
+- 
+
+### Fixed
+
+- Addressed issue #17 (Power supply spikes exceeding the resistors power rating. Enable pin control of the U1)
+
+### Changed
+
+- 
+
+### Removed
+

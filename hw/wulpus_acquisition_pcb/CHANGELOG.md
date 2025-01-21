@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.1] - 2024-12-18
+## [1.2.0] - 2025-01-20
 
 ### Added
 
@@ -13,11 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Placed a weak pull-down resistor (R2) to fix the disabled state of TLV62569 (U1) by default
 - Replaced R1, R5, R6, R8, R9, R10, R11, R13 with 0.1Ohm, 250mW resistors
+- Addressed issue #21 (Missing ground plane for microstrip)
 
 ### Changed
 
+- Replaced chip antenna to ignion NN03-320
+- Changed matching curcuit accordingly
+
 ### Removed
 
+- Mounting hole M3 (to make space for RF routing and matching network)
 
 ## [1.1.0] - 2024-02-21
 
