@@ -6,7 +6,28 @@ For the detailed description, please explore nested folders and corresponding CH
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.2.0] - 2025-01-27
+
+### Added
+
+- Fabrication instructions for the WULPUS silicone package (refer to WULPUS User Manual Rev. 2).  
+- Source design files for the WULPUS silicone package (`/hw/wulpus_silicone_package`).  
+- Updated repository description and an expanded list of contributors in `README.md`.  
+- Added new publications utilizing the WULPUS probe to `README.md`.
+
+### Fixed
+
+- Resolved multiple inaccuracies in WULPUS User Manual Rev. 1 (#13, #15, #18, #22).  
+- Fixed issue #17: Power supply spikes exceeding resistor power ratings. Added enable pin control for U1.  
+- Addressed issue #21: Improved antenna layout for better performance.  
+- Updated acquisition PCB layout and production files accordingly.
+
+### Changed
+
+- Replaced chip antenna on the Acquisition PCB and updated the matching circuit.
+
+### Removed
+- Removed mounting hole on the Acquisition PCB to allow for RF routing and antenna matching network adjustments.  
 
 ## [1.1.0] - 2024-02-21
 
@@ -33,3 +54,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Removed `./sw/docs` folder with the old GUI guide. The information about the GUI is now available in the WULPUS user manual.
+
+## [1.1.1] - 2024-12-18
+
+### Added
+
+- 
+
+### Fixed
+
+- Addressed issue #17 (Power supply spikes exceeding the resistors power rating. Enable pin control of the U1)
+
+### Changed
+
+- 
+
+### Removed
+
