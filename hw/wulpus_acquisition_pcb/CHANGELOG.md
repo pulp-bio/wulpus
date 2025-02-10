@@ -11,6 +11,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+### Changed
+
+- Updated stackup to a default PCBWay stackup (4 layers, 1mm thickness, 1oz inner copper, 1oz outer copper, 50% inner layer residual copper ratio) 
+- Adjusted RF trace width according to the stackup to keep 50ohm impedance
+- Updated the gerber files and stackup information
+
+### Removed
+
+## [1.2.0] - 2025-01-27
+
+### Added
+
+### Fixed
+
 - Placed a weak pull-down resistor (R2) to fix the disabled state of TLV62569 (U1) by default
 - Replaced R1, R5, R6, R8, R9, R10, R11, R13 with 0.1Ohm, 250mW resistors
 - Addressed issue #21 (Missing ground plane for microstrip)
