@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2025-02-12
+
+### Added
+
+### Fixed
+
+### Changed
+
+- Updated Altium stackup to a default PCBWay stackup (4 layers, 1mm thickness, 1oz inner copper, 1oz outer copper, 50% inner layer residual copper ratio) 
+- Regenerated fabrication files and stackup information
+
+### Removed
+
 ## [1.1.0] - 2024-02-21
 
 ### Added
