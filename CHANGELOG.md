@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Updated Acquisition PCB stackup and adjusted RF trace width according to the stackup to keep 50ohm impedance
-- Updated the gerber files and stackup information.
+- Updated the gerber files and stackup information for both Acquisition PCB and HV PCB.
 
 ### Removed
 
