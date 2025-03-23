@@ -1,3 +1,3 @@
-Layer Pairs Export File for PCB: C:\Users\s-fre\Github\wulpus\hw\wulpus_acquisition_pcb\PCB1.PcbDoc
+Layer Pairs Export File for PCB: C:\Users\serge\Documents\repos\wulpus_dev\hw\wulpus_acquisition_pcb\PCB1.PcbDoc
 LayersSetName=Top_Bot_Plated_Thru_Holes|DrillFile=pcb1-plated.txt|DrillLayers=gtl,g1,g2,gbl
 LayersSetName=Top_Bot_NonPlated_Thru_Holes|DrillFile=pcb1-nonplated.txt|DrillLayers=gtl,g1,g2,gbl
