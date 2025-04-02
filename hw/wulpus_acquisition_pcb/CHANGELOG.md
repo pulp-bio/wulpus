@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated footprint of U4, U5 and U8 to release production complexity (increased vias hole diameter to 0.3 mm, left 0.2 mm spacing between the pads of U8 for the minimal solder mask sliver).
+- Updated footprint of U4, U5 and U8 to release production complexity (increased vias hole diameter to 0.3 mm, left 0.22 mm spacing between the pads of U8 for the minimal solder mask sliver).
 
 ### Removed
 

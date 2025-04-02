@@ -4,9 +4,9 @@ C:\Users\serge\Documents\repos\wulpus_dev\hw\wulpus_acquisition_pcb\Project Outp
 ========================================================================================================================
 File Design Information:
 
-Date:       23/03/25
-Time:       22:32
-Revision:   96e8c15a1b37951aa7f9def6d4ebafe8a3ec0833
+Date:       02/04/25
+Time:       10:59
+Revision:   abb8ec2b8b23a7895e57e32bdeeac34389663d28
 Variant:    Fabrication_ready
 Units used: mm
 
