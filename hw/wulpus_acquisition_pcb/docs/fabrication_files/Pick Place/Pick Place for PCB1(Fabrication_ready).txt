@@ -1,12 +1,12 @@
 Altium Designer Pick and Place Locations
-C:\Users\s-fre\Github\wulpus\hw\wulpus_acquisition_pcb\Project Outputs for wulpus_acq_pcb\Pick Place\Pick Place for PCB1(Fabrication_ready).txt
+C:\Users\serge\Documents\repos\wulpus_dev\hw\wulpus_acquisition_pcb\Project Outputs for wulpus_acq_pcb\Pick Place\Pick Place for PCB1(Fabrication_ready).txt
 
 ========================================================================================================================
 File Design Information:
 
-Date:       17.01.25
-Time:       17:41
-Revision:   5cd4fb9cbb34e9d9febb728bbc69f99c0eff6a20
+Date:       02/04/25
+Time:       10:59
+Revision:   abb8ec2b8b23a7895e57e32bdeeac34389663d28
 Variant:    Fabrication_ready
 Units used: mm
 
@@ -77,7 +77,7 @@ L11        742792040                   BottomLayer SMD-0805                     
 L10        742792040                   BottomLayer SMD-0805                                                   39.9000      19.2500      180      "SMD EMI Suppression Ferrite Bead WE-CBF, Z = 600 Ohm"                                                                                                         
 L9         742792040                   BottomLayer SMD-0805                                                   25.1000      7.8000       90       "SMD EMI Suppression Ferrite Bead WE-CBF, Z = 600 Ohm"                                                                                                         
 L8         742792040                   BottomLayer SMD-0805                                                   38.7500      3.2000       90       "SMD EMI Suppression Ferrite Bead WE-CBF, Z = 600 Ohm"                                                                                                         
-L5         LQG15HS3N9B02D              BottomLayer INDC1005X45N                                               8.6000       10.6500      180      "Inductor RF Chip Thin Film 3.9nH 0.1nH 500MHz 13Q-Factor 170mA 500mOhm DCR 0402 Paper T/R"                                                                    
+L5         LQG15HS3N9B02D              BottomLayer INDC1005X45N                                               9.1000       10.6500      180      "Inductor RF Chip Thin Film 3.9nH 0.1nH 500MHz 13Q-Factor 170mA 500mOhm DCR 0402 Paper T/R"                                                                    
 L4         LQW15AN15NJ00D              BottomLayer FP-LQW15AN_00-W0_6-0_1-MFG                                 17.5000      18.2500      180      "Wire Wound RF Inductor 15nH ±5% 460mA 0.16O 0402 (1005)"                                                                                                      
 L3         L0603B100KDWFT              BottomLayer L0603B100KDWFT                                             17.7250      16.2600      90       "Inductor RF Chip Wirewound 10uH 10% 2.52MHz 0.38A 0.36Ohm DCR 0603 T/R"                                                                                       
 L2         DFE201612E-2R2M=P2          TopLayer    INDC2016X10L                                               13.8750      17.5200      270      "2.2µH Shielded Wirewound Inductor 1.8A 116mOhm Max 0806 (2016 Metric)"                                                                                        

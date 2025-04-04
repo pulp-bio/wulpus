@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.2] - 2025-03-23
+
+### Added
+
+### Fixed
+
+### Changed
+
+- Updated footprint of U4, U5 and U8 to release production complexity (increased vias hole diameter to 0.3 mm, left 0.22 mm spacing between the pads of U8 for the minimal solder mask sliver).
+
+### Removed
+
 ## [1.2.1] - 2025-02-12
 
 ### Added
