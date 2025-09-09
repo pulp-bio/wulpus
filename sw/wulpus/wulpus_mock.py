@@ -1,29 +1,19 @@
 import asyncio
-import inspect
-import io
-import json
 import os
-import time
-from enum import IntEnum
 from typing import Union
-from zipfile import ZipFile
 
 import numpy as np
-import pandas as pd
-from wulpus.dongle import WulpusDongle
-from wulpus.dongle_mock import WulpusDongleMock
+from wulpus.interface_mock import WulpusDongleMock
 from wulpus.helper import zip_to_dataframe
-from wulpus.wulpus_api import gen_conf_package, gen_restart_package
-from wulpus.wulpus_config_models import WulpusConfig
 
-import wulpus as wulpus_pgk
 from wulpus.wulpus import Status, Wulpus
 
 
 class WulpusMock(Wulpus):
     def __init__(self):
         super().__init__()
-        self._dongle = WulpusDongleMock()
+        self._interface_usb_dongle = WulpusDongleMock()
+        self._interface_direct = WulpusDongleMock()
         self._status = Status.READY
         self._replay_file = None
 

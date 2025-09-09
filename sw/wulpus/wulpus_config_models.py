@@ -104,5 +104,5 @@ class WulpusConfig(BaseModel):
     us_config: UsConfig
 
 
-class ComPort(BaseModel):
-    com_port: str
+class ConDev(BaseModel):
+    con_dev: str

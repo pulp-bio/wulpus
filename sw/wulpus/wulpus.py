@@ -3,20 +3,19 @@ import inspect
 import io
 import os
 import time
-import json
 from enum import IntEnum
 from typing import Union
 from zipfile import ZipFile
 
-from matplotlib import dates
 import numpy as np
 import pandas as pd
 
+from wulpus.interface_direct import WulpusDongleDirect
 from wulpus.helper import ensure_dir
 import wulpus
-from wulpus.dongle import WulpusDongle
-from wulpus.dongle_mock import WulpusDongleMock
-from wulpus.wulpus_api import CONFIG_FILE_EXTENSION, DATA_FILE_EXTENSION, gen_conf_package, gen_restart_package
+from wulpus.interface_usb import WulpusDongleUsb
+from wulpus.wulpus_api import DATA_FILE_EXTENSION, gen_conf_package, gen_restart_package
+from .interface import DongleInterface
 from wulpus.wulpus_config_models import WulpusConfig
 from typing import TypedDict
 
@@ -40,8 +39,8 @@ class Wulpus:
     def __init__(self):
         self._config: Union[WulpusConfig, None] = None
         self._status: Status = Status.NOT_CONNECTED
-        self._dongle = WulpusDongle()
-        # self._dongle = WulpusDongleMock()
+        self._interface_usb_dongle = WulpusDongleUsb()
+        self._interface_direct = WulpusDongleDirect()
         self._last_connection: str = ''
         self._latest_frame: Union[Measurement, None] = None
         self._data:  Union[np.ndarray, None] = None
@@ -54,10 +53,21 @@ class Wulpus:
         self._live_data_cnt = 0
         self._acquisition_running = False
 
-    def get_connection_options(self):
-        return self._dongle.get_available()
+    def _get_current_interface(self) -> DongleInterface:
+        if (self._last_connection.startswith("COM") or self._last_connection.startswith("/dev/")):
+            return self._interface_usb_dongle
+        else:
+            return self._interface_direct
 
-    def connect(self, device_name: str = ''):
+    def get_acquisition_running(self) -> bool:
+        return self._acquisition_running
+
+    async def get_connection_options(self):
+        conn_1 = await self._interface_direct.get_available()
+        conn_2 = await self._interface_usb_dongle.get_available()
+        return list(conn_1) + list(conn_2)
+
+    async def connect(self, device_name: str = ''):
         if self._status == Status.READY:
             return
         if len(device_name) == 0:
@@ -68,18 +78,19 @@ class Wulpus:
 
         self._last_connection = device_name
         self._status = Status.CONNECTING
-        if self._dongle.open(device_str=device_name):
-            self._status = Status.READY
-        else:
-            self._status = Status.NOT_CONNECTED
 
-    def disconnect(self):
-        self._dongle.close()
+        if await self._get_current_interface().connect(device_str=device_name):
+            self._status = Status.READY
+            return
+        self._status = Status.NOT_CONNECTED
+
+    async def disconnect(self):
+        await self._get_current_interface().close()
         self._status = Status.NOT_CONNECTED
 
     def get_status(self):
         return {"status": self._status,
-                "bluetooth": self._dongle.get_status(),
+                "bluetooth": self._get_current_interface().get_status(),
                 "us_config": self._config.us_config if self._config else None,
                 "tx_rx_config": self._config.tx_rx_config if self._config else None,
                 "progress": self._live_data_cnt / self._config.us_config.num_acqs if self._config else 0,
@@ -99,11 +110,11 @@ class Wulpus:
         bytes_config = gen_conf_package(self._config)
 
         # Send a restart command (in case the system is already running)
-        # TODO: Remove after live config-update is tested
-        self._dongle.send_config(gen_restart_package())
+        # Note: Can be removed after live config-update is tested
+        await self._get_current_interface().send_config(gen_restart_package())
         await asyncio.sleep(2.5)
 
-        if self._dongle.send_config(bytes_config):
+        if await self._get_current_interface().send_config(bytes_config):
             self._status = Status.RUNNING
             asyncio.create_task(self._measure())
         else:
@@ -129,11 +140,12 @@ class Wulpus:
         # Acquisition counter
         data_cnt = 0
         self._acquisition_running = True
+        current_intf = self._get_current_interface()
         while data_cnt < number_of_acq and self._acquisition_running:
-            # Receive the data
-            data = self._dongle.receive_data()
+            # need to be a object so it gets passes by ref
+            data = await current_intf.receive_data(self, self._config.us_config.num_samples)
             timestamp = int(time.time_ns()/1e3)
-            if data is not None:
+            if data is not None and self._acquisition_running:
                 self._latest_frame = self._structure_measurement(
                     data[0], data[2], timestamp)
                 self._data[:, data_cnt] = data[0]
@@ -143,10 +155,9 @@ class Wulpus:
                 self._new_measurement.set()
                 data_cnt += 1
                 self._live_data_cnt = data_cnt
-            await asyncio.sleep(0.001)
 
         # stop measurement
-        self._dongle.send_config(gen_restart_package())
+        await current_intf.send_config(gen_restart_package())
         # Trim data to actual measured size
         self._data = self._data[:, :data_cnt]
         self._data_acq_num = self._data_acq_num[:data_cnt]

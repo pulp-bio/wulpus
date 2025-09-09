@@ -6,14 +6,14 @@ import time
 from typing import List, Optional
 
 import uvicorn
-from fastapi import (FastAPI, File, HTTPException, Request, UploadFile,
-                     WebSocket, WebSocketDisconnect)
+from fastapi import (FastAPI, HTTPException,
+                     WebSocket, WebSocketDisconnect, Request)
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from wulpus.wulpus_api import CONFIG_FILE_EXTENSION, DATA_FILE_EXTENSION
 from wulpus.helper import check_if_filereq_is_legitimate, ensure_dir
 from wulpus.websocket_manager import WebsocketManager
-from wulpus.wulpus_config_models import (ComPort, TxRxConfig, UsConfig,
+from wulpus.wulpus_config_models import (ConDev, TxRxConfig, UsConfig,
                                          WulpusConfig)
 from wulpus.wulpus_mock import WulpusMock
 
@@ -32,13 +32,13 @@ wulpus_mock = WulpusMock()
 
 manager = WebsocketManager(wulpus)
 app = FastAPI()
-global_send_data_task = None
+app.state.send_data_task = None
 
 
 @app.post("/api/start")
 async def start(config: WulpusConfig):
     try:
-        manager.get_wulpus().connect()
+        await manager.get_wulpus().connect()
     except ValueError as e:
         return {"connection-error": str(e)}
     manager.get_wulpus().set_config(config)
@@ -53,32 +53,31 @@ def stop():
 
 
 @app.get("/api/connections")
-def get_connections():
-    return manager.get_wulpus().get_connection_options()
+async def get_connections():
+    return await manager.get_wulpus().get_connection_options()
 
 
 @app.post("/api/connect")
-def connect(conf: ComPort):
-    manager.get_wulpus().connect(conf.com_port)
+async def connect(conf: ConDev):
+    await manager.get_wulpus().connect(conf.con_dev)
 
 
 @app.post("/api/disconnect")
-def disconnect():
-    manager.get_wulpus().disconnect()
+async def disconnect():
+    await manager.get_wulpus().disconnect()
 
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
-    global global_send_data_task
     await manager.connect(websocket)
     asyncio.create_task(manager.send_status(websocket))
-    if global_send_data_task is None or global_send_data_task.done():
+    if app.state.send_data_task is None or app.state.send_data_task.done():
         new_measurement_event = asyncio.Event()
 
         wulpus.set_new_measurement_event(new_measurement_event)
         wulpus_mock.set_new_measurement_event(new_measurement_event)
 
-        global_send_data_task = asyncio.create_task(
+        app.state.send_data_task = asyncio.create_task(
             manager.send_data(new_measurement_event))
 
     latest_frame = manager.get_wulpus().get_latest_frame()

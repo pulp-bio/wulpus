@@ -2,29 +2,42 @@
 
 export type ConnectResponse = { ok: string } | { [key: string]: string };
 
+export type ConnectionType = 'serial' | 'ble';
+export type ConnectionOption = {
+    device: string;           // e.g. COM5 or BLE MAC/address
+    description: string;      // human-friendly label
+    type: ConnectionType;     // 'serial' | 'ble'
+};
+
 // Use Vite proxy in dev to avoid CORS; see vite.config.ts
 export const BASE_URL = "/api";
 
-export async function getBTHConnections(): Promise<string[][]> {
+export async function getBTHConnections(): Promise<ConnectionOption[]> {
     const res = await fetch(`${BASE_URL}/connections`);
     if (!res.ok) throw new Error(`GET /connections failed: ${res.status}`);
-    const data = await res.json() as { [key: string]: string }[]
-    // Backend might return list of strings or objects; normalize to strings
+    const data = await res.json();
     if (Array.isArray(data)) {
-        return data.map((item) => {
-            // get key of object:
-            const key = Object.keys(item)[0];
-            return [key, item[key]];
-        })
+        // Expecting [{ device, description, type }, ...]
+        return (data as unknown[])
+            .filter(Boolean)
+            .map((item) => {
+                const obj = item as Partial<ConnectionOption> & Record<string, unknown>;
+                const t = obj.type === 'ble' || obj.type === 'serial' ? obj.type : 'serial';
+                return {
+                    device: String(obj.device ?? ''),
+                    description: String(obj.description ?? obj.device ?? ''),
+                    type: t,
+                } as ConnectionOption;
+            });
     }
     return [];
 }
 
-export async function postConnect(com_port: string): Promise<void> {
+export async function postConnect(conDev: string): Promise<void> {
     const res = await fetch(`${BASE_URL}/connect`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ com_port }),
+        body: JSON.stringify({ con_dev: conDev }),
     });
     if (!res.ok) throw new Error(`POST /connect failed: ${res.status}`);
 }

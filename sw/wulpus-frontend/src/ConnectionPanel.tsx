@@ -1,39 +1,37 @@
-import { useEffect, useState } from "react";
-import { deactivateMock, getBTHConnections, postActivateMock, postConnect, postDisconnect, postStart, postStop, StatusLabel } from "./api";
+import { useEffect, useState, useCallback } from "react";
+import { deactivateMock, getBTHConnections, postActivateMock, postConnect, postDisconnect, postStart, postStop, StatusLabel, type ConnectionOption } from "./api";
 import type { Status, WulpusConfig } from "./websocket-types";
+import { toast } from 'react-hot-toast';
 
 export function ConnectionPanel(props: { effectiveConfig: WulpusConfig, status: Status | null }) {
     const { effectiveConfig, status } = props;
-    const [connections, setConnections] = useState<string[][]>([]);
-    const [selectedPort, setSelectedPort] = useState<string>("");
+    const [connections, setConnections] = useState<ConnectionOption[]>([]);
+    const [selectedConnection, setSelectedConnection] = useState<string>("");
+    const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
     const isMock = status?.mock ?? false;
 
-    async function refreshConnections() {
-        try {
-            const list = await getBTHConnections();
-            setConnections(list);
-            const justPosts: string[] = list.map(item => item[1]);
-            // if previously selected port is gone, clear selection
-            if (selectedPort && !justPosts.includes(selectedPort)) {
-                setSelectedPort("");
-            }
-        } catch (e) {
-            setConnections([]);
+    const refreshConnections = useCallback(async () => {
+        setIsRefreshing(true);
+        toast('scanning...', { icon: <span className="material-symbols-rounded">bluetooth</span> });
+        const list = await getBTHConnections();
+        setIsRefreshing(false);
+        setConnections(list);
+        const justPosts: string[] = list.map(item => item.device);
+        if (selectedConnection && !justPosts.includes(selectedConnection)) {
+            setSelectedConnection("");
         }
-    }
+    }, []);
 
 
     useEffect(() => {
-        getBTHConnections()
-            .then((list) => setConnections(list))
-            .catch(() => setConnections([]))
-    }, []);
+        refreshConnections()
+    }, [refreshConnections]);
 
     async function handleConnect() {
-        console.log("Connecting to port:", selectedPort);
-        if (!selectedPort) return;
-        await postConnect(selectedPort);
+        console.log("Connecting to port:", selectedConnection);
+        if (!selectedConnection) return;
+        await postConnect(selectedConnection);
     }
 
     async function handleStart() {
@@ -64,15 +62,17 @@ export function ConnectionPanel(props: { effectiveConfig: WulpusConfig, status: 
                 <div className="flex flex-row flex-nowrap items-center space-x-2">
                     <select className="border rounded px-2 py-1 w-52"
                         disabled={(status?.status ?? 0) !== 0}
-                        value={selectedPort}
-                        onChange={(e) => setSelectedPort(e.target.value)}>
+                        value={selectedConnection}
+                        onChange={(e) => setSelectedConnection(e.target.value)}>
                         <option value="">Select port</option>
                         {connections.map((c) => (
-                            <option key={c[0]} value={c[0]}>{c[1]}</option>
+                            <option key={`${c.type}:${c.device}`} value={c.device}>
+                                {c.type === 'ble' ? 'BLE: ' : ''}{c.description}
+                            </option>
                         ))}
                     </select>
                     <button onClick={refreshConnections} title="Refresh" className="p-1 bg-gray-100 hover:bg-gray-200 flex items-center rounded">
-                        <span className="material-symbols-rounded">refresh</span>
+                        <span className={`material-symbols-rounded ${isRefreshing ? 'motion-safe:animate-spin' : ''}`}>refresh</span>
                     </button>
                 </div>
                 <div className='flex space-x-2'>

@@ -15,4 +15,5 @@ dependencies:
   - pandas=2.3
   - tables=3.9
   - pyarrow=21.0
+  - bleak=1.1
 prefix: 
