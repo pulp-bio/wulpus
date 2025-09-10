@@ -35,6 +35,7 @@ export function ConnectionPanel(props: { effectiveConfig: WulpusConfig, status: 
     }
 
     async function handleStart() {
+        toast('Starting...');
         await postStart(effectiveConfig);
     }
 
@@ -76,6 +77,9 @@ export function ConnectionPanel(props: { effectiveConfig: WulpusConfig, status: 
                     </button>
                 </div>
                 <div className='flex space-x-2'>
+                    {status?.status === undefined && (
+                        <div className="font-medium text-red-500 border-1 px-2 border-red-500 hover:bg-gray-50 rounded">Server not running!</div>
+                    )}
                     {status?.status === 0 && (
                         <button
                             onClick={handleConnect}
@@ -84,7 +88,7 @@ export function ConnectionPanel(props: { effectiveConfig: WulpusConfig, status: 
                             Connect
                         </button>
                     )}
-                    {status?.status !== 0 && (
+                    {status?.status !== undefined && status.status !== 0 && (
                         <button
                             onClick={postDisconnect}
                             className={`w-full bg-yellow-600 hover:bg-yellow-700 text-white rounded px-3 py-2 ${status?.status === 1 ? 'opacity-50' : ''}`}
@@ -93,7 +97,7 @@ export function ConnectionPanel(props: { effectiveConfig: WulpusConfig, status: 
                         </button>
                     )}
 
-                    {status?.status !== 3 && (
+                    {status?.status !== undefined && status.status !== 3 && (
                         <button
                             onClick={handleStart}
                             className={`w-full bg-green-600 hover:bg-green-700 text-white rounded px-3 py-2 ${status?.status != 2 ? 'opacity-50' : ''}`}

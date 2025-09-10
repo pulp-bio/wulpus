@@ -1,7 +1,7 @@
 from __future__ import annotations
 import asyncio
 import json
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Union, Any
 
 from fastapi import WebSocket, WebSocketDisconnect
 from fastapi.encoders import jsonable_encoder
@@ -47,11 +47,14 @@ class WebsocketManager:
                 self.disconnect(connection)
 
     async def send_status(self, websocket: WebSocket):
+        old_status: Union[dict[str, Any], None] = None
         try:
             while websocket.application_state == WebSocketState.CONNECTED:
                 status = self.wulpus.get_status()
-                await websocket.send_json(jsonable_encoder(status))
-                await asyncio.sleep(1)
+                if status != old_status:
+                    await websocket.send_json(jsonable_encoder(status))
+                old_status = status
+                await asyncio.sleep(0.05)
         except (RuntimeError, WebSocketDisconnect):  # Client disconnected
             return
 
