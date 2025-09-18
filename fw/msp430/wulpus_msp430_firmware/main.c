@@ -71,6 +71,11 @@ int main(void)
         tx_rx_id = 0;
         meas_frame_nr = 0;
 
+        // Power down HV PCB to save energy
+        disableHvPcbDcDc();
+        disableOpAmpSupply();
+        disableHvPcbSupply();
+
         // Receive Uss configuration package from nRF
         receiveUssConfPackage();
 
@@ -78,9 +83,6 @@ int main(void)
 
         // Enter acquisition loop
         usAcquisitionLoop();
-        
-        // Power down HV PCB after finished recording
-        disableHvPcbSupply();
         }
     
     // Not reachable
@@ -174,6 +176,7 @@ static void prepareUSSAcquisition(){
 
     // Power up HV PCB
     enableHvPcbSupply();
+    enableHvPcbDcDc();
     // Enable Power for OPA836
     enableOpAmpSupply();
 }
