@@ -9,14 +9,6 @@ import wulpus as wulpus_pkg
 from typing import Tuple, List, Optional
 from wulpus.helper import zip_to_dataframe
 
-def load_measurement_zip(path: str) -> Tuple[pd.DataFrame, object]:
-    """Load measurement zip into a DataFrame and the config object.
-
-    Thin wrapper around wulpus.helper.zip_to_dataframe.
-    """
-    df, config = zip_to_dataframe(path)
-    return df, config
-
 
 def flatten_df_measurements(df: pd.DataFrame, sample_crop: Optional[int] = None) -> Tuple[pd.DataFrame, List[str]]:
     """Convert a DataFrame with a 'measurement' column (each row an array/Series)

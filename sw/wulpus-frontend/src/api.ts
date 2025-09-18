@@ -1,6 +1,6 @@
 // Simple API client for the FastAPI backend
 
-import type { SeriesStatus, WulpusConfig } from "./websocket-types";
+import type { WulpusConfig } from "./websocket-types";
 
 export type ConnectResponse = { ok: string } | { [key: string]: string };
 
