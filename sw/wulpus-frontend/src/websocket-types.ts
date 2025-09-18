@@ -34,6 +34,13 @@ export type WulpusConfig = {
     us_config: UsConfig;
 };
 
+export type SeriesStatus = {
+    active: boolean;
+    interval_seconds?: number;
+    number?: number;
+    progress_count?: number;
+}
+
 export type Status = {
     mock?: boolean;
     status: number; // 0.., maps to backend Status enum
@@ -41,6 +48,7 @@ export type Status = {
     us_config: UsConfig | null;
     tx_rx_config: TxRxConfig[] | null;
     progress: number; // 0..1
+    series?: SeriesStatus
 };
 
 export type DataFrame = {

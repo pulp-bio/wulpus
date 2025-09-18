@@ -1,5 +1,7 @@
 // Simple API client for the FastAPI backend
 
+import type { SeriesStatus, WulpusConfig } from "./websocket-types";
+
 export type ConnectResponse = { ok: string } | { [key: string]: string };
 
 export type ConnectionType = 'serial' | 'ble';
@@ -50,7 +52,7 @@ export async function postDisconnect(): Promise<void> {
     if (!res.ok) throw new Error(`POST /disconnect failed: ${res.status}`);
 }
 
-export async function postStart(config: unknown): Promise<ConnectResponse> {
+export async function postStart(config: WulpusConfig): Promise<ConnectResponse> {
     const res = await fetch(`${BASE_URL}/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -109,4 +111,24 @@ export function StatusLabel(s?: number) {
         case 9: return 'ERROR';
         default: return String(s ?? '—');
     }
+}
+
+export async function startSeries(intervalSeconds: number, config: WulpusConfig, number: number) {
+    const res = await fetch(`${BASE_URL}/series/start`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            interval_seconds: intervalSeconds,
+            config,
+            number
+        })
+    });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
+}
+
+export async function stopSeries() {
+    const res = await fetch(`${BASE_URL}/series/stop`, { method: 'POST' });
+    if (!res.ok) throw new Error(await res.text());
+    return res.json();
 }

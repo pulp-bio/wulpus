@@ -100,8 +100,8 @@ export function ConnectionPanel(props: { effectiveConfig: WulpusConfig, status: 
                     {status?.status !== undefined && status.status !== 3 && (
                         <button
                             onClick={handleStart}
-                            className={`w-full bg-green-600 hover:bg-green-700 text-white rounded px-3 py-2 ${status?.status != 2 ? 'opacity-50' : ''}`}
-                            disabled={status?.status != 2}
+                            className={`w-full bg-green-600 hover:bg-green-700 text-white rounded px-3 py-2 disabled:opacity-50`}
+                            disabled={(status?.status != 2) || (status.series?.active)}
                         >
                             Start
                         </button>

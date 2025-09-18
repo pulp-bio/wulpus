@@ -6,6 +6,7 @@ import { Graph } from './Graph';
 import { TxRxConfigPanel } from './TxRxConfig';
 import { USConfigPanel } from './UsConfig';
 import { ConfigFilesPanel } from './ConfigFilesPanel';
+import { SeriesPanel } from './SeriesPanel';
 import type { DataFrame, Status, TxRxConfig, UsConfig, WulpusConfig } from './websocket-types';
 import { getInitialConfig } from './helper';
 
@@ -87,6 +88,10 @@ function App() {
         <section className="lg:col-span-1 space-y-3">
           <div className="bg-white rounded-lg shadow">
             <ConnectionPanel effectiveConfig={effectiveConfig} status={status} />
+          </div>
+
+          <div className="bg-white rounded-lg shadow">
+            <SeriesPanel effectiveConfig={effectiveConfig} disabled={(status?.status ?? 0) !== 2} seriesStatus={status?.series} />
           </div>
 
           <div className="bg-white rounded-lg shadow">

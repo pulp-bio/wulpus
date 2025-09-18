@@ -1,11 +1,14 @@
 from __future__ import annotations
+
 import asyncio
 import json
-from typing import TYPE_CHECKING, Union, Any
+from typing import TYPE_CHECKING, Any, Callable, Dict, Optional, Union
 
 from fastapi import WebSocket, WebSocketDisconnect
 from fastapi.encoders import jsonable_encoder
 from fastapi.websockets import WebSocketState
+from wulpus.helper import PassByRef
+from wulpus.series import SeriesConfig
 
 if TYPE_CHECKING:
     from wulpus.wulpus import Wulpus
@@ -46,11 +49,13 @@ class WebsocketManager:
             except (RuntimeError, WebSocketDisconnect):  # Client disconnected
                 self.disconnect(connection)
 
-    async def send_status(self, websocket: WebSocket):
+    async def send_status(self, websocket: WebSocket, series_info: PassByRef[Optional[SeriesConfig]]):
         old_status: Union[dict[str, Any], None] = None
         try:
             while websocket.application_state == WebSocketState.CONNECTED:
                 status = self.wulpus.get_status()
+                if series_info.value:
+                    status = {**status, "series": series_info.value}
                 if status != old_status:
                     await websocket.send_json(jsonable_encoder(status))
                 old_status = status

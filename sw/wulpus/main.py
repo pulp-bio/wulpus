@@ -3,18 +3,20 @@ import inspect
 import json
 import os
 import time
-from typing import List, Optional
+from typing import List, Optional, Union
 
 import uvicorn
 from fastapi import (FastAPI, HTTPException,
                      WebSocket, WebSocketDisconnect, Request)
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from wulpus.series import series_loop, SeriesConfig, SeriesStartRequest
 from wulpus.wulpus_api import CONFIG_FILE_EXTENSION, DATA_FILE_EXTENSION
-from wulpus.helper import check_if_filereq_is_legitimate, ensure_dir
+from wulpus.helper import PassByRef, check_if_filereq_is_legitimate, ensure_dir, estimate_measurement_duration_seconds
 from wulpus.websocket_manager import WebsocketManager
 from wulpus.wulpus_config_models import (ConDev, TxRxConfig, UsConfig,
                                          WulpusConfig)
+from pydantic import BaseModel, Field
 from wulpus.wulpus_mock import WulpusMock
 
 import wulpus as wulpus_pkg
@@ -32,8 +34,10 @@ wulpus_mock = WulpusMock()
 
 manager = WebsocketManager(wulpus)
 app = FastAPI()
-app.state.send_data_task = None
-
+app.state.send_data_task = None  # type: Optional[asyncio.Task]
+app.state.series_task = None  # type: Optional[asyncio.Task]
+# type: PassByRef[Optional[SeriesConfig]]
+app.state.series_info = PassByRef(None)
 
 @app.post("/api/start")
 async def start(config: WulpusConfig):
@@ -50,6 +54,40 @@ async def start(config: WulpusConfig):
 def stop():
     manager.get_wulpus().stop()
     return {"ok": "ok"}
+
+
+@app.post("/api/series/start")
+async def start_series(req: SeriesStartRequest):
+    """Start a repeating measurement series at a fixed interval (seconds)."""
+    # Reject if a series is already running
+    if app.state.series_task and not app.state.series_task.done():
+        raise HTTPException(status_code=400, detail="Series already running")
+
+    # Check if duration of single measurement is less than interval
+    est = estimate_measurement_duration_seconds(req.config)
+    if est >= req.interval_seconds:
+        raise HTTPException(
+            status_code=400, detail=f"Estimated measurement duration {est:.2f}s exceeds or equals interval {req.interval_seconds}s")
+
+    app.state.series_info.value = SeriesConfig(
+        active=True,
+        config=req.config,
+        interval_seconds=req.interval_seconds,
+        number=req.number,
+        progress_count=0
+    )
+
+    app.state.series_task = asyncio.create_task(
+        series_loop(app.state.series_info, start))
+    return {"ok": True}
+
+
+@app.post("/api/series/stop")
+async def stop_series():
+    if app.state.series_task:
+        app.state.series_task.cancel()
+    app.state.series_info.value = None
+    return stop()
 
 
 @app.get("/api/connections")
@@ -70,7 +108,7 @@ async def disconnect():
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
-    asyncio.create_task(manager.send_status(websocket))
+    asyncio.create_task(manager.send_status(websocket, app.state.series_info))
     if app.state.send_data_task is None or app.state.send_data_task.done():
         new_measurement_event = asyncio.Event()
 

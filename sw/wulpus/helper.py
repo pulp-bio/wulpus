@@ -5,7 +5,7 @@ import inspect
 import io
 import json
 import os
-from typing import Tuple
+from typing import Any, Generic, Iterable, Iterator, Tuple, TypeVar
 from zipfile import ZipFile
 
 import numpy as np
@@ -38,7 +38,10 @@ def check_if_filereq_is_legitimate(req_name: str, system_dir: str, allowed_endin
     return path
 
 
-def zip_to_dataframe(path: str) -> Tuple[pd.DataFrame, object]:
+def zip_to_dataframe(path: str) -> Tuple[pd.DataFrame, WulpusConfig]:
+    """
+    Returns df: DataFrame with log; config: WulpusConfig object
+    """
     with ZipFile(path, 'r') as zf:
         config_raw = json.loads(zf.read('config-0.json').decode('utf-8'))
         df_flat = pd.read_parquet(io.BytesIO(zf.read('data.parquet')))
@@ -69,7 +72,7 @@ def zip_to_dataframe(path: str) -> Tuple[pd.DataFrame, object]:
     return df, config
 
 
-def find_latest_measurement_zip() -> str:
+def find_latest_measurement_zip(n=1) -> list[str]:
     """Return path to the most recent .zip in the package measurements folder.
 
     Raises FileNotFoundError if the folder or files don't exist.
@@ -82,4 +85,52 @@ def find_latest_measurement_zip() -> str:
     zip_files = glob.glob(os.path.join(measurement_dir, '*.zip'))
     if not zip_files:
         raise FileNotFoundError(f"No zip files found in {measurement_dir}")
-    return max(zip_files, key=os.path.getctime)
+    zip_files.sort()
+    return zip_files[:n]
+
+
+def estimate_measurement_duration_seconds(config: WulpusConfig) -> float:
+    """Estimate duration of a job in seconds."""
+    return (config.us_config.num_acqs * config.us_config.meas_period) / 1e6
+
+
+def concat_dataframes(dfs: list[pd.DataFrame]) -> pd.DataFrame:
+    """Concatenate multiple DataFrames with same columns."""
+    return pd.concat(dfs, axis=0)
+
+
+def get_all_zips_from_folder(folder: str) -> list[str]:
+    """Return a list of all .zip files in the specified folder."""
+    if not os.path.exists(folder):
+        raise FileNotFoundError(f"Folder not found: {folder}")
+    zip_files = glob.glob(os.path.join(folder, '*.zip'))
+    if not zip_files:
+        raise FileNotFoundError(f"No zip files found in {folder}")
+    zip_files.sort()
+    return zip_files
+
+
+T = TypeVar('T')
+
+
+class PassByRef(Generic[T]):
+    """Simple generic wrapper to carry a mutable reference to a value.
+    """
+
+    def __init__(self, value: T):
+        self.value: T = value
+
+    def set(self, value: T) -> None:
+        self.value = value
+
+    def __getattr__(self, item: str) -> Any:  # runtime delegation
+        return getattr(self.value, item)
+
+    def __repr__(self) -> str:  # pragma: no cover simple convenience
+        return f"PassByRef({self.value!r})"
+
+    # Optional iteration delegation if underlying is iterable
+    def __iter__(self) -> Iterator[Any]:  # type: ignore[override]
+        if isinstance(self.value, Iterable):
+            return iter(self.value)
+        raise TypeError(f"{type(self.value).__name__} object is not iterable")
