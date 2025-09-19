@@ -11,9 +11,10 @@ from zipfile import ZipFile
 import numpy as np
 import pandas as pd
 from fastapi import HTTPException
-from wulpus.wulpus_config_models import WulpusConfig
 
 import wulpus as wulpus_pkg
+from typing import TYPE_CHECKING
+from wulpus.wulpus_config_models import WulpusConfig
 
 
 def ensure_dir(dir: str) -> None:

@@ -11,7 +11,8 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Optional, TypedDict, List, Tuple
+from typing import Optional, List, Tuple
+from typing_extensions import TypedDict
 
 import numpy as np
 from serial.tools.list_ports_common import ListPortInfo

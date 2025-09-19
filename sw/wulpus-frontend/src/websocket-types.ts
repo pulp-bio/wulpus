@@ -52,8 +52,12 @@ export type Status = {
 };
 
 export type DataFrame = {
-    data: number[]
-    time: number[]
-    tx: number[]
-    rx: number[]
+    measurement: {
+        data: number[]
+        time: number[]
+        tx: number[]
+        rx: number[]
+    }
+    peaks: number[]
+    wavelet: number[]
 }

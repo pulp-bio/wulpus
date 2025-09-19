@@ -24,6 +24,7 @@ function App() {
   const [dataFrame, setDataFrame] = useState<DataFrame | null>(null);
 
   const [bmodeBuffer, setBmodeBuffer] = useState<number[][]>(Array.from({ length: CHANNEL_SIZE }, () => []));
+  const [peaksPerChannel, setPeaksPerChannel] = useState<number[][]>(Array.from({ length: CHANNEL_SIZE }, () => []));
 
   // WulpusConfig state
   const [txRxConfigs, setTxRxConfigs] = useState<TxRxConfig[]>(getInitialConfig().tx_rx_config);
@@ -59,19 +60,28 @@ function App() {
       if ('status' in lastJsonMessage) {
         setStatus(lastJsonMessage);
       }
-      else if ('data' in lastJsonMessage) {
+      else if ('measurement' in lastJsonMessage) {
         setDataFrame(lastJsonMessage);
-        const rx_channel = lastJsonMessage.rx;
-        // push into bmode buffer
-        setBmodeBuffer((prev) => {
+        const rx_channel = lastJsonMessage.measurement.rx;
+        const new_data = lastJsonMessage.measurement.data.slice();
+        setBmodeBuffer(prev => {
           const next = [...prev];
-          const new_data = lastJsonMessage.data.slice()
           for (const channel of rx_channel) {
             if (channel >= CHANNEL_SIZE) break;
             next[channel] = new_data;
           }
           return next;
         });
+        if (Array.isArray(lastJsonMessage.peaks)) {
+          setPeaksPerChannel(prev => {
+            const next = [...prev];
+            for (const channel of rx_channel) {
+              if (channel >= CHANNEL_SIZE) break;
+              next[channel] = lastJsonMessage.peaks.slice();
+            }
+            return next;
+          });
+        }
       }
     }
   }, [lastJsonMessage, setStatus, setDataFrame]);
@@ -101,7 +111,7 @@ function App() {
 
         <div className="col-span-2 space-y-3">
           <div className="bg-white rounded-lg shadow">
-            <Graph dataFrame={dataFrame} bmodeBuffer={bmodeBuffer} usConfig={usConfig} />
+            <Graph dataFrame={dataFrame} bmodeBuffer={bmodeBuffer} peaksPerChannel={peaksPerChannel} usConfig={usConfig} />
           </div>
 
           <div className="bg-white rounded-lg shadow">

@@ -20,7 +20,7 @@ export async function getBTHConnections(): Promise<ConnectionOption[]> {
     const data = await res.json();
     if (Array.isArray(data)) {
         // Expecting [{ device, description, type }, ...]
-        return (data as unknown[])
+        const items = (data as unknown[])
             .filter(Boolean)
             .map((item) => {
                 const obj = item as Partial<ConnectionOption> & Record<string, unknown>;
@@ -30,7 +30,9 @@ export async function getBTHConnections(): Promise<ConnectionOption[]> {
                     description: String(obj.description ?? obj.device ?? ''),
                     type: t,
                 } as ConnectionOption;
-            });
+            })
+        const uniqueItems = Array.from(new Map(items.map(i => [i.device, i])).values());
+        return uniqueItems;
     }
     return [];
 }

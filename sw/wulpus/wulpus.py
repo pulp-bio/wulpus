@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import asyncio
 import inspect
 import io
@@ -9,16 +11,16 @@ from zipfile import ZipFile
 
 import numpy as np
 import pandas as pd
-
-from wulpus.interface_direct import WulpusDongleDirect
+from typing_extensions import TypedDict
 from wulpus.helper import ensure_dir
-import wulpus
+from wulpus.interface import DongleInterface
+from wulpus.interface_direct import WulpusDongleDirect
 from wulpus.interface_usb import WulpusDongleUsb
-from wulpus.wulpus_api import DATA_FILE_EXTENSION, gen_conf_package, gen_restart_package
-from .interface import DongleInterface
+from wulpus.wulpus_api import (DATA_FILE_EXTENSION, gen_conf_package,
+                               gen_restart_package)
 from wulpus.wulpus_config_models import WulpusConfig
-from typing import TypedDict
 
+import wulpus as wulpus_pkg
 
 class Status(IntEnum):
     NOT_CONNECTED = 0
@@ -61,6 +63,9 @@ class Wulpus:
 
     def get_acquisition_running(self) -> bool:
         return self._acquisition_running
+
+    def get_config(self):
+        return self._config
 
     async def get_connection_options(self):
         conn_1 = await self._interface_direct.get_available()
@@ -172,7 +177,7 @@ class Wulpus:
         timestring = time.strftime("%Y-%m-%d_%H-%M-%S", start_time)
         filename = "wulpus-" + timestring
         # Ensure measurement directory exists
-        module_path = os.path.dirname(inspect.getfile(wulpus))
+        module_path = os.path.dirname(inspect.getfile(wulpus_pkg))
         measurement_path = os.path.join(module_path, 'measurements')
         ensure_dir(measurement_path)
         basepath = os.path.join(measurement_path, filename)
@@ -206,7 +211,7 @@ class Wulpus:
 
         print('Data saved in ' + basepath + DATA_FILE_EXTENSION)
 
-    def get_latest_frame(self):
+    def get_latest_frame(self) -> Union[Measurement, None]:
         return self._latest_frame
 
     def _structure_measurement(self, _data: np.ndarray, _tx_rx_id: int, _time: int) -> Measurement:

@@ -10,6 +10,7 @@ from fastapi import (FastAPI, HTTPException,
                      WebSocket, WebSocketDisconnect, Request)
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from wulpus.data_processing import MeasurementProcessor
 from wulpus.series import series_loop, SeriesConfig, SeriesStartRequest
 from wulpus.wulpus_api import CONFIG_FILE_EXTENSION, DATA_FILE_EXTENSION
 from wulpus.helper import PassByRef, check_if_filereq_is_legitimate, ensure_dir, estimate_measurement_duration_seconds
@@ -32,7 +33,9 @@ FRONTEND_DIR = os.path.join(os.path.dirname(
 wulpus = Wulpus()
 wulpus_mock = WulpusMock()
 
-manager = WebsocketManager(wulpus)
+processor = MeasurementProcessor()
+
+manager = WebsocketManager(wulpus, processor)
 app = FastAPI()
 app.state.send_data_task = None  # type: Optional[asyncio.Task]
 app.state.series_task = None  # type: Optional[asyncio.Task]
@@ -53,6 +56,7 @@ async def start(config: WulpusConfig):
 @app.post("/api/stop")
 def stop():
     manager.get_wulpus().stop()
+    processor.reset()
     return {"ok": "ok"}
 
 
@@ -77,6 +81,7 @@ async def start_series(req: SeriesStartRequest):
         progress_count=0
     )
 
+    processor.reset()
     app.state.series_task = asyncio.create_task(
         series_loop(app.state.series_info, start))
     return {"ok": True}
@@ -108,7 +113,8 @@ async def disconnect():
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
-    asyncio.create_task(manager.send_status(websocket, app.state.series_info))
+    asyncio.create_task(manager.task_send_status(
+        websocket, app.state.series_info))
     if app.state.send_data_task is None or app.state.send_data_task.done():
         new_measurement_event = asyncio.Event()
 
@@ -116,11 +122,9 @@ async def websocket_endpoint(websocket: WebSocket):
         wulpus_mock.set_new_measurement_event(new_measurement_event)
 
         app.state.send_data_task = asyncio.create_task(
-            manager.send_data(new_measurement_event))
+            manager.task_send_data(new_measurement_event))
 
-    latest_frame = manager.get_wulpus().get_latest_frame()
-    if latest_frame is not None:
-        await manager.broadcast_json(latest_frame)
+    await manager.send_data()
     try:
         while True:
             data = await websocket.receive_text()
@@ -219,6 +223,7 @@ def delete_config(filename: str):
 def activate_mock():
     wulpus.stop()
     manager.set_wulpus(wulpus_mock)
+    processor.reset()
     return {"ok": "ok"}
 
 
@@ -226,6 +231,7 @@ def activate_mock():
 def deactivate_mock():
     wulpus_mock.stop()
     manager.set_wulpus(wulpus)
+    processor.reset()
     return {"ok": "ok"}
 
 
@@ -241,6 +247,7 @@ async def replay_file(filename: str):
         filename, MEASUREMENTS_DIR, DATA_FILE_EXTENSION)
     wulpus_mock.set_config(default_config)
     wulpus_mock.set_replay_file(filepath)
+    processor.reset()
     await wulpus_mock.start()
 
 app.mount("/assets", StaticFiles(directory=os.path.join(FRONTEND_DIR,

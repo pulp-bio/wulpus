@@ -16,4 +16,5 @@ dependencies:
   - tables=3.9
   - pyarrow=21.0
   - bleak=1.1
+  - pywavelets=1.6
 prefix: 

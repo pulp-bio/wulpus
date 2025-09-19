@@ -5,12 +5,15 @@ import { bandpassFIR, hilbertEnvelope, toggleFullscreen } from './helper';
 import type { DataFrame, UsConfig } from './websocket-types';
 import RangeSlider from 'react-range-slider-input';
 
-export function Graph(props: { dataFrame: DataFrame | null, bmodeBuffer: number[][], usConfig: UsConfig }) {
-    const { dataFrame, bmodeBuffer, usConfig } = props;
-    const data = dataFrame?.data ?? []
+export function Graph(props: { dataFrame: DataFrame | null, bmodeBuffer: number[][], peaksPerChannel: number[][], usConfig: UsConfig }) {
+    const { dataFrame, bmodeBuffer, peaksPerChannel, usConfig } = props;
+    const data = dataFrame?.measurement.data ?? [];
+    const wavelet_transform = dataFrame?.wavelet ?? [];
+    const peaks = dataFrame?.peaks ?? [];
     const sampling_freq = usConfig.sampling_freq;
     const plotContainerRef = useRef<HTMLDivElement | null>(null);
     const [showBMode, setShowBMode] = useState<boolean>(false);
+    const UPSAMPLING_FACTOR = 10
 
     // fullscreen graph support
     const [isFullscreen, setIsFullscreen] = useState(false);
@@ -35,6 +38,35 @@ export function Graph(props: { dataFrame: DataFrame | null, bmodeBuffer: number[
         setHighCutHz(maxHighCutHz(sampling_freq));
     }, [sampling_freq, setHighCutHz, minLowCutHz, maxHighCutHz]);
 
+    // Rx channels for current frame (if provided)
+
+    // Vertical line shapes for the time-domain (non B-mode) plot spanning full height
+    const signalPeakShapes: Partial<Plotly.Shape>[] = peaks.map(p => ({
+        type: 'line', x0: p, x1: p, xref: 'x', yref: 'paper', y0: 0, y1: 1,
+        line: { color: 'rgba(255,140,0,0.35)', width: 2, dash: 'dot' }, layer: 'below'
+    }));
+
+    // For B-Mode heatmap: draw peak lines only over the rows (channels) that belong to this measurement's rx set.
+    // Heatmap implicit y coordinates: row indices 0..N-1. We'll span each channel row from (ch-0.5) to (ch+0.5)
+    const bmodePeakShapes: Partial<Plotly.Shape>[] = [];
+    if (peaksPerChannel && peaksPerChannel.length) {
+        for (let ch = 0; ch < peaksPerChannel.length; ch++) {
+            const chPeaks = peaksPerChannel[ch];
+            if (!chPeaks || !chPeaks.length) continue;
+            if (ch < 0 || ch >= bmodeBuffer.length) continue;
+            for (const p of chPeaks) {
+                bmodePeakShapes.push({
+                    type: 'line',
+                    x0: p, x1: p,
+                    xref: 'x', yref: 'y',
+                    y0: ch - 0.5, y1: ch + 0.5,
+                    line: { color: 'rgba(255,140,0,0.55)', width: 2, dash: 'dot' },
+                    layer: 'above'
+                });
+            }
+        }
+    }
+
     return (
         <div ref={plotContainerRef} className="bg-white p-4">
             <h2 className="font-medium mb-3">Live Signal</h2>
@@ -49,8 +81,12 @@ export function Graph(props: { dataFrame: DataFrame | null, bmodeBuffer: number[
                         }] as unknown as Plotly.Data[]}
                         useResizeHandler
                         style={{ width: "100%", height: "100%" }}
-                        layout={{ autosize: true, margin: { t: 10, r: 10, b: 30, l: 40 } }}
-
+                        layout={{
+                            autosize: true,
+                            margin: { t: 10, r: 10, b: 30, l: 40 },
+                            shapes: bmodePeakShapes,
+                            yaxis: { autorange: true, title: { text: 'Channel' } },
+                        }}
                     />
                 ) : (
                     <Plot
@@ -61,26 +97,34 @@ export function Graph(props: { dataFrame: DataFrame | null, bmodeBuffer: number[
                                 type: 'scatter', mode: 'lines', name: 'Raw', line: { color: 'blue' },
                             },
                             {
-                                x: data ? data.map((_, i) => i) : [],
-                                y: filteredFrame.length ? filteredFrame : [],
-                                type: 'scatter', mode: 'lines', name: 'Filter', line: { color: 'green' },
+                                    x: data ? data.map((_, i) => i) : [],
+                                    y: filteredFrame.length ? filteredFrame : [],
+                                    type: 'scatter', mode: 'lines', name: 'Filter', line: { color: 'green' },
+                                    visible: 'legendonly',
+                                },
+                                {
+                                    x: data ? data.map((_, i) => i) : [],
+                                    y: envelopeFrame.length ? envelopeFrame : [],
+                                    type: 'scatter', mode: 'lines', name: 'Envelope', line: { color: 'fuchsia' },
+                                    visible: 'legendonly',
+                                },
+                                {
+                                    x: wavelet_transform ? wavelet_transform.map((_, i) => i / UPSAMPLING_FACTOR) : [],
+                                    y: wavelet_transform ?? [],
+                                    type: 'scatter', mode: 'lines', name: 'Wavelet Envelope', line: { color: 'red' },
                                 visible: 'legendonly',
-                            },
-                            {
-                                x: data ? data.map((_, i) => i) : [],
-                                y: envelopeFrame.length ? envelopeFrame : [],
-                                type: 'scatter', mode: 'lines', name: 'Envelope', line: { color: 'red' },
-                                visible: 'legendonly',
-                            },
-                        ]) as unknown as Plotly.Data[]}
+                                },
+                            ]) as unknown as Plotly.Data[]}
                         useResizeHandler
                         style={{ width: "100%", height: "100%" }}
                         layout={{
-                            autosize: true, uirevision: "fixed",
+                            autosize: true,
+                            uirevision: "fixed",
                             showlegend: true,
-                            legend: { orientation: 'h', },
+                            legend: { orientation: 'h' },
                             margin: { t: 10, r: 10, b: 30, l: 40 },
-                            yaxis: { range: [-2000, 2000] }
+                            yaxis: { range: [-2000, 2000] },
+                            shapes: signalPeakShapes,
                         }}
                     />
                 )}
