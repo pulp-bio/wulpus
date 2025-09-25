@@ -1,19 +1,23 @@
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import useWebSocket from 'react-use-websocket';
+import { AnalysisConfigPanel } from './AnalysisConfigPanel';
+import { fetchAnalyzeConfig, postAnalyzeConfig } from './api';
+import { ConfigFilesPanel } from './ConfigFilesPanel';
 import { ConnectionPanel } from './ConnectionPanel';
 import { Graph } from './Graph';
+import { getInitialConfig } from './helper';
+import { SeriesPanel } from './SeriesPanel';
 import { TxRxConfigPanel } from './TxRxConfig';
 import { USConfigPanel } from './UsConfig';
-import { ConfigFilesPanel } from './ConfigFilesPanel';
-import { SeriesPanel } from './SeriesPanel';
 import type { DataFrame, Status, TxRxConfig, UsConfig, WulpusConfig } from './websocket-types';
-import { getInitialConfig } from './helper';
 
 export const LOCAL_KEY = 'wulpus-config-v1';
 export const CHANNEL_SIZE = 8;
 
 function App() {
+  const queryClient = useQueryClient();
 
   const wsUrl = `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}/ws`;
   const { lastJsonMessage } = useWebSocket<Status | DataFrame>(wsUrl, {
@@ -86,6 +90,27 @@ function App() {
     }
   }, [lastJsonMessage, setStatus, setDataFrame]);
 
+  const { data: analyzeConfig } = useQuery({
+    queryKey: ['fetchAnalyzeConfig'],
+    queryFn: fetchAnalyzeConfig,
+  })
+  const updateAnalyzeConfig = useMutation({
+    mutationFn: postAnalyzeConfig,
+    // Optimistically update to the new value
+    onMutate: async (newData, context) => {
+      // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+      await context.client.cancelQueries({ queryKey: ['fetchAnalyzeConfig'] })
+      const previousVal = context.client.getQueryData(['fetchAnalyzeConfig'])
+      context.client.setQueryData(['fetchAnalyzeConfig'], () => newData)
+      return { previousVal }
+    },
+    onError: (_err, _newTodo, onMutateResult, context) => {
+      context.client.setQueryData(['fetchAnalyzeConfig'], onMutateResult?.previousVal)
+    },
+    onSettled: (_data, _error, _variables, _onMutateResult, _context) =>
+      queryClient.invalidateQueries({ queryKey: ['fetchAnalyzeConfig'] })
+  })
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <div className="border-b bg-white">
@@ -106,6 +131,10 @@ function App() {
 
           <div className="bg-white rounded-lg shadow">
             <USConfigPanel usConfig={usConfig} setUsConfig={setUsConfig} />
+          </div>
+
+          <div className="bg-white rounded-lg shadow">
+            <AnalysisConfigPanel analyzeConfig={analyzeConfig} setAnalyzeConfig={updateAnalyzeConfig} />
           </div>
         </section>
 

@@ -11,6 +11,16 @@ export type ConnectionOption = {
     type: ConnectionType;     // 'serial' | 'ble'
 };
 
+
+export type AnalysisConfig = {
+    spacers: { "thickness": number, "note"?: string, "speedOfSound": number }[]
+    peakConsistency: number,
+    peakThreshold: number,
+    peakHistory: number,
+    nMaxPeaks: number,
+    upsamplingFactor: number,
+};
+
 // Use Vite proxy in dev to avoid CORS; see vite.config.ts
 export const BASE_URL = "/api";
 
@@ -60,7 +70,15 @@ export async function postStart(config: WulpusConfig): Promise<ConnectResponse> 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(config),
     });
-    if (!res.ok) throw new Error(`POST /start failed: ${res.status}`);
+    if (!res.ok) {
+        let message = `${res.status}`;
+        try {
+            const errorData = await res.json();
+            message += ` (${errorData.detail[0]?.msg ?? JSON.stringify(errorData)})`;
+        }
+        catch { /* empty */ }
+        throw new Error(message)
+    };
     return res.json();
 }
 
@@ -132,5 +150,21 @@ export async function startSeries(intervalSeconds: number, config: WulpusConfig,
 export async function stopSeries() {
     const res = await fetch(`${BASE_URL}/series/stop`, { method: 'POST' });
     if (!res.ok) throw new Error(await res.text());
+    return res.json();
+}
+
+export async function postAnalyzeConfig(config: AnalysisConfig): Promise<ConnectResponse> {
+    const res = await fetch(`${BASE_URL}/analyzeConfig`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(config),
+    });
+    if (!res.ok) throw new Error(`POST /analyzeConfig failed: ${res.status}`);
+    return res.json();
+}
+
+export async function fetchAnalyzeConfig(): Promise<AnalysisConfig> {
+    const res = await fetch(`${BASE_URL}/analyzeConfig`);
+    if (!res.ok) throw new Error(`GET /analyzeConfig failed: ${res.status}`);
     return res.json();
 }

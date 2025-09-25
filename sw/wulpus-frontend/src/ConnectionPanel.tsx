@@ -36,7 +36,14 @@ export function ConnectionPanel(props: { effectiveConfig: WulpusConfig, status: 
 
     async function handleStart() {
         toast('Starting...');
-        await postStart(effectiveConfig);
+        try {
+            await postStart(effectiveConfig);
+            toast.success('Started');
+        } catch (e) {
+            if (e instanceof Error) {
+                toast.error(`Failed to start: ${e.message}`);
+            }
+        }
     }
 
     return (

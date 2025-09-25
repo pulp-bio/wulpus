@@ -21,3 +21,8 @@
 - **File structure**: Clear separation of concerns, API models in separate files
 - **Error handling**: Use proper exception types, HTTP status codes for API errors
 - **Data processing**: NumPy for measurements, Pandas for structured data analysis
+
+### General
+Write code where the naming of variables and functions is self explanatory.
+Comments should be used sparingly.
+Make sure to not catch error-cases that logically can't occur.

@@ -18,3 +18,18 @@ export function SelectField({ label, value, onChange, options }: { label: string
     </label>
   );
 }
+
+export function StringField({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string; }) {
+  return (
+    <label className="text-sm">
+      <div className="mb-1 text-gray-600">{label}</div>
+      <input
+        type="text"
+        className="w-full border rounded px-2 py-1"
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </label>
+  );
+}

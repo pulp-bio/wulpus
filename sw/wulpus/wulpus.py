@@ -12,29 +12,19 @@ from zipfile import ZipFile
 import numpy as np
 import pandas as pd
 from typing_extensions import TypedDict
+from wulpus.wulpus_model import Measurement, Status
 from wulpus.helper import ensure_dir
 from wulpus.interface import DongleInterface
 from wulpus.interface_direct import WulpusDongleDirect
 from wulpus.interface_usb import WulpusDongleUsb
 from wulpus.wulpus_api import (DATA_FILE_EXTENSION, gen_conf_package,
                                gen_restart_package)
-from wulpus.wulpus_config_models import WulpusConfig
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from wulpus.wulpus_config_models import WulpusConfig
 
 import wulpus as wulpus_pkg
-
-class Status(IntEnum):
-    NOT_CONNECTED = 0
-    CONNECTING = 1
-    READY = 2
-    RUNNING = 3
-    ERROR = 9
-
-
-class Measurement(TypedDict):
-    data: list[float]
-    time: int
-    tx: list[int]
-    rx: list[int]
 
 
 class Wulpus:
@@ -219,6 +209,6 @@ class Wulpus:
         return Measurement(
             data=_data.tolist(),
             time=int(_time),
-            tx=tx_rx_config.tx_channels,
-            rx=tx_rx_config.rx_channels
+            tx=tx_rx_config.tx_channels if tx_rx_config.tx_channels else [],
+            rx=tx_rx_config.rx_channels if tx_rx_config.rx_channels else []
         )

@@ -46,6 +46,11 @@ export function Graph(props: { dataFrame: DataFrame | null, bmodeBuffer: number[
         line: { color: 'rgba(255,140,0,0.35)', width: 2, dash: 'dot' }, layer: 'below'
     }));
 
+    const spacerShape: Partial<Plotly.Shape> = {
+        type: 'rect', x0: 0, x1: dataFrame?.spacer_region[1] ?? 0, xref: 'x', yref: 'paper', y0: 0, y1: 1,
+        line: { color: 'rgba(100,120,135,0.35)' }, fillcolor: 'rgba(100,120,135,0.35)', layer: 'below'
+    }
+
     // For B-Mode heatmap: draw peak lines only over the rows (channels) that belong to this measurement's rx set.
     // Heatmap implicit y coordinates: row indices 0..N-1. We'll span each channel row from (ch-0.5) to (ch+0.5)
     const bmodePeakShapes: Partial<Plotly.Shape>[] = [];
@@ -78,13 +83,13 @@ export function Graph(props: { dataFrame: DataFrame | null, bmodeBuffer: number[
                             type: 'heatmap',
                             colorscale: 'Viridis',
                             reversescale: true,
-                        }] as unknown as Plotly.Data[]}
+                        }] as Plotly.Data[]}
                         useResizeHandler
                         style={{ width: "100%", height: "100%" }}
                         layout={{
                             autosize: true,
                             margin: { t: 10, r: 10, b: 30, l: 40 },
-                            shapes: bmodePeakShapes,
+                            shapes: [...bmodePeakShapes, spacerShape],
                             yaxis: { autorange: true, title: { text: 'Channel' } },
                         }}
                     />
@@ -113,8 +118,8 @@ export function Graph(props: { dataFrame: DataFrame | null, bmodeBuffer: number[
                                     y: wavelet_transform ?? [],
                                     type: 'scatter', mode: 'lines', name: 'Wavelet Envelope', line: { color: 'red' },
                                 visible: 'legendonly',
-                                },
-                            ]) as unknown as Plotly.Data[]}
+                                }
+                            ]) as Plotly.Data[]}
                         useResizeHandler
                         style={{ width: "100%", height: "100%" }}
                         layout={{
@@ -124,12 +129,12 @@ export function Graph(props: { dataFrame: DataFrame | null, bmodeBuffer: number[
                             legend: { orientation: 'h' },
                             margin: { t: 10, r: 10, b: 30, l: 40 },
                             yaxis: { range: [-2000, 2000] },
-                            shapes: signalPeakShapes,
+                            shapes: [...signalPeakShapes, spacerShape],
                         }}
                     />
                 )}
             </div>
-            <div className="flex gap-2 mt-2">
+            <div className="flex gap-2 mt-2 flex-wrap items-center">
                 <button
                     onClick={() => setShowBMode(o => !o)}
                     className={`bg-gray-500 hover:bg-gray-600 text-white rounded p-1`}
@@ -143,6 +148,7 @@ export function Graph(props: { dataFrame: DataFrame | null, bmodeBuffer: number[
                 </button>
 
                 {!showBMode && (
+                    <>
                     <div className="flex grow items-center ml-4 gap-3">
                         <span>Filter: </span>
                         <div className='flex grow max-w-96 items-center justify-start gap-2'>
@@ -163,6 +169,12 @@ export function Graph(props: { dataFrame: DataFrame | null, bmodeBuffer: number[
                             <span className='w-32'>{Math.round(highCutHz / 1e4) / 100} MHz</span>
                         </div>
                     </div>
+                        <div className="items-center gap-2">
+                            <span className='px-2 py-0.5 text-xs rounded-md border border-gray-200 bg-white'>
+                                {dataFrame?.measurement.rx && dataFrame.measurement.rx.length > 0 ? `Rx: ${dataFrame.measurement.rx.join(', ')}` : 'No Signal'}
+                            </span>
+                        </div>
+                    </>
                 )}
             </div>
         </div>)

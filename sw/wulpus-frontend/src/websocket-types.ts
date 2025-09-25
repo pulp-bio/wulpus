@@ -60,4 +60,5 @@ export type DataFrame = {
     }
     peaks: number[]
     wavelet: number[]
+    spacer_region: [number, number]
 }

@@ -10,16 +10,16 @@ from fastapi import (FastAPI, HTTPException,
                      WebSocket, WebSocketDisconnect, Request)
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from wulpus.data_processing import MeasurementProcessor
+from wulpus.data_processing import AnalysisConfig, MeasurementProcessor
 from wulpus.series import series_loop, SeriesConfig, SeriesStartRequest
 from wulpus.wulpus_api import CONFIG_FILE_EXTENSION, DATA_FILE_EXTENSION
-from wulpus.helper import PassByRef, check_if_filereq_is_legitimate, ensure_dir, estimate_measurement_duration_seconds
+from wulpus.helper import PassByRef, check_if_filereq_is_legitimate, ensure_dir, estimate_measurement_duration_seconds, get_saved_analysis_config
 from wulpus.websocket_manager import WebsocketManager
 from wulpus.wulpus_config_models import (ConDev, TxRxConfig, UsConfig,
                                          WulpusConfig)
+from wulpus.data_processing import ANALYSIS_CONFIG_DIR, ANALYSIS_CONFIG_FILENAME
 from pydantic import BaseModel, Field
 from wulpus.wulpus_mock import WulpusMock
-
 import wulpus as wulpus_pkg
 from wulpus.wulpus import Wulpus
 
@@ -33,7 +33,7 @@ FRONTEND_DIR = os.path.join(os.path.dirname(
 wulpus = Wulpus()
 wulpus_mock = WulpusMock()
 
-processor = MeasurementProcessor()
+processor = MeasurementProcessor(get_saved_analysis_config())
 
 manager = WebsocketManager(wulpus, processor)
 app = FastAPI()
@@ -249,6 +249,22 @@ async def replay_file(filename: str):
     wulpus_mock.set_replay_file(filepath)
     processor.reset()
     await wulpus_mock.start()
+
+
+@app.get("/api/analyzeConfig", response_model=Optional[AnalysisConfig])
+def get_analyze_config():
+    return processor.get_analyze_config()
+
+
+@app.post("/api/analyzeConfig", response_model=Optional[AnalysisConfig])
+def set_analyze_config(config: AnalysisConfig):
+    ensure_dir(ANALYSIS_CONFIG_DIR)
+    filename = os.path.join(ANALYSIS_CONFIG_DIR, ANALYSIS_CONFIG_FILENAME)
+    with open(filename, 'w', encoding='utf-8') as f:
+        json.dump(config.model_dump(), f, ensure_ascii=False, indent=2)
+    processor.set_analyze_config(config)
+    return get_analyze_config()
+
 
 app.mount("/assets", StaticFiles(directory=os.path.join(FRONTEND_DIR,
           'assets')), name="assets")

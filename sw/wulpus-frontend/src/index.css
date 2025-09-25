@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "@material-symbols/font-200";
+@import "@material-symbols/font-300";
 @import "@material-symbols/font-400";
 @import "react-range-slider-input/dist/style.css";
 

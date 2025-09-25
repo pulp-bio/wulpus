@@ -12,10 +12,10 @@ import numpy as np
 import pandas as pd
 from fastapi import HTTPException
 
+from wulpus.data_processing import AnalysisConfig
 import wulpus as wulpus_pkg
-from typing import TYPE_CHECKING
 from wulpus.wulpus_config_models import WulpusConfig
-
+from wulpus.data_processing import ANALYSIS_CONFIG_DIR, ANALYSIS_CONFIG_FILENAME
 
 def ensure_dir(dir: str) -> None:
     os.makedirs(dir, exist_ok=True)
@@ -111,9 +111,21 @@ def get_all_zips_from_folder(folder: str) -> list[str]:
     return zip_files
 
 
+def get_saved_analysis_config() -> AnalysisConfig | None:
+    analysis_config_path = os.path.join(
+        ANALYSIS_CONFIG_DIR, ANALYSIS_CONFIG_FILENAME)
+    if not os.path.exists(analysis_config_path):
+        return None
+    try:
+        with open(analysis_config_path, 'r', encoding='utf-8') as f:
+            config_raw = json.load(f)
+        config = AnalysisConfig.model_validate(config_raw)
+        return config
+    except:
+        return None
+
+
 T = TypeVar('T')
-
-
 class PassByRef(Generic[T]):
     """Simple generic wrapper to carry a mutable reference to a value.
     """

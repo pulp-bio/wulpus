@@ -177,7 +177,7 @@ export function ConfigFilesPanel({ effectiveConfig, applyConfig }: Props) {
                     <input type="file" accept="application/json,.json" className="hidden" onChange={applyLocalFile} />
                     {uploading ? 'Uploading…' : 'Load local file (.json)'}
                 </label>
-                <button onClick={() => { handleApplyConfig(getDefaultConfig()); }} className="flex items-center gap-1  rounded-md bg-gray-100 hover:bg-gray-200 px-2 py-1">
+                <button onClick={() => { handleApplyConfig(getDefaultConfig()); }} className="flex items-center gap-1 rounded-md bg-gray-100 hover:bg-gray-200 px-2 py-1">
                     <span className="material-symbols-rounded">settings_backup_restore</span>
                     Restore Default
                 </button>

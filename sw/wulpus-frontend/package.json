@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@material-symbols/font-200": "^0.35.2",
+    "@material-symbols/font-300": "^0.35.2",
     "@material-symbols/font-400": "^0.34.1",
     "@tailwindcss/vite": "^4.1.12",
+    "@tanstack/react-query": "^5.90.2",
     "plotly.js": "^3.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
