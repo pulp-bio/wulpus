@@ -122,7 +122,6 @@ bool extractUsConfig(uint8_t * spi_rx, msp_config_t * msp_config)
 // Check the first byte if restart should be performed
 bool isRestartCondition(uint8_t * spi_rx)
 {
-    // Check for restart byte
     return (spi_rx[0] == START_BYTE_RESTART);
 }
 

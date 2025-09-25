@@ -76,12 +76,11 @@ int main(void)
         disableOpAmpSupply();
         disableHvPcbSupply();
 
-        // Receive Uss configuration package from nRF
+        // Wait until we receive Uss configuration package from nRF
         receiveUssConfPackage();
 
         prepareUSSAcquisition();
-
-        // Enter acquisition loop
+        // Do measurements
         usAcquisitionLoop();
         }
     
@@ -167,6 +166,8 @@ static void receiveUssConfPackage(void)
 }
 
 static void prepareUSSAcquisition(){
+    enableHvPcbDcDc();
+
     // Configure Uss according to the new package
     confUsSubsystem();
 
@@ -176,7 +177,6 @@ static void prepareUSSAcquisition(){
 
     // Power up HV PCB
     enableHvPcbSupply();
-    enableHvPcbDcDc();
     // Enable Power for OPA836
     enableOpAmpSupply();
 }
@@ -228,23 +228,6 @@ static void usAcquisitionLoop(void)
             {
                 pauseTimerSlowSwEvents();
                 return;
-            }
-
-            // Check the SPI RX buffer for restart command
-            if (isNewConfigCondition(usSpiGetRxPtr()))
-            {
-                pauseTimerSlowSwEvents();
-                if (extractUsConfig(usSpiGetRxPtr(), &msp_config))
-                {
-                    // Update Ultrasound config
-                    setNewUsConfig(&msp_config);
-                    prepareUSSAcquisition();
-                    continue;
-                }
-                else{
-                    // config invalid
-                    return;
-                }
             }
 
             // Wait for timer to elapse
