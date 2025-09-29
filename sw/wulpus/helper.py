@@ -17,6 +17,7 @@ import wulpus as wulpus_pkg
 from wulpus.wulpus_config_models import WulpusConfig
 from wulpus.data_processing import ANALYSIS_CONFIG_DIR, ANALYSIS_CONFIG_FILENAME
 
+
 def ensure_dir(dir: str) -> None:
     os.makedirs(dir, exist_ok=True)
 
@@ -39,13 +40,14 @@ def check_if_filereq_is_legitimate(req_name: str, system_dir: str, allowed_endin
     return path
 
 
-def zip_to_dataframe(path: str) -> Tuple[pd.DataFrame, WulpusConfig]:
+def zip_to_dataframe(path: str, ignore_first_frames: int = 0) -> Tuple[pd.DataFrame, WulpusConfig]:
     """
     Returns df: DataFrame with log; config: WulpusConfig object
     """
     with ZipFile(path, 'r') as zf:
         config_raw = json.loads(zf.read('config-0.json').decode('utf-8'))
         df_flat = pd.read_parquet(io.BytesIO(zf.read('data.parquet')))
+    config = WulpusConfig.model_validate(config_raw)
 
     # Columns created by save
     meta_cols = {'tx', 'rx', 'aq_number', 'tx_rx_id', 'log_version'}
@@ -69,7 +71,9 @@ def zip_to_dataframe(path: str) -> Tuple[pd.DataFrame, WulpusConfig]:
         'log_version': df_flat['log_version'].to_numpy() if 'log_version' in df_flat else np.full(len(df_flat), 1, dtype=int),
     }, index=df_flat.index)
 
-    config = WulpusConfig.model_validate(config_raw)
+    num_txrx_configs = config.us_config.num_txrx_configs
+    df = df.iloc[(ignore_first_frames*num_txrx_configs):]
+
     return df, config
 
 
@@ -126,6 +130,8 @@ def get_saved_analysis_config() -> AnalysisConfig | None:
 
 
 T = TypeVar('T')
+
+
 class PassByRef(Generic[T]):
     """Simple generic wrapper to carry a mutable reference to a value.
     """
