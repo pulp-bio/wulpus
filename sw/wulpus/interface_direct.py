@@ -208,8 +208,14 @@ class WulpusDongleDirect(DongleInterface):
     def get_status(self):
         if self._bleak_client and self._bleak_client.is_connected:
             addr = getattr(self._bleak_client, 'address', None)
-            return f"Connected to {addr}" if addr else "Connected"
-        return "Not connected"
+            return f"connected to {addr}" if addr else "connected"
+        return "not connected"
+
+    def get_connection_endpoint(self) -> str:
+        if self._bleak_client and self._bleak_client.is_connected:
+            addr = getattr(self._bleak_client, 'address', None)
+            return addr if addr else ""
+        return ""
 
 
 if __name__ == "__main__":

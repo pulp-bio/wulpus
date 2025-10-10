@@ -280,9 +280,9 @@ static void saphSeqAcqDoneCallback(void)
     // and OpAmp
 
     // Disable HV and +5 V
-    disableHvPcbDcDc();
+    // disableHvPcbDcDc();
     // Disable RX OPA836
-    disableOpAmp();
+    // disableOpAmp();
 
     // if PLL unlock event occurs earlier the acquisition might be not valid
     if (isEventFlagSet(HS_PLL_UNLOCK_EVENT) == false)
@@ -308,7 +308,7 @@ static void fastTimerCc0Callback(void)
     // Switch HV Mux
     hvMuxLatchOutput();
     // Disable HV DC-DC (we don't need V at this point)
-    disableHvDcDc();
+    // disableHvDcDc();
     // Disable Fast Timer
     timerFastStop();
 }

@@ -10,8 +10,8 @@ from wulpus.wulpus import Status, Wulpus
 
 
 class WulpusMock(Wulpus):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, wulpus_id=0):
+        super().__init__(wulpus_id=wulpus_id)
         self._interface_usb_dongle = WulpusDongleMock()
         self._interface_direct = WulpusDongleMock()
         self._status = Status.READY

@@ -53,26 +53,32 @@ export function SeriesPanel(props: { effectiveConfig: WulpusConfig, disabled?: b
             </div>
 
 
+            {!status.active &&
+                <>
             <div className="grid grid-cols-2 gap-3">
                 <NumberField label="Interval (minutes)" value={intervalMinutes} onChange={(v) => setIntervalMinutes(v)} />
                 <NumberField label="Num measurements" value={nIntervals} onChange={(v) => setNIntervals(v)} />
             </div>
             <div className='flex flex-row items-baseline gap-3'>
-                <div>
-                    {!status.active &&
+                    <div>
                         <button onClick={handleStart} disabled={disabled}
                             className="ml-auto bg-indigo-600 hover:bg-indigo-700 text-white rounded px-3 py-2 disabled:opacity-50">
                             Start Series
                         </button>
-                    }
-                    {status.active &&
-                        <button onClick={handleStop} className="ml-auto bg-red-600 hover:bg-red-700 text-white rounded px-3 py-2">
-                            Stop Series
-                        </button>
-                    }
+                    </div>
+                    <div className="text-xs text-gray-600">Total Duration: {intervalMinutes * nIntervals}min</div>
                 </div>
-                <div className="text-xs text-gray-600">Total Duration: {intervalMinutes * nIntervals}min</div>
-            </div>
+            </>
+            }
+            {status.active &&
+                <>
+                    <div className="text-xs text-gray-600">Progress: {status.progress_count} of {status.number}
+                        {" "}(every {status.interval_seconds}s)</div>
+                    <button onClick={handleStop} className="ml-auto bg-red-600 hover:bg-red-700 text-white rounded px-3 py-2 mt-3">
+                        Stop Series
+                    </button>
+            </>
+            }
         </div>
     );
 }

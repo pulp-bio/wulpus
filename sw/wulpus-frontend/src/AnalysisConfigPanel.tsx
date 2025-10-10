@@ -88,10 +88,14 @@ export function AnalysisConfigPanel(props: { analyzeConfig?: AnalysisConfig, set
                     </div>
                 </div>
                 <div className='grid grid-cols-2 gap-3' hidden={!showAdvanced}>
-                    <NumberField label="Min Peak Consistency" value={analyzeConfig.peakConsistency} step={1} onChange={(v) => setAnalyzeConfig.mutate({ ...analyzeConfig, peakConsistency: v })} />
-                    <NumberField label="Min Peak Threshold" value={analyzeConfig.peakThreshold} step={1} onChange={(v) => setAnalyzeConfig.mutate({ ...analyzeConfig, peakThreshold: v })} />
-                    <NumberField label="Min Peak History" value={analyzeConfig.peakHistory} step={1} onChange={(v) => setAnalyzeConfig.mutate({ ...analyzeConfig, peakHistory: v })} />
-                    <NumberField label="Max Peaks" value={analyzeConfig.nMaxPeaks} step={1} onChange={(v) => setAnalyzeConfig.mutate({ ...analyzeConfig, nMaxPeaks: v })} />
+                    <NumberField label="Min Peak Consistency" value={analyzeConfig.peakConsistency} step={1} onChange={(v) => setAnalyzeConfig.mutate({ ...analyzeConfig, peakConsistency: v })}
+                        helper='Require at least x peaks in similar location in the last [Peak History] samples' />
+                    <NumberField label="Min Peak Threshold" value={analyzeConfig.peakThreshold} step={1} onChange={(v) => setAnalyzeConfig.mutate({ ...analyzeConfig, peakThreshold: v })}
+                        helper='Matplotlib threshold for peak detection' />
+                    <NumberField label="Min Peak History" value={analyzeConfig.peakHistory} step={1} onChange={(v) => setAnalyzeConfig.mutate({ ...analyzeConfig, peakHistory: v })}
+                        helper='Require at least [Min Peak Consistency] peaks in similar location in the last x samples' />
+                    <NumberField label="Max Peaks" value={analyzeConfig.nMaxPeaks} step={1} onChange={(v) => setAnalyzeConfig.mutate({ ...analyzeConfig, nMaxPeaks: v })}
+                        helper='Number of peaks to detect' />
                     <NumberField label="Upsampling Factor" value={analyzeConfig.upsamplingFactor} step={1} onChange={(v) => setAnalyzeConfig.mutate({ ...analyzeConfig, upsamplingFactor: v })} />
                 </div>
             </div>

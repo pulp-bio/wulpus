@@ -45,10 +45,12 @@ export type Status = {
     mock?: boolean;
     status: number; // 0.., maps to backend Status enum
     bluetooth: string;
+    endpoint: string;
     us_config: UsConfig | null;
     tx_rx_config: TxRxConfig[] | null;
     progress: number; // 0..1
-    series?: SeriesStatus
+    series?: SeriesStatus;
+    wulpus_id?: number;
 };
 
 export type DataFrame = {
@@ -61,4 +63,5 @@ export type DataFrame = {
     peaks: number[]
     wavelet: number[]
     spacer_region: [number, number]
+    wulpus_id?: number;
 }

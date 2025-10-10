@@ -105,7 +105,10 @@ class WulpusDongleUsb(DongleInterface):
         return await asyncio.to_thread(_read_packet, wulpus)
 
     def get_status(self) -> str:
-        return f"Connected to {self.__ser__.port}" if self.__ser__.is_open else "Not connected"
+        return f"connected to {self.__ser__.port}" if self.__ser__.is_open else "not connected"
+
+    def get_connection_endpoint(self) -> str:
+        return self.__ser__.port if self.__ser__.is_open else ""
 
 
 if __name__ == "__main__":

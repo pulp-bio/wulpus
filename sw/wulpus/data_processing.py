@@ -25,7 +25,7 @@ ANALYSIS_CONFIG_FILENAME = 'analysis_config.json'
 
 class AnalysisConfig(BaseModel):
     spacers: List[Dict[str, Union[float, str]]] = [
-        {"thickness": 0.6, "note": "PDMS", "speedOfSound": 1200},
+        {"thickness": 0.6, "note": "PDMS", "speedOfSound": 1030},
         {"thickness": 8, "note": "PEEK spacer", "speedOfSound": 2500}
     ]
     peakConsistency: int = Field(default=5, ge=1)

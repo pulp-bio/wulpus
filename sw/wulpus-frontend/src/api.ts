@@ -28,20 +28,42 @@ export async function getBTHConnections(): Promise<ConnectionOption[]> {
     const res = await fetch(`${BASE_URL}/connections`);
     if (!res.ok) throw new Error(`GET /connections failed: ${res.status}`);
     const data = await res.json();
+
     if (Array.isArray(data)) {
-        // Expecting [{ device, description, type }, ...]
-        const items = (data as unknown[])
-            .filter(Boolean)
-            .map((item) => {
-                const obj = item as Partial<ConnectionOption> & Record<string, unknown>;
-                const t = obj.type === 'ble' || obj.type === 'serial' ? obj.type : 'serial';
-                return {
-                    device: String(obj.device ?? ''),
-                    description: String(obj.description ?? obj.device ?? ''),
-                    type: t,
-                } as ConnectionOption;
-            })
-        const uniqueItems = Array.from(new Map(items.map(i => [i.device, i])).values());
+        // Handle new multi-device format: [{ wulpus_id?, options: [{ device, description, type }] }, ...]
+        // or old format: [{ device, description, type }, ...]
+        const allItems: ConnectionOption[] = [];
+
+        for (const item of data) {
+            if (item && typeof item === 'object') {
+                // New format with options array
+                if ('options' in item && Array.isArray(item.options)) {
+                    const deviceId = item.wulpus_id ?? 0;
+                    const devicePrefix = deviceId > 0 ? `[${deviceId}] ` : '';
+
+                    for (const option of item.options) {
+                        const obj = option as Partial<ConnectionOption> & Record<string, unknown>;
+                        const t = obj.type === 'ble' || obj.type === 'serial' ? obj.type : 'serial';
+                        allItems.push({
+                            device: String(obj.device ?? ''),
+                            description: devicePrefix + String(obj.description ?? obj.device ?? ''),
+                            type: t,
+                        } as ConnectionOption);
+                    }
+                } else {
+                    // Old format - direct device object
+                    const obj = item as Partial<ConnectionOption> & Record<string, unknown>;
+                    const t = obj.type === 'ble' || obj.type === 'serial' ? obj.type : 'serial';
+                    allItems.push({
+                        device: String(obj.device ?? ''),
+                        description: String(obj.description ?? obj.device ?? ''),
+                        type: t,
+                    } as ConnectionOption);
+                }
+            }
+        }
+
+        const uniqueItems = Array.from(new Map(allItems.map(i => [i.device, i])).values());
         return uniqueItems;
     }
     return [];
@@ -56,11 +78,20 @@ export async function postConnect(conDev: string): Promise<void> {
     if (!res.ok) throw new Error(`POST /connect failed: ${res.status}`);
 }
 
-export async function postDisconnect(): Promise<void> {
-    const res = await fetch(`${BASE_URL}/disconnect`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-    });
+export async function postDisconnect(conDev?: string): Promise<void> {
+    let res: Response
+    if (!conDev) {
+        res = await fetch(`${BASE_URL}/disconnect/all`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+        });
+    } else {
+        res = await fetch(`${BASE_URL}/disconnect`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ con_dev: conDev }),
+        });
+    }
     if (!res.ok) throw new Error(`POST /disconnect failed: ${res.status}`);
 }
 

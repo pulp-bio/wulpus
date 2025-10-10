@@ -28,7 +28,8 @@ import wulpus as wulpus_pkg
 
 
 class Wulpus:
-    def __init__(self):
+    def __init__(self, wulpus_id=0):
+        self.wulpus_id: int = wulpus_id
         self._config: Union[WulpusConfig, None] = None
         self._status: Status = Status.NOT_CONNECTED
         self._interface_usb_dongle = WulpusDongleUsb()
@@ -86,6 +87,7 @@ class Wulpus:
     def get_status(self):
         return {"status": self._status,
                 "bluetooth": self._get_current_interface().get_status(),
+                "endpoint": self._get_current_interface().get_connection_endpoint(),
                 "us_config": self._config.us_config if self._config else None,
                 "tx_rx_config": self._config.tx_rx_config if self._config else None,
                 "progress": self._live_data_cnt / self._config.us_config.num_acqs if self._config else 0,
@@ -165,7 +167,7 @@ class Wulpus:
     def _save_measurement(self):
         start_time = time.localtime(self._recording_start)
         timestring = time.strftime("%Y-%m-%d_%H-%M-%S", start_time)
-        filename = "wulpus-" + timestring
+        filename = "wulpus-" + timestring + f"-id{self.wulpus_id}"
         # Ensure measurement directory exists
         module_path = os.path.dirname(inspect.getfile(wulpus_pkg))
         measurement_path = os.path.join(module_path, 'measurements')

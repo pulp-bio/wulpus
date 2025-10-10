@@ -82,3 +82,8 @@ class DongleInterface(ABC):
     def get_status(self) -> str:
         """Human-readable backend status info."""
         raise NotImplementedError
+
+    @abstractmethod
+    def get_connection_endpoint(self) -> str:
+        """connection endpoint string (used for connection)"""
+        raise NotImplementedError

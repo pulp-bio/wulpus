@@ -1,10 +1,11 @@
 // UI helpers
-export function NumberField({ label, value, onChange, step = 1, min }: { label: string; value: number; onChange: (v: number) => void; step?: number; min?: number; }) {
+export function NumberField({ label, value, onChange, step = 1, min, helper }: { label: string; value: number; onChange: (v: number) => void; step?: number; min?: number; helper?: string; }) {
   return (
     <label className="text-sm">
       <div className="mb-1 text-gray-600">{label}</div>
       <input type="number" className="w-full border rounded px-2 py-1" value={value} step={step} min={min}
         onChange={(e) => onChange(Number(e.target.value))} />
+      {helper && <div className="mt-0.5 text-gray-600 font-light text-xs">{helper}</div>}
     </label>
   );
 }

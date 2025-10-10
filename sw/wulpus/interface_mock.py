@@ -55,3 +55,6 @@ class WulpusDongleMock(WulpusDongleUsb):
 
     def get_status(self):
         return "Dongle is mocked!"
+
+    def get_connection_endpoint(self) -> str:
+        return "mocked_endpoint"

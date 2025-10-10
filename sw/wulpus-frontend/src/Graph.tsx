@@ -5,7 +5,7 @@ import { bandpassFIR, hilbertEnvelope, toggleFullscreen } from './helper';
 import type { DataFrame, UsConfig } from './websocket-types';
 import RangeSlider from 'react-range-slider-input';
 
-export function Graph(props: { dataFrame: DataFrame | null, bmodeBuffer: number[][], peaksPerChannel: number[][], usConfig: UsConfig }) {
+export function Graph(props: { dataFrame: DataFrame | undefined, bmodeBuffer: number[][], peaksPerChannel: number[][], usConfig: UsConfig }) {
     const { dataFrame, bmodeBuffer, peaksPerChannel, usConfig } = props;
     const data = dataFrame?.measurement.data ?? [];
     const wavelet_transform = dataFrame?.wavelet ?? [];
@@ -74,7 +74,6 @@ export function Graph(props: { dataFrame: DataFrame | null, bmodeBuffer: number[
 
     return (
         <div ref={plotContainerRef} className="bg-white p-4">
-            <h2 className="font-medium mb-3">Live Signal</h2>
             <div className="h-[400px]">
                 {showBMode ? (
                     <Plot

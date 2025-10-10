@@ -100,6 +100,14 @@ class TxRxConfig(BaseModel):
             return channels
 
 
+class MultiWulpusConfigEntrance(BaseModel):
+    wulpusId: int
+    config: WulpusConfig
+
+
+class MultiWulpusConfig(BaseModel):
+    configs: list[MultiWulpusConfigEntrance] = Field(min_length=1)
+
 class WulpusConfig(BaseModel):
     tx_rx_config: list[TxRxConfig] = Field(
         min_length=1, max_length=TX_RX_MAX_NUM_OF_CONFIGS)
