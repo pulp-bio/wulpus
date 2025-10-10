@@ -9,18 +9,20 @@ export function StatusView(props: {
     handleConnect?: Handler,
     handleDisconnect?: Handler,
     connections: ConnectionOption[]
+    disabled?: boolean
 }) {
     const { status, handleConnect, handleDisconnect, connections } = props;
+    const disabled = props.disabled ?? false;
     const [selectedConnection, setSelectedConnection] = useState<string>("");
 
-    const commonButtonStyle: React.HTMLAttributes<HTMLButtonElement>['className'] = "text-white rounded items-center inline-flex justify-center px-3 py-2 h-9 max-w-23";
+    const commonButtonStyle: React.HTMLAttributes<HTMLButtonElement>['className'] = "text-white rounded items-center inline-flex justify-center px-3 py-2 h-9 max-w-23 disabled:opacity-50 disabled:cursor-not-allowed";
 
     const connectionValue = ((status?.status ?? 0) !== 0) ? (status?.endpoint ?? "") : selectedConnection;
     return (
         <div className="flex flex-col">
             <div className="flex flex-row flex-nowrap items-center space-x-2">
                 <select className="border rounded px-2 py-1 w-52 grow h-9 disabled:bg-gray-200"
-                    disabled={(status?.status ?? 0) !== 0}
+                    disabled={(status?.status ?? 0) !== 0 || disabled}
                     value={connectionValue}
                     onChange={(e) => setSelectedConnection(e.target.value)}>
                     <option value="">Select port</option>
@@ -34,6 +36,7 @@ export function StatusView(props: {
                     <button
                         onClick={() => handleConnect?.(selectedConnection)}
                         className={`w-full bg-blue-600 hover:bg-blue-700 ${commonButtonStyle}`}
+                        disabled={disabled}
                     >
                         Connect
                     </button>

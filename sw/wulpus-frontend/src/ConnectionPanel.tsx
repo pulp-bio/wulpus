@@ -83,8 +83,8 @@ export function ConnectionPanel(props: { effectiveConfig: WulpusConfig, status: 
                 {allStatuses?.sort((a, b) => b.status - a.status).map((s, idx) => (
                     <StatusView key={idx} status={s} handleConnect={handleConnect} handleDisconnect={handleDisconnect} connections={connections} />
                 ))}
-                {allStatuses?.every(s => s.status !== 0) && (
-                    <StatusView handleConnect={handleConnect} handleDisconnect={handleDisconnect} connections={connections} />
+                {!someJobRunning && allStatuses?.every(s => s.status !== 0) && (
+                    <StatusView handleConnect={handleConnect} handleDisconnect={handleDisconnect} connections={connections} disabled={someJobRunning} />
                 )}
                 <div className='flex space-x-2'>
                     {allStatuses?.[0]?.status === undefined && (
