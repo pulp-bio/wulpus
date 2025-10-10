@@ -10,7 +10,8 @@ export function ConnectionPanel(props: { effectiveConfig: WulpusConfig, status: 
     const [selectedConnection, setSelectedConnection] = useState<string>("");
     const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
 
-    const isMock = status?.mock ?? false;
+    const isMock = allStatuses?.some(status => status.mock) ?? false;
+    const someJobRunning = allStatuses?.some(s => s.status === 3) ?? false;
 
     const refreshConnections = useCallback(async () => {
         setIsRefreshing(true);
@@ -86,20 +87,20 @@ export function ConnectionPanel(props: { effectiveConfig: WulpusConfig, status: 
                     <StatusView handleConnect={handleConnect} handleDisconnect={handleDisconnect} connections={connections} />
                 )}
                 <div className='flex space-x-2'>
-                    {status?.status === undefined && (
+                    {allStatuses?.[0]?.status === undefined && (
                         <div className="font-medium text-red-500 border-1 px-2 border-red-500 hover:bg-gray-50 rounded">Server not running!</div>
                     )}
 
-                    {status?.status !== undefined && status.status !== 3 && (
+                    {!someJobRunning && (
                         <button
                             onClick={handleStart}
                             className={`w-full bg-green-600 hover:bg-green-700 text-white rounded px-3 py-2 disabled:opacity-50`}
-                            disabled={(status?.status != 2) || (status.series?.active)}
+                            disabled={someJobRunning}
                         >
                             Start
                         </button>
                     )}
-                    {status?.status === 3 && (
+                    {someJobRunning && (
                         <button
                             onClick={postStop}
                             className={`w-full bg-red-600 hover:bg-red-700 text-white rounded px-3 py-2`}

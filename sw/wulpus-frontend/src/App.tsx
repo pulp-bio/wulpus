@@ -69,13 +69,13 @@ function App() {
   useEffect(() => {
     if (lastJsonMessage) {
       // Check if it's a status array (array of objects with 'status' field)
-      if (Array.isArray(lastJsonMessage) && lastJsonMessage.length > 0 && 'status' in lastJsonMessage[0]) {
+      if (Array.isArray(lastJsonMessage) && (lastJsonMessage.length === 0 || (lastJsonMessage.length > 0 && 'status' in lastJsonMessage[0]))) {
         setStatuses(lastJsonMessage);
-        if (!lastJsonMessage.filter(status => status.wulpus_id === selectedWulpusId).length) {
+        if (!lastJsonMessage.some(s => s.wulpus_id === selectedWulpusId)) {
           setSelectedWulpusId(lastJsonMessage[0].wulpus_id ?? 0);
         }
       }
-        // Check if it's a single DataFrame (has 'measurement' field)
+      // Check if it's a single DataFrame (has 'measurement' field)
       else if ('measurement' in lastJsonMessage) {
         const dataFrame = lastJsonMessage as DataFrame;
         const deviceId = dataFrame.wulpus_id ?? 0;

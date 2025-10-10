@@ -53,7 +53,7 @@ export function AnalysisConfigPanel(props: { analyzeConfig?: AnalysisConfig, set
                             style={{ fontSize: 100, lineHeight: 1 }}
                             aria-label='Toggle advanced fields'
                         >
-                            <span className="material-symbols-rounded">{showAdvanced ? 'visibility_off' : "visibility"}</span>
+                            <span className="material-symbols-rounded">{showAdvanced ? "unfold_less" : "unfold_more"}</span>
                         </button>
                     </div>
                     <div className="mb-1 text-gray-600 text-sm">Configure sections to be ignored</div>

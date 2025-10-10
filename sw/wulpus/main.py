@@ -46,15 +46,19 @@ app.state.series_info = PassByRef(None)
 
 @app.post("/api/start")
 async def start(config: Union[WulpusConfig,  MultiWulpusConfig]):
-    try:
-        for w in manager.get_wulpus():
-            await w.connect()
-    except ValueError as e:
-        return {"connection-error": str(e)}
+    ready_wulpus = 0
     for w in manager.get_wulpus():
+        if w.get_status()["status"] == Status.READY:
+            ready_wulpus += 1
         w.set_config(config)
+    if ready_wulpus == 0:
+        raise HTTPException(
+            status_code=400, detail="No Wulpus is ready!")
     for w in manager.get_wulpus():
-        await w.start()
+        if w.get_status()["status"] == Status.READY:
+            await w.start()
+        else:
+            manager.remove_wulpus(w.wulpus_id)
     return {"ok": "ok"}
 
 
@@ -144,7 +148,8 @@ async def disconnect(conf: ConDev):
     for w in manager.get_wulpus():
         if conf.con_dev == w.get_status()["endpoint"]:
             await w.disconnect()
-            manager.remove_wulpus(w.wulpus_id)
+            if (len(manager.get_wulpus()) > 1):
+                manager.remove_wulpus(w.wulpus_id)
             break
 
 
@@ -152,6 +157,8 @@ async def disconnect(conf: ConDev):
 async def disconnect_all():
     for w in manager.get_wulpus():
         await w.disconnect()
+        if (len(manager.get_wulpus()) > 1):
+            manager.remove_wulpus(w.wulpus_id)
 
 
 @app.websocket("/ws")
