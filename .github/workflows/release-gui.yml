@@ -17,11 +17,22 @@ jobs:
         run: python build.py
         working-directory: ./sw/wulpus-frontend
       - name: Install python dependencies
+        working-directory: ./sw/wulpus
         run: pip install -r requirements.txt
-        working-directory: ./sw/wulpus
       - name: Build .exe
-        run: pyinstaller ./main.spec --noconfirm
         working-directory: ./sw/wulpus
+        run: pyinstaller ./main.spec --noconfirm
+      - name: Write version info to artifact
+        working-directory: ./sw/wulpus
+        shell: pwsh
+        run: |
+          $commitHash = (git rev-parse HEAD).Trim()
+          $commitDateFull = (git show -s --format=%cd --date=iso-strict HEAD).Trim()
+          $commitDate = $commitDateFull.Split('T')[0]
+          $text = "$commitHash from $commitDate"
+          $target = "./dist/main/_internal/wulpus/version.txt"
+          New-Item -ItemType Directory -Force -Path (Split-Path -Parent $target) | Out-Null
+          Set-Content -Path $target -Value $text -Encoding UTF8
       - uses: actions/upload-artifact@v4
         id: artifact-upload-step
         with:

@@ -3,12 +3,13 @@ import inspect
 import json
 import os
 import time
+import subprocess
 from typing import List, Optional, Union
 
 import uvicorn
 from fastapi import (FastAPI, HTTPException,
                      WebSocket, WebSocketDisconnect, Request)
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from wulpus.data_processing import AnalysisConfig, MeasurementProcessor
 from wulpus.series import series_loop, SeriesConfig, SeriesStartRequest
@@ -23,12 +24,10 @@ from wulpus.wulpus_mock import WulpusMock
 import wulpus as wulpus_pkg
 from wulpus.wulpus import Wulpus
 
-MEASUREMENTS_DIR = os.path.join(os.path.dirname(
-    inspect.getfile(wulpus_pkg)), 'measurements')
-CONFIG_DIR = os.path.join(os.path.dirname(
-    inspect.getfile(wulpus_pkg)), 'configs')
-FRONTEND_DIR = os.path.join(os.path.dirname(
-    inspect.getfile(wulpus_pkg)), 'production-frontend')
+THIS_DIR = os.path.dirname(inspect.getfile(wulpus_pkg))
+MEASUREMENTS_DIR = os.path.join(THIS_DIR, 'measurements')
+CONFIG_DIR = os.path.join(THIS_DIR, 'configs')
+FRONTEND_DIR = os.path.join(THIS_DIR, 'production-frontend')
 
 wulpus = Wulpus()
 wulpus_mock = WulpusMock()
@@ -266,6 +265,29 @@ def set_analyze_config(config: AnalysisConfig):
     return get_analyze_config()
 
 
+@app.get("/api/version", response_model=Optional[AnalysisConfig])
+def get_version() -> str:
+    path = os.path.join(THIS_DIR, "version.txt")
+    if os.path.isfile(path):
+        with open(path, "r", encoding="utf-8") as f:
+            return PlainTextResponse(f.read().strip())
+    else:
+        text = "unknown"
+        try:
+            commit_hash = subprocess.check_output(
+                ["git", "rev-parse", "HEAD"], cwd=THIS_DIR, stderr=subprocess.DEVNULL
+            ).decode("utf-8").strip()
+            commit_date = subprocess.check_output(
+                ["git", "show", "-s", "--format=%cd", "--date=iso-strict", "HEAD"],
+                cwd=THIS_DIR,
+                stderr=subprocess.DEVNULL,
+            ).decode("utf-8").strip().split("T")[0]
+            text = f"dev: {commit_hash} from {commit_date}"
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            pass
+        return PlainTextResponse(text)
+
+
 app.mount("/assets", StaticFiles(directory=os.path.join(FRONTEND_DIR,
           'assets')), name="assets")
 
@@ -274,6 +296,7 @@ app.mount("/assets", StaticFiles(directory=os.path.join(FRONTEND_DIR,
 async def frontend_fallback(full_path: str, request: Request):
     index_path = os.path.join(FRONTEND_DIR, "index.html")
     return FileResponse(index_path)
+
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
