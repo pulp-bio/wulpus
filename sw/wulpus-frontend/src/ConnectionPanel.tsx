@@ -91,7 +91,7 @@ export function ConnectionPanel(props: { effectiveConfig: WulpusConfig, status: 
                         <div className="font-medium text-red-500 border-1 px-2 border-red-500 hover:bg-gray-50 rounded">Server not running!</div>
                     )}
 
-                    {!someJobRunning && (
+                    {allStatuses?.[0]?.status !== undefined && !someJobRunning && (
                         <button
                             onClick={handleStart}
                             className={`w-full bg-green-600 hover:bg-green-700 text-white rounded px-3 py-2 disabled:opacity-50`}

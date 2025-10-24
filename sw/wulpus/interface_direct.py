@@ -1,7 +1,7 @@
 from __future__ import annotations
 import asyncio
 import re
-from typing import Union, Optional, List
+from typing import Callable, Union, Optional, List
 
 import numpy as np
 
@@ -25,12 +25,13 @@ class WulpusDongleDirect(DongleInterface):
     Class representing the Wulpus via direct Bluetooth connection
     """
 
-    def __init__(self) -> None:
+    def __init__(self, disconnected_callback: Optional[Callable[[BleakClient], None]] = None) -> None:
         super().__init__()
         self._devices: list[BLEDevice] = []
         self._bleak_client: Union[BleakClient, None] = None
         self._data_queue: Optional["asyncio.Queue[bytes]"] = None
         self._loop: Optional[asyncio.AbstractEventLoop] = None
+        self._disconnected_callback = disconnected_callback
 
     async def get_available(self) -> List[ConnectionOption]:
         """
@@ -82,7 +83,8 @@ class WulpusDongleDirect(DongleInterface):
             self._loop = asyncio.get_running_loop()
             # Reasonable buffer to absorb short bursts without unbounded growth
             self._data_queue = asyncio.Queue(maxsize=1000)
-            self._bleak_client = BleakClient(target_address)
+            self._bleak_client = BleakClient(
+                target_address, disconnected_callback=self._disconnected_callback)
             await self._bleak_client.connect()
             await self._bleak_client.start_notify(NUS_TX_CHAR_UUID, self._notification_handler)
             return True

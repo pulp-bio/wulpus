@@ -33,7 +33,9 @@ class Wulpus:
         self._config: Union[WulpusConfig, None] = None
         self._status: Status = Status.NOT_CONNECTED
         self._interface_usb_dongle = WulpusDongleUsb()
-        self._interface_direct = WulpusDongleDirect()
+        self._interface_direct = WulpusDongleDirect(
+            disconnected_callback=self._disconnected_callback
+        )
         self._last_connection: str = ''
         self._latest_frame: Union[Measurement, None] = None
         self._data:  Union[np.ndarray, None] = None
@@ -161,7 +163,8 @@ class Wulpus:
         self._data_time = self._data_time[:data_cnt]
         self._data_tx_rx_id = self._data_tx_rx_id[:data_cnt]
         self._acquisition_running = False
-        self._status = Status.READY
+        if (self._status == Status.RUNNING):
+            self._status = Status.READY
         self._save_measurement()
 
     def _save_measurement(self):
@@ -214,3 +217,8 @@ class Wulpus:
             tx=tx_rx_config.tx_channels if tx_rx_config.tx_channels else [],
             rx=tx_rx_config.rx_channels if tx_rx_config.rx_channels else []
         )
+
+    def _disconnected_callback(self, *args, **kwargs):
+        print("Device disconnected unexpectedly.")
+        self._status = Status.NOT_CONNECTED
+        self._acquisition_running = False
