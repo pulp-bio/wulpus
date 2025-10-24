@@ -11,12 +11,13 @@ from fastapi import (FastAPI, HTTPException,
                      WebSocket, WebSocketDisconnect, Request)
 from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
+from wulpus.wulpus_model import Status
 from wulpus.data_processing import AnalysisConfig, MeasurementProcessor
 from wulpus.series import series_loop, SeriesConfig, SeriesStartRequest
 from wulpus.wulpus_api import CONFIG_FILE_EXTENSION, DATA_FILE_EXTENSION
 from wulpus.helper import PassByRef, check_if_filereq_is_legitimate, ensure_dir, estimate_measurement_duration_seconds, get_saved_analysis_config
 from wulpus.websocket_manager import WebsocketManager
-from wulpus.wulpus_config_models import (ConDev, TxRxConfig, UsConfig,
+from wulpus.wulpus_config_models import (ConDev, MultiWulpusConfig, TxRxConfig, UsConfig,
                                          WulpusConfig)
 from wulpus.data_processing import ANALYSIS_CONFIG_DIR, ANALYSIS_CONFIG_FILENAME
 from pydantic import BaseModel, Field
@@ -29,32 +30,41 @@ MEASUREMENTS_DIR = os.path.join(THIS_DIR, 'measurements')
 CONFIG_DIR = os.path.join(THIS_DIR, 'configs')
 FRONTEND_DIR = os.path.join(THIS_DIR, 'production-frontend')
 
-wulpus = Wulpus()
-wulpus_mock = WulpusMock()
+wulpi = [Wulpus()]  # List of Wulpus instances, can be expanded later
+wulpus_mocks = [WulpusMock(), WulpusMock(1)]
 
 processor = MeasurementProcessor(get_saved_analysis_config())
 
-manager = WebsocketManager(wulpus, processor)
+manager = WebsocketManager(wulpi, processor)
 app = FastAPI()
 app.state.send_data_task = None  # type: Optional[asyncio.Task]
 app.state.series_task = None  # type: Optional[asyncio.Task]
 # type: PassByRef[Optional[SeriesConfig]]
 app.state.series_info = PassByRef(None)
 
+
 @app.post("/api/start")
-async def start(config: WulpusConfig):
-    try:
-        await manager.get_wulpus().connect()
-    except ValueError as e:
-        return {"connection-error": str(e)}
-    manager.get_wulpus().set_config(config)
-    await manager.get_wulpus().start()
+async def start(config: Union[WulpusConfig,  MultiWulpusConfig]):
+    ready_wulpus = 0
+    for w in manager.get_wulpus():
+        if w.get_status()["status"] == Status.READY:
+            ready_wulpus += 1
+        w.set_config(config)
+    if ready_wulpus == 0:
+        raise HTTPException(
+            status_code=400, detail="No Wulpus is ready!")
+    for w in manager.get_wulpus():
+        if w.get_status()["status"] == Status.READY:
+            await w.start()
+        else:
+            manager.remove_wulpus(w.wulpus_id)
     return {"ok": "ok"}
 
 
 @app.post("/api/stop")
 def stop():
-    manager.get_wulpus().stop()
+    for w in manager.get_wulpus():
+        w.stop()
     processor.reset()
     return {"ok": "ok"}
 
@@ -96,32 +106,77 @@ async def stop_series():
 
 @app.get("/api/connections")
 async def get_connections():
-    return await manager.get_wulpus().get_connection_options()
+    results = []
+    for w in manager.get_wulpus():
+        options = await w.get_connection_options()
+        result = {"options": options}
+        if hasattr(w, 'id'):
+            result["wulpus_id"] = w.wulpus_id
+        results.append(result)
+    return results
 
 
 @app.post("/api/connect")
-async def connect(conf: ConDev):
-    await manager.get_wulpus().connect(conf.con_dev)
+async def connect_single(conf: ConDev):
+    for w in manager.get_wulpus():
+        if (w.get_status()["status"] == Status.NOT_CONNECTED):
+            await w.connect(conf.con_dev)
+            return
+    # All existing Wulpus are connected, create a new one
+    new_wulpus = Wulpus(manager.find_free_id())
+    new_wulpus.set_new_measurement_event(app.state.new_data_event)
+    manager.add_wulpus(new_wulpus)
+    await new_wulpus.connect(conf.con_dev)
+
+
+@app.post("/api/connect/{wulpus_id}")
+async def connect_specific(wulpus_id: int, conf: ConDev):
+    wulpus = manager.get_wulpus(wulpus_id)
+    if (len(wulpus) == 1):
+        w = wulpus[0]
+        await w.connect(conf.con_dev)
+    else:
+        new_wulpus = Wulpus(wulpus_id)
+        new_wulpus.set_new_measurement_event(app.state.new_data_event)
+        manager.add_wulpus(new_wulpus)
+        await new_wulpus.connect(conf.con_dev)
 
 
 @app.post("/api/disconnect")
-async def disconnect():
-    await manager.get_wulpus().disconnect()
+async def disconnect(conf: ConDev):
+    for w in manager.get_wulpus():
+        if conf.con_dev == w.get_status()["endpoint"]:
+            await w.disconnect()
+            if (len(manager.get_wulpus()) > 1):
+                manager.remove_wulpus(w.wulpus_id)
+            break
+
+
+@app.post("/api/disconnect/all")
+async def disconnect_all():
+    for w in manager.get_wulpus():
+        await w.disconnect()
+        if (len(manager.get_wulpus()) > 1):
+            manager.remove_wulpus(w.wulpus_id)
 
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await manager.connect(websocket)
+    # Task to periodically broadcast status updates to all clients
     asyncio.create_task(manager.task_send_status(
         websocket, app.state.series_info))
-    if app.state.send_data_task is None or app.state.send_data_task.done():
-        new_measurement_event = asyncio.Event()
 
-        wulpus.set_new_measurement_event(new_measurement_event)
-        wulpus_mock.set_new_measurement_event(new_measurement_event)
+    # Task to broadcast measurements to all clients
+    if app.state.send_data_task is None or app.state.send_data_task.done():
+        app.state.new_data_event = asyncio.Event()
+        new_data_event = app.state.new_data_event
+
+        for w in manager.get_wulpus():
+            w.set_new_measurement_event(new_data_event)
 
         app.state.send_data_task = asyncio.create_task(
-            manager.task_send_data(new_measurement_event))
+            manager.task_broadcast_data(new_data_event))
 
     await manager.send_data()
     try:
@@ -220,16 +275,20 @@ def delete_config(filename: str):
 
 @app.post("/api/activate-mock")
 def activate_mock():
-    wulpus.stop()
-    manager.set_wulpus(wulpus_mock)
+    for w in manager.get_wulpus():
+        w.stop()
+    for w in wulpus_mocks:
+        w.set_new_measurement_event(app.state.new_data_event)
+    manager.set_wulpus(wulpus_mocks)
     processor.reset()
     return {"ok": "ok"}
 
 
 @app.post("/api/deactivate-mock")
 def deactivate_mock():
-    wulpus_mock.stop()
-    manager.set_wulpus(wulpus)
+    for w in wulpus_mocks:
+        w.stop()
+    manager.set_wulpus(wulpi)
     processor.reset()
     return {"ok": "ok"}
 
@@ -239,15 +298,19 @@ async def replay_file(filename: str):
     # Build a minimal default config: one empty TxRxConfig and a UsConfig with its own defaults
     default_config = WulpusConfig(
         tx_rx_config=[TxRxConfig()], us_config=UsConfig())
-    wulpus.stop()
+    for w in manager.get_wulpus():
+        w.stop()
+    for w in wulpus_mocks:
+        w.set_new_measurement_event(app.state.new_data_event)
     ensure_dir(MEASUREMENTS_DIR)
-    manager.set_wulpus(wulpus_mock)
+    manager.set_wulpus(wulpus_mocks)
     filepath = check_if_filereq_is_legitimate(
         filename, MEASUREMENTS_DIR, DATA_FILE_EXTENSION)
-    wulpus_mock.set_config(default_config)
-    wulpus_mock.set_replay_file(filepath)
+    for w in wulpus_mocks:
+        w.set_config(default_config)
+        w.set_replay_file(filepath)
     processor.reset()
-    await wulpus_mock.start()
+    await asyncio.gather(*(w.start() for w in wulpus_mocks))
 
 
 @app.get("/api/analyzeConfig", response_model=Optional[AnalysisConfig])

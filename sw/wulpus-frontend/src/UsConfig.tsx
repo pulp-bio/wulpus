@@ -47,7 +47,7 @@ export function USConfigPanel(props: { usConfig: UsConfig, setUsConfig: React.Di
                     style={{ fontSize: 100, lineHeight: 1 }}
                     aria-label='Toggle advanced fields'
                 >
-                    <span className="material-symbols-rounded">{showAdvanced ? 'visibility_off' : "visibility"}</span>
+                    <span className="material-symbols-rounded">{showAdvanced ? "unfold_less" : "unfold_more"}</span>
                 </button>
             </div>
             <div className={"grid gap-3 " + (showAdvanced ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-2')}> {/* Keep two columns either way */}
