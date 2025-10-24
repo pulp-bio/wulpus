@@ -170,7 +170,10 @@ class Wulpus:
     def _save_measurement(self):
         start_time = time.localtime(self._recording_start)
         timestring = time.strftime("%Y-%m-%d_%H-%M-%S", start_time)
-        filename = "wulpus-" + timestring + f"-id{self.wulpus_id}"
+        devicestring = self._last_connection \
+            .replace('/dev/', '').replace('COM', '').replace(' ', '') \
+            .replace('/', '_').replace(':', '')
+        filename = "wulpus-" + timestring + f"-id-{devicestring}"
         # Ensure measurement directory exists
         module_path = os.path.dirname(inspect.getfile(wulpus_pkg))
         measurement_path = os.path.join(module_path, 'measurements')

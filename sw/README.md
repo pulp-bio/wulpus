@@ -23,6 +23,24 @@ How to Launch the user-interface:
 You should be able to open a browser of you choice and visit [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 
 
+#### Using the log-file
+The log which gets recorded by the userinterface is a zip-file called `wulpus-{date}-id-{connection}.zip`.
+The date is the start of the recording, with the connection describes which wulpus was used (MAC address or COM port).
+It contains the config from the job, as well as the data in a [parquet](https://parquet.apache.org/) file.
+
+The parquet-file contains the following rows:
+- `tx`: list of channels used for sending
+- `rx`: list of channels used for receiving
+- `aq_number`: ID increased by the wulpus (can be used to detect lost frames)
+- `log_version`: the current version of the log-format. Constant over the whole file. 
+- `tx_rx_id`: the index of the tx-rx-config used
+- `0`, `1`, `2`, ...`{num samples - 1}`: the actual data, readout from ADC
+- `__index_level_0__`: unix timestamp in us
+
+You can use the jupyter notebook [visualize_log.ipynb](visualize_log.ipynb) to load a single or a set of multiple measurements and evaluate them.
+Ther's also [MATLAB_load_wulpus_log.m](MATLAB_load_wulpus_log.m) to help import the logs into MATLAB.
+
+
 ### Jupyter notebook (legacy)
 How to Launch an example Jupyter notebook:
 - In a terminal launch 
@@ -51,7 +69,7 @@ During the build-step of `wulpus-frontend`, the build results are copied inside 
 
 ## Development
 If you want to work on the frontend, it's easier to just run the backen (`wulpus`) and the frontend (`wulpus-frontend`) seperate.
-this way you don't have to build after each step.
+This way you don't have to build after each step.
 
 You can start the backend as usual (see above `python -m wulpus.main`), but instead of visiting [http://127.0.0.1:8000/](http://127.0.0.1:8000/) in your browser, you start the dev-environment of the frontend:
 - Open an additonal terminal at `\sw\wulpus-frontend`
@@ -60,6 +78,9 @@ You can start the backend as usual (see above `python -m wulpus.main`), but inst
     npm run dev
 ```
 - open the displayed link in your browser (probably [http://localhost:5173/](http://localhost:5173/))
+
+This way do you access the frontend though its own dev-server, which does hot-reloading.
+It still acesses the same backend, so everything still works exactly the same.
 
 # License
 The source files are released under Apache v2.0 (`Apache-2.0`) license unless noted otherwise, please refer to the `sw/LICENSE` file for details.
