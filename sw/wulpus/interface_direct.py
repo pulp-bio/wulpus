@@ -2,6 +2,7 @@ from __future__ import annotations
 import asyncio
 import re
 from typing import Callable, Union, Optional, List
+import time
 
 import numpy as np
 
@@ -32,6 +33,7 @@ class WulpusDongleDirect(DongleInterface):
         self._data_queue: Optional["asyncio.Queue[bytes]"] = None
         self._loop: Optional[asyncio.AbstractEventLoop] = None
         self._disconnected_callback = disconnected_callback
+        self._last_frame_time: Optional[float] = None
 
     async def get_available(self) -> List[ConnectionOption]:
         """
@@ -198,12 +200,26 @@ class WulpusDongleDirect(DongleInterface):
 
                 # Verify data length
                 if len(rf_arr) == acq_length:
+                    now = time.perf_counter()
+                    if self._last_frame_time is not None:
+                        dt_ms = (now - self._last_frame_time) * 1000.0
+                        dt_str = f"{dt_ms:.1f} ms"
+                    else:
+                        dt_str = "n/a"
+                    self._last_frame_time = now
+                    if acq_nr % 100 == 0:
+                        print(
+                            f"state of frames: acq_nr={acq_nr}, tx_rx_id={tx_rx_id}, dt={dt_str} (to prev. one)")
                     return rf_arr, acq_nr, tx_rx_id
                 else:
                     print(
                         f"Warning: Malformed frame received (data length {len(rf_arr)}, expected {acq_length}). Discarding.")
                     # Reset buffer if data is malformed
                     frame_buffer = bytearray()
+            elif len(frame_buffer) > 804:
+                print(
+                    f"Warning: Oversized frame discarded ({len(frame_buffer)} bytes)")
+                frame_buffer = bytearray()
 
         return None, None, None
 

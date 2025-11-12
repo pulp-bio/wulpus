@@ -35,7 +35,7 @@ class WulpusDongleMock(WulpusDongleUsb):
         """
         Send a configuration package to the device.
         """
-        print("Configuration sent:", conf_bytes_pack)
+        print("Configuration sent:", conf_bytes_pack.hex())
         self.acq_num = 0
         return True
 

@@ -184,6 +184,10 @@ class Wulpus:
         while os.path.isfile(basepath + DATA_FILE_EXTENSION):
             basepath = basepath + "_conflict"
 
+        if self._data.shape[1] == 0:
+            print('No data recorded, measurement not saved.')
+            return
+
         df = pd.DataFrame({
             'measurement': [pd.Series(self._data[:, i]) for i in range(self._live_data_cnt)],
             "tx": [self._config.tx_rx_config[i].tx_channels for i in self._data_tx_rx_id],
