@@ -52,8 +52,8 @@ class WulpusDongleDirect(DongleInterface):
                     d.name), "type": ConnectionType.BLE}
                 for d in self._devices
             ]
-        except OSError:
-            print("OSError during Bluetooth discovery - Adapter probably disabled")
+        except (OSError, BleakError):
+            print("Error during Bluetooth discovery - Adapter probably disabled")
             return []
 
     async def connect(self, device: Optional[ListPortInfo] = None, device_str: Optional[str] = None) -> bool:
