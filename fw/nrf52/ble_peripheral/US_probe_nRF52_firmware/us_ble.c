@@ -73,6 +73,7 @@
 #include "nrf_delay.h"
 #include "us_ble.h"
 #include "us_defines.h"
+#include "iis2dh.h"
 
 
 #define APP_BLE_CONN_CFG_TAG            1                                           /**< A tag identifying the SoftDevice BLE configuration. */
@@ -101,6 +102,11 @@ extern ArrayList_type m_rx_buf[NUMBER_OF_XFERS*MAX_BUFFER_NUMBER_OF_US_FRAMES];
 extern volatile bool ble_connected;
 extern volatile bool msp_conf_received;
 extern int BLE_packet_ready;
+
+extern volatile bool accel_stream_enabled;
+extern volatile bool accel_stream_requested;
+extern volatile bool accel_stream_update_pending;
+
 
 void sleep_mode_enter(void);
 
@@ -167,6 +173,8 @@ static void gap_params_init(void)
 }
 
 
+
+
 /**@brief Function for handling Queued Write Module errors.
  *
  * @details A pointer to this function will be passed to each service which may need to inform the
@@ -179,6 +187,18 @@ static void nrf_qwr_error_handler(uint32_t nrf_error)
     APP_ERROR_HANDLER(nrf_error);
 }
 
+
+// Helper to decode little-endian uint32_t
+static uint32_t read_u32_le(const uint8_t *p)
+{
+    return ((uint32_t)p[0]) |
+           ((uint32_t)p[1] << 8) |
+           ((uint32_t)p[2] << 16) |
+           ((uint32_t)p[3] << 24);
+}
+
+
+
 /**@brief Function for handling the data from the Nordic UART Service.
  *
  * @details This function will process the data received from the Nordic UART BLE Service and send
@@ -189,11 +209,23 @@ static void nrf_qwr_error_handler(uint32_t nrf_error)
 /**@snippet [Handling the data received over BLE] */
 static void nus_data_handler(ble_nus_evt_t * p_evt)
 {
-
     if (p_evt->type == BLE_NUS_EVT_RX_DATA)
     {
-        // Copy received command from python to the SPI transmit buffer
-        memcpy(m_tx_buf_1, p_evt->params.rx_data.p_data, p_evt->params.rx_data.length);
+        const uint8_t *rx  = p_evt->params.rx_data.p_data;
+        uint16_t       len = p_evt->params.rx_data.length;
+
+        // Only decode config packets: start byte 0xFA, transFreq at bytes 5..8
+        if ((len >= 9) && (rx[0] == 0xFA))
+        {
+            uint32_t transFreq = read_u32_le(&rx[5]);
+          
+            // If transFreq contains code 101, enable accelerometer
+            accel_stream_requested = (transFreq == 101u);
+            accel_stream_update_pending = true;
+        }
+
+        // Forward packet unchanged to MSP430
+        memcpy(m_tx_buf_1, rx, len);
         msp_conf_received = true;
 
         // Clear the BLE buffers to send US data with the received configuration
