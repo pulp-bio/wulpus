@@ -52,6 +52,8 @@
 #include "us_ble.h"
 #include "us_defines.h"
 
+#include "iis2dh.h"
+
 // Buffers to store US data
 ArrayList_type m_rx_buf[NUMBER_OF_XFERS*MAX_BUFFER_NUMBER_OF_US_FRAMES] = {0};
 
@@ -68,6 +70,14 @@ volatile bool ble_connected = false;
 
 // A flag to signal that MSP config is received
 volatile bool msp_conf_received = false;
+
+volatile bool do_act_reading=false;
+
+
+// Handle accelerometer as requested by GUI/User (see us_ble.c)
+volatile bool accel_stream_enabled = false;
+volatile bool accel_stream_requested = false;
+volatile bool accel_stream_update_pending = false;
 
 /**@brief Function for initializing the timer module.
  */
@@ -132,6 +142,7 @@ void in_pin_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
         // Enable timer and counter to start the four SPI transactions
         nrf_drv_timer_enable(&timer_timer);
         nrf_drv_timer_enable(&timer_counter);
+        do_act_reading =true;
     }
 }
 
@@ -167,6 +178,19 @@ static void gpio_init(void)
 
 }
 
+
+static void apply_accel_mode_if_pending(void)
+{
+    if (!accel_stream_update_pending)
+        return;
+
+    accel_stream_enabled = accel_stream_requested;
+    IIS2DH_set_streaming_enabled(accel_stream_enabled);
+    accel_stream_update_pending = false;
+}
+
+
+
 /**@brief Application main function.
  */
 int main(void)
@@ -178,10 +202,12 @@ int main(void)
     us_ble_init();
     gpio_init();
     us_spi_init();
+    IIS2DH_init();
 
 
     // Tell MSP430 that the BLE connection is not ready yet
     nrf_drv_gpiote_out_clear(PIN_BLE_CONN_READY);
+
 
     // Start BLE advertising
     advertising_start();
@@ -197,16 +223,35 @@ int main(void)
 
     while(msp_conf_received==false)
     {
-        // Wait for MSP430 config to be received from host PC
+        idle_state_handle();
     }
-    //msp_conf_received = false;
+    msp_conf_received = false;
+
+    apply_accel_mode_if_pending();
 
     // Now the BLE connection is ready to send US data
     nrf_drv_gpiote_out_set(PIN_BLE_CONN_READY);
 
     // Enter main loop.
     while(1)
-    {
+    { 
+        // Enable/disable accelerometer as requested by user-config
+        apply_accel_mode_if_pending();
+
+        if (do_act_reading)
+        {
+            if (accel_stream_enabled)
+            {
+                getIIS2DHData2Buffer();
+            }
+            else
+            {
+                finalizeFrameWithoutIMU();
+            }
+
+            do_act_reading = false;
+        }
+
         send_pending_frames();
         idle_state_handle();
     }
