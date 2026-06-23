@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - A new web-based UI application (`wulpus-frontend/`, Vite + React) with panels for connection, TX/RX config, ultrasound config, logs, and live graphing.
-  It has feature-pairity with the jupyter notebook gui.
+  It has feature parity with the Jupyter notebook GUI.
 - A new FastAPI backend service (`wulpus/`) exposing HTTP APIs and a WebSocket stream for live measurements; includes config and log endpoints.
 - Recording functionality and compressed logging that includes the recording start timestamp.
 - Mocked dongle, simulation, and replay modes to ease development and demonstrations.
@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Moved the existing Gui from `/sw/wulpus` into `/sw/jupyter notebook (legacy)/wulpus_jptnbk`.
+- Moved the existing GUI from `/sw/wulpus` into `/sw/jupyter notebook (legacy)/wulpus_jptnbk`.
 - Frontend is now served by the FastAPI backend.
 - Refactored US acquisition setup; added capability to live-patch configuration during runtime.
 - Reworked and typed the `latest_frame` data structure, enabling reliable B-mode visualization.
@@ -35,14 +35,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated RX/TX API and Python GUI accordingly (optional tick box to activate optimal switching).
 - A STOP button to stop acquisition earlier.
 - A GUI to configure/save/load TX and RX configurations of the HV multiplexer.
-- A GUI to configure ultrasound subsytem's parameters, +save them to or load them from a file.
+- A GUI to configure ultrasound subsystem parameters, and save them to or load them from a file.
 - Comments/docstrings in the source files
 - Added B-mode visualization option.
 - The code in example jupyter notebook to load the data.
 
 ### Fixed
 
-- Bug with empty COM port list (the GUI were failing when there were no COM ports in the system).
+- Bug with empty COM port list (the GUI failed when there were no COM ports in the system).
 - Now the user can rerun the main GUI cell without closing the COM port first.
 
 ### Changed

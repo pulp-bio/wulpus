@@ -13,6 +13,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.9"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
       - name: Install npm dependencies
         run: npm ci
         working-directory: ./sw/wulpus-frontend
@@ -20,11 +22,11 @@ jobs:
         run: python build.py
         working-directory: ./sw/wulpus-frontend
       - name: Install python dependencies
-        working-directory: ./sw/wulpus
-        run: pip install -r requirements.txt
+        working-directory: ./sw
+        run: uv sync --locked
       - name: Build .exe
-        working-directory: ./sw/wulpus
-        run: pyinstaller ./main.spec --noconfirm
+        working-directory: ./sw
+        run: uv run pyinstaller ./wulpus/main.spec --noconfirm
       - name: Bump version and push tag
         id: tag_version
         uses: mathieudutour/github-tag-action@v6.2
@@ -32,7 +34,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dry_run: ${{ github.event_name == 'pull_request' || github.ref != 'refs/heads/main'}}
       - name: Write version info to artifact
-        working-directory: ./sw/wulpus
+        working-directory: ./sw
         shell: pwsh
         run: |
           $commitHash = (git rev-parse HEAD).Trim()
@@ -46,7 +48,7 @@ jobs:
         id: artifact-upload-step
         with:
           name: wulpus-all-in-one
-          path: ./sw/wulpus/dist/main/
+          path: ./sw/dist/main/
           compression-level: 8
       - name: Create release
         uses: softprops/action-gh-release@v2

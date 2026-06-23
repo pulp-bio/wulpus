@@ -1,8 +1,12 @@
 *.ipynb_checkpoints
 *.pyc
 __pycache__/
+*.egg-info/
 .ipynb_checkpoints/
 .vscode
 *.clangd
 sw/.venv
+sw/build/
+sw/dist/
+.uv-cache/
 local-development/

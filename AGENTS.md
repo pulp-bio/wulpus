@@ -2,7 +2,7 @@
 
 ## Commands
 
-- **Start backend**: `sw/.venv/Scripts/Activate.ps1` then `python -m wulpus.main` (hosts backend at http://127.0.0.1:8000/)
+- **Start backend**: `uv run python -m wulpus.main` in `sw/` (hosts backend at http://127.0.0.1:8000/)
 - **Frontend dev**: `npm run dev` in `sw/wulpus-frontend/` (dev server at http://localhost:5173/)
 - **Frontend build**: `npm run build` in `sw/wulpus-frontend/`
 - **Frontend lint**: `npm run lint` in `sw/wulpus-frontend/`
