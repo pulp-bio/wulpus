@@ -60,6 +60,8 @@ extern volatile bool ble_connected;
 
 extern volatile bool msp_conf_received;
 
+volatile bool flag_add_IMU;
+
 extern int buffer_content;
 extern int buffer_counter;
 
@@ -173,11 +175,9 @@ void counter_cc0_event_handler(nrf_timer_event_t event_type, void* p_context)
         //APP_ERROR_CHECK(1);
     }
 
-    buffer_counter++;
-    if(buffer_counter == MAX_BUFFER_NUMBER_OF_US_FRAMES)
-        buffer_counter = 0;
-
-    BLE_packet_ready = 1;
+    // Buffer ready to add IMU data
+    flag_add_IMU = true;
+    
     //msp_conf_received = false;
     
     // Relay the received SPI data to the BLE dongle

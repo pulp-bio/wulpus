@@ -99,6 +99,11 @@
         <configuration Name="Release" build_exclude_from_build="No" />
       </file>
       <file file_name="../../../../../../modules/nrfx/drivers/src/nrfx_ppi.c" />
+      <file file_name="../../../../../../modules/nrfx/drivers/include/nrfx_twim.h" />
+      <file file_name="../../../../../../modules/nrfx/drivers/src/nrfx_twi.c" />
+      <file file_name="../../../../../../modules/nrfx/drivers/src/nrfx_twim.c" />
+      <file file_name="../../../../../../modules/nrfx/drivers/src/nrfx_twi_twim.c" />
+      <file file_name="../../../../../../integration/nrfx/legacy/nrf_drv_twi.c" />
     </folder>
     <folder Name="Board Support">
       <file file_name="../../../../../../components/libraries/bsp/bsp.c" />
@@ -112,6 +117,8 @@
       <file file_name="../../../us_defines.h" />
       <file file_name="../../../us_ble.c" />
       <file file_name="../../../us_ble.h" />
+      <file file_name="../../../iis2dh.c" />
+      <file file_name="../../../iis2dh.h" />
     </folder>
     <folder Name="nRF_Segger_RTT">
       <file file_name="../../../../../../external/segger_rtt/SEGGER_RTT.c" />
