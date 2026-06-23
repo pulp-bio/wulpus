@@ -45,12 +45,14 @@ static void getConfigPack(void);
 static void configAfterPowerUp(void);
 static void receiveUssConfPackage(void);
 static void usAcquisitionLoop(void);
+static void prepareUSSAcquisition();
 
 // Callbacks implementation
 static void hsPllUnlockCallback(void);
 static void saphSeqAcqDoneCallback(void);
 static void slowTimerCc2Callback(void);
 static void fastTimerCc0Callback(void);
+
 
 int main(void)
 {
@@ -69,27 +71,20 @@ int main(void)
         tx_rx_id = 0;
         meas_frame_nr = 0;
 
-        // Receive Uss configuration package from nRF
+        // Power down HV PCB to save energy
+        disableHvPcbDcDc();
+        disableOpAmpSupply();
+        disableHvPcbSupply();
+
+        // Wait until we receive Uss configuration package from nRF
         receiveUssConfPackage();
 
-        // Configure Uss according to the new package
-        confUsSubsystem();
-
-        // Configure the events of slow and fast timers
-        confTimerSlowSwEvents();
-        confTimerFastSwEvents();
-
-        // Power up HV PCB
-        enableHvPcbSupply();
-        // Enable Power for OPA836
-        enableOpAmpSupply();
-
-        // Enter acquisition loop
+        prepareUSSAcquisition();
+        // Do measurements
         usAcquisitionLoop();
-
-    }
+        }
+    
     // Not reachable
-	
 	return 0;
 }
 
@@ -147,7 +142,6 @@ void configAfterPowerUp(void)
 }
 
 static void receiveUssConfPackage(void)
-
 {
     while(1)
     {
@@ -169,6 +163,22 @@ static void receiveUssConfPackage(void)
             }
         }
     }
+}
+
+static void prepareUSSAcquisition(){
+    enableHvPcbDcDc();
+
+    // Configure Uss according to the new package
+    confUsSubsystem();
+
+    // Configure the events of slow and fast timers
+    confTimerSlowSwEvents();
+    confTimerFastSwEvents();
+
+    // Power up HV PCB
+    enableHvPcbSupply();
+    // Enable Power for OPA836
+    enableOpAmpSupply();
 }
 
 static void usAcquisitionLoop(void)
@@ -270,9 +280,9 @@ static void saphSeqAcqDoneCallback(void)
     // and OpAmp
 
     // Disable HV and +5 V
-    disableHvPcbDcDc();
+    // disableHvPcbDcDc();
     // Disable RX OPA836
-    disableOpAmp();
+    // disableOpAmp();
 
     // if PLL unlock event occurs earlier the acquisition might be not valid
     if (isEventFlagSet(HS_PLL_UNLOCK_EVENT) == false)
@@ -298,7 +308,7 @@ static void fastTimerCc0Callback(void)
     // Switch HV Mux
     hvMuxLatchOutput();
     // Disable HV DC-DC (we don't need V at this point)
-    disableHvDcDc();
+    // disableHvDcDc();
     // Disable Fast Timer
     timerFastStop();
 }

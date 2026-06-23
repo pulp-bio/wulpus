@@ -59,8 +59,10 @@ bool extractUsConfig(uint8_t * spi_rx, msp_config_t * msp_config);
 
 //// Extra functions ////
 
-// Check the first byte and check if restart should be performed
+// Check the first byte if restart should be performed
 bool isRestartCondition(uint8_t * spi_rx);
+// Check the first byte if a new config is requested
+bool isNewConfigCondition(uint8_t * spi_rx);
 
 // Initiate MSP430-controlled power switches
 void initAllPowerSwitches(void);

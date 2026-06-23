@@ -8,4 +8,4 @@ This directory contains the source firmware files for
 2. Follow the same file to flash the MSP430 MCU on the WULPUS acquisition PCB.
 
 # License
-The files in the `hw/nRF52/wulpus_msp430_firmware` directory contains third-party sources that come with their own licenses (primarily BSD and Apache 2.0 License). See the respective folders and source files' headers for the licenses used.
+The files in the `fw/msp430/wulpus_msp430_firmware` directory contain third-party sources that come with their own licenses (primarily BSD and Apache 2.0 License). See the respective folders and source files' headers for the licenses used.

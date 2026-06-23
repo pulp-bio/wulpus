@@ -1,0 +1,44 @@
+@import "tailwindcss";
+@import "@material-symbols/font-200";
+@import "@material-symbols/font-300";
+@import "@material-symbols/font-400";
+@import "react-range-slider-input/dist/style.css";
+
+@layer base {
+  button:not([disabled]),
+  [role="button"]:not([disabled]) {
+    cursor: pointer;
+  }
+  @font-face {
+    font-family: "Material Symbols Rounded";
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url("./material-symbols-rounded.woff2") format("woff2");
+
+    .material-symbols-rounded {
+      font-family: "Material Symbols Rounded";
+      font-weight: normal;
+      font-style: normal;
+      font-size: 24px;
+      line-height: 1;
+      letter-spacing: normal;
+      text-transform: none;
+      display: inline-block;
+      white-space: nowrap;
+      word-wrap: normal;
+      direction: ltr;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      font-feature-settings: "liga";
+    }
+  }
+}
+.range-slider .range-slider__thumb {
+  background: #008000;
+}
+
+.range-slider .range-slider__range {
+  background: #005f00;
+}
