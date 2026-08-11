@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Layout changes to improve RF performance (more antenna clearance, improved RF routing)
+
+### Changed
+
+- Added new antenna (NN02-201) and corresponding matching network
+
+## [1.2.2] - 2025-03-23
+
+### Added
+
+### Fixed
+
 ### Changed
 
 - Updated footprint of U4, U5 and U8 to release production complexity (increased vias hole diameter to 0.3 mm, left 0.22 mm spacing between the pads of U8 for the minimal solder mask sliver).
