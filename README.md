@@ -1,6 +1,6 @@
 <img src="docs/images/wulpus_main.png" alt="WULPUS main" width="100%"/>
 
-# WULPUS v1.2.3
+# WULPUS v1.2.4
 ## Wearable Ultra Low-Power Ultrasound
 
 # Introduction
