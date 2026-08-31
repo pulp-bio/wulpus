@@ -30,6 +30,14 @@
 #define IIS2DH_REG_CTRL_REG5  0x24
 #define IIS2DH_REG_CTRL_REG6  0x25
 
+/* Sub-address bit 7 makes the IIS2DH auto-increment the register pointer, so a
+ * whole block (e.g. OUT_X_L..OUT_Z_H) can be read in one I2C transaction. */
+#define IIS2DH_AUTO_INCREMENT 0x80
+
+/* CTRL_REG4 bits */
+#define IIS2DH_CTRL_REG4_BDU  0x80  /* block data update: hold OUT_* until both halves read */
+#define IIS2DH_CTRL_REG4_HR   0x08  /* high-resolution (12-bit) mode                        */
+
 #define IIS2DH_REG_STATUS_REG_AUX 0x07
 #define IIS2DH_REG_OUT_TEMP_L 0x0C
 #define IIS2DH_REG_OUT_TEMP_H 0x0D

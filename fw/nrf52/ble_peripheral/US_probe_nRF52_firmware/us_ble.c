@@ -363,8 +363,15 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             APP_ERROR_CHECK(err_code);
 
             // Set radio power
-            //err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_CONN, m_conn_handle, 8);
-            //APP_ERROR_CHECK(err_code);
+            // In ble_evt_handler -> BLE_GAP_EVT_CONNECTED:
+            #if defined(NRF52840_XXAA) || defined(NRF52833_XXAA)
+            int8_t tx_power = 8;
+            #else
+            int8_t tx_power = 4; // nRF52832 max
+            #endif
+
+            err_code = sd_ble_gap_tx_power_set(BLE_GAP_TX_POWER_ROLE_CONN, m_conn_handle, tx_power);
+            APP_ERROR_CHECK(err_code);
 
             // Request a switch to 2Mbps from the peer
             ble_gap_phys_t const phys =

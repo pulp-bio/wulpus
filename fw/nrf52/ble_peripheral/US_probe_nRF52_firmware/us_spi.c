@@ -87,6 +87,8 @@ uint32_t spi_end_evt_addr;
 uint32_t timer0_timeout_cc0_evt_addr;
 uint32_t counter1_count_task_addr;
 uint32_t counter1_cc0_evt_addr;
+uint32_t timer0_stop_task_addr;
+uint32_t counter1_stop_task_addr;
 
 int BLE_packet_ready = 0;
 
@@ -151,7 +153,9 @@ void timer_timeout_event_handler(nrf_timer_event_t event_type, void* p_context)
  */
 void counter_cc0_event_handler(nrf_timer_event_t event_type, void* p_context)
 {
-    // Stop timers and hence, stop SPI transfers.
+    /* Both timers have already been stopped in hardware by the counter CC0 event
+     * over PPI (see ppi_init()). These calls are only a backstop; the burst length
+     * no longer depends on how quickly this handler gets to run. */
     nrf_drv_timer_disable(&timer_timer);
     nrf_drv_timer_disable(&timer_counter);
     
@@ -218,8 +222,13 @@ void timer_init()
     APP_ERROR_CHECK(err_code);
 
     nrf_drv_timer_extended_compare(&timer_counter, NRF_TIMER_CC_CHANNEL0, NUMBER_OF_XFERS, NRF_TIMER_SHORT_COMPARE0_CLEAR_MASK, true);
-    
+
     counter1_count_task_addr = nrf_drv_timer_task_address_get(&timer_counter, NRF_TIMER_TASK_COUNT);
+
+    // Needed to stop the burst from hardware rather than from the CC0 interrupt
+    counter1_cc0_evt_addr    = nrf_drv_timer_event_address_get(&timer_counter, NRF_TIMER_EVENT_COMPARE0);
+    timer0_stop_task_addr    = nrf_drv_timer_task_address_get(&timer_timer,   NRF_TIMER_TASK_STOP);
+    counter1_stop_task_addr  = nrf_drv_timer_task_address_get(&timer_counter, NRF_TIMER_TASK_STOP);
 }
 
 /**@brief Initialize the PPI channels
@@ -232,6 +241,7 @@ void ppi_init()
     uint32_t err_code;
     nrf_ppi_channel_t ppi_ch_timer_cc0_start_spi;
     nrf_ppi_channel_t ppi_ch_spi_end_counter1_count;
+    nrf_ppi_channel_t ppi_ch_counter1_cc0_stop_timers;
     
 
      //* Init timer0 timout to start SPI
@@ -249,10 +259,37 @@ void ppi_init()
     err_code = nrf_drv_ppi_channel_assign(ppi_ch_spi_end_counter1_count, spi_end_evt_addr, counter1_count_task_addr);
     APP_ERROR_CHECK(err_code);
     
-    // Enable both configured PPI channels
+    /* Stop the burst in hardware as soon as the counter reaches NUMBER_OF_XFERS.
+     *
+     * counter_cc0_event_handler() also stops the timers, but it runs at application
+     * interrupt priority and only has (time_us - transfer time) to do it - 99 us at
+     * the current 300 us period and 201 bytes at 8 MHz. If the SoftDevice delays it
+     * past that, timer_timer triggers a fifth SPI START and the frame runs long.
+     * The MSP430's slave DMA is sized for exactly NUMBER_OF_XFERS transfers, so once
+     * the byte stream is misaligned a later frame is left waiting for bytes that
+     * never arrive: DATA_READY stays high, no further GPIOTE edge is ever produced,
+     * and the link deadlocks until the probe is power cycled.
+     *
+     * Driving the STOP tasks straight from the CC0 event removes the deadline. */
+    err_code = nrf_drv_ppi_channel_alloc(&ppi_ch_counter1_cc0_stop_timers);
+    APP_ERROR_CHECK(err_code);
+
+    err_code = nrf_drv_ppi_channel_assign(ppi_ch_counter1_cc0_stop_timers,
+                                          counter1_cc0_evt_addr,
+                                          timer0_stop_task_addr);
+    APP_ERROR_CHECK(err_code);
+
+    // The fork lets the same event also stop the counter itself
+    err_code = nrf_drv_ppi_channel_fork_assign(ppi_ch_counter1_cc0_stop_timers,
+                                               counter1_stop_task_addr);
+    APP_ERROR_CHECK(err_code);
+
+    // Enable all configured PPI channels
     err_code = nrf_drv_ppi_channel_enable(ppi_ch_timer_cc0_start_spi);
     APP_ERROR_CHECK(err_code);
     err_code = nrf_drv_ppi_channel_enable(ppi_ch_spi_end_counter1_count);
+    APP_ERROR_CHECK(err_code);
+    err_code = nrf_drv_ppi_channel_enable(ppi_ch_counter1_cc0_stop_timers);
     APP_ERROR_CHECK(err_code);
 }
 

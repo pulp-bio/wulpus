@@ -17,11 +17,11 @@ RevisionNamingSchemeGUID=
 [OutputGroup1]
 Name=Job.OutJob
 Description=
-TargetOutputMedium=BOM
+TargetOutputMedium=BOM_excel
 VariantName=Fabrication_ready
 VariantScope=1
 CurrentConfigurationName=
-TargetPrinter=Virtual Printer
+TargetPrinter=Microsoft Print to PDF
 PrinterOptions=Record=PrinterOptions|Copies=1|Duplex=1|TrueTypeOptions=3|Collate=1|PrintJobKind=1|PrintWhat=1
 OutputMedium1=Print Job
 OutputMedium1_Type=Printer
@@ -87,7 +87,7 @@ OutputName4=BOM
 OutputCategory4=Documentation
 OutputDocumentPath4=DOC_BOM.PCBDwf
 OutputVariantName4=
-OutputEnabled4=1
+OutputEnabled4=0
 OutputEnabled4_OutputMedium1=0
 OutputEnabled4_OutputMedium2=0
 OutputEnabled4_OutputMedium3=0
@@ -145,7 +145,7 @@ OutputName8=Bill of Materials
 OutputCategory8=Report
 OutputDocumentPath8=PCB1.PcbDoc
 OutputVariantName8=
-OutputEnabled8=0
+OutputEnabled8=1
 OutputEnabled8_OutputMedium1=0
 OutputEnabled8_OutputMedium2=0
 OutputEnabled8_OutputMedium3=0
@@ -159,13 +159,13 @@ Configuration8_Item1=CaptionAsName
 Configuration8_Name2=General
 Configuration8_Item2=OpenExported=False|AddToProject=False|ReportBOMViolationsInMessages=False|ForceFit=False|NotFitted=False|Database=False|DatabasePriority=False|IncludePcbData=False|IncludeVaultData=False|IncludeCloudData=False|IncludeDocumentData=True|IncludeAlternatives=False|ShowExportOptions=True|TemplateFilename=|TemplateVaultGuid=|TemplateItemGuid=|TemplateRevisionGuid=|BatchMode=5|FormWidth=1200|FormHeight=710|SupplierProdQty=1|SupplierAutoQty=False|SupplierUseCachedPricing=False|SupplierCurrency=USD|SolutionsPerItem=1|SuppliersPerSolution=1|ViewType=1|UseDirectApi=False|BomSetName=
 Configuration8_Name3=GroupOrder
-Configuration8_Item3=Footprint=True|Comment=True
+Configuration8_Item3=Comment=True
 Configuration8_Name4=SortOrder
 Configuration8_Item4=Designator=Up|Comment=Up
 Configuration8_Name5=VisibleOrder
-Configuration8_Item5=Designator=100|Comment=100|Quantity=100|Manufacturer=100
+Configuration8_Item5=Designator=292|Comment=100|Quantity=100|Manufacturer=100
 Configuration8_Name6=VisibleOrder_Flat
-Configuration8_Item6=Designator=100|Comment=100|Quantity=100|Manufacturer=100
+Configuration8_Item6=Designator=292|Comment=100|Quantity=100|Manufacturer=100
 OutputType9=Board Stack Report
 OutputName9=Report Board Stack
 OutputCategory9=Fabrication
