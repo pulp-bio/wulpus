@@ -98,4 +98,77 @@ class WulpusRxTxConfigGen():
     def get_rx_configs(self):
         
         return self.rx_configs[:self.tx_rx_len]
-        
+
+
+def build_tx_rx_configs_from_wulpus_config(wulpus_config):
+    """Build TX and RX configuration arrays from a WulpusConfig instance.
+
+    The function replicates the logic of WulpusRxTxConfigGen.add_config for each
+    TxRxConfig entry inside wulpus_config.tx_rx_config, including the optional
+    optimized switching behavior.
+
+    Parameters
+    ----------
+    wulpus_config : object
+        Expected to expose an attribute `tx_rx_config` which is an iterable of
+        objects each having: tx_channels (list[int]), rx_channels (list[int]),
+        optimized_switching (bool).
+
+    Returns
+    -------
+    (np.ndarray, np.ndarray)
+        Tuple of (tx_configs, rx_configs) each shaped (N,) dtype '<u2'.
+    """
+    tx_cfgs = np.zeros(TX_RX_MAX_NUM_OF_CONFIGS, dtype='<u2')
+    rx_cfgs = np.zeros(TX_RX_MAX_NUM_OF_CONFIGS, dtype='<u2')
+    length = 0
+
+    for cfg in getattr(wulpus_config, 'tx_rx_config', []):
+        if length >= TX_RX_MAX_NUM_OF_CONFIGS:
+            raise ValueError('Maximum number of configs is ' +
+                             str(TX_RX_MAX_NUM_OF_CONFIGS))
+
+        tx_channels = list(getattr(cfg, 'tx_channels', []))
+        rx_channels = list(getattr(cfg, 'rx_channels', []))
+        optimized_switching = bool(getattr(cfg, 'optimized_switching', False))
+
+        # Validate channel IDs
+        if (any(ch > MAX_CH_ID for ch in tx_channels) or any(ch > MAX_CH_ID for ch in rx_channels)):
+            raise ValueError(
+                'RX and TX channel ID must be less than ' + str(MAX_CH_ID))
+        if (any(ch < 0 for ch in tx_channels) or any(ch < 0 for ch in rx_channels)):
+            raise ValueError('RX and TX channel ID must be positive.')
+
+        # Build bitmasks
+        if len(tx_channels) == 0:
+            tx_cfgs[length] = 0
+        else:
+            tx_cfgs[length] = np.bitwise_or.reduce(
+                np.left_shift(1, TX_MAP[tx_channels]))
+
+        if len(rx_channels) == 0:
+            rx_cfgs[length] = 0
+        else:
+            rx_cfgs[length] = np.bitwise_or.reduce(
+                np.left_shift(1, RX_MAP[rx_channels]))
+
+        if optimized_switching:
+            rx_tx_intersect_ch = list(set(tx_channels) & set(rx_channels))
+            rx_only_ch = list(set(rx_tx_intersect_ch) ^ set(rx_channels))
+            tx_only_ch = list(set(rx_tx_intersect_ch) ^ set(
+                tx_channels))  # kept for clarity if later needed
+
+            if len(rx_tx_intersect_ch) > len(rx_only_ch):
+                temp_switch_config = np.bitwise_or.reduce(np.left_shift(
+                    1, RX_MAP[rx_tx_intersect_ch])) if rx_tx_intersect_ch else 0
+                tx_cfgs[length] = np.bitwise_or(
+                    tx_cfgs[length], temp_switch_config)
+            elif len(rx_only_ch) > 0:
+                temp_switch_config = np.bitwise_or.reduce(
+                    np.left_shift(1, RX_MAP[rx_only_ch]))
+                tx_cfgs[length] = np.bitwise_or(
+                    tx_cfgs[length], temp_switch_config)
+
+        length += 1
+
+    return tx_cfgs[:length], rx_cfgs[:length]

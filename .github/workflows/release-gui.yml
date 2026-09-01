@@ -1,0 +1,59 @@
+name: GUI Release
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+jobs:
+  Build-Action:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+      - name: Install npm dependencies
+        run: npm ci
+        working-directory: ./sw/wulpus-frontend
+      - name: Build UI (react)
+        run: python build.py
+        working-directory: ./sw/wulpus-frontend
+      - name: Install python dependencies
+        working-directory: ./sw
+        run: uv sync --locked
+      - name: Build .exe
+        working-directory: ./sw
+        run: uv run pyinstaller ./wulpus/main.spec --noconfirm
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          dry_run: ${{ github.event_name == 'pull_request' || github.ref != 'refs/heads/main'}}
+      - name: Write version info to artifact
+        working-directory: ./sw
+        shell: pwsh
+        run: |
+          $commitHash = (git rev-parse HEAD).Trim()
+          $commitDateFull = (git show -s --format=%cd --date=iso-strict HEAD).Trim()
+          $commitDate = $commitDateFull.Split('T')[0]
+          $text = "$commitHash from $commitDate (${{ steps.tag_version.outputs.new_tag }})"
+          $target = "./dist/main/_internal/wulpus/version.txt"
+          New-Item -ItemType Directory -Force -Path (Split-Path -Parent $target) | Out-Null
+          Set-Content -Path $target -Value $text -Encoding UTF8
+      - uses: actions/upload-artifact@v4
+        id: artifact-upload-step
+        with:
+          name: wulpus-all-in-one
+          path: ./sw/dist/main/
+          compression-level: 8
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main'}}
+        with:
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+          name: UI-Release ${{ steps.tag_version.outputs.new_tag }}
+          body: Automated release of Wulpus GUI version ${{ steps.tag_version.outputs.new_tag }}. The release can be downloaded here [${{ steps.artifact-upload-step.outputs.artifact-url }}](${{ steps.artifact-upload-step.outputs.artifact-url }}) (github-login required)

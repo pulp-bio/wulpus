@@ -57,8 +57,8 @@ void getDefaultUsConfig(msp_config_t * msp_config)
 
     // TX/RX configurations
     msp_config->txRxConfLen = 0;
-//    msp_config->txConfigs[TX_RX_CONF_LEN_MAX];
-//    msp_config->rxConfigs[TX_RX_CONF_LEN_MAX];
+    // msp_config->txConfigs[TX_RX_CONF_LEN_MAX];
+    // msp_config->rxConfigs[TX_RX_CONF_LEN_MAX];
 
     // Pulser settins
     msp_config->driveStrength = PPG_NORMAL_DRIVE;
@@ -70,8 +70,6 @@ void getDefaultUsConfig(msp_config_t * msp_config)
     msp_config->numStopPulses = 0;
     msp_config->pulserPolarity = PPG_POLARITY_START_WITH_HIGH;
     msp_config->pulserPauseState = PPG_PAUSE_STATE_LOW;
-
-    return;
 }
 
 // Extract Uss config from spi RX buffer
@@ -79,8 +77,9 @@ void getDefaultUsConfig(msp_config_t * msp_config)
 bool extractUsConfig(uint8_t * spi_rx, msp_config_t * msp_config)
 {
     // Check start byte
-    if (spi_rx[0] != START_BYTE_CONF_PACK)
+    if(!isNewConfigCondition(spi_rx)){
         return 0;
+    }
 
     // Note: The MSP430 cannot access 2-byte words at odd addresses, so the CPU just ignores the lowest bit of word addresses.
     //Therefore, we do here some magic
@@ -120,16 +119,15 @@ bool extractUsConfig(uint8_t * spi_rx, msp_config_t * msp_config)
     return 1;
 }
 
-// Check the first byte and check if restart should be done.
+// Check the first byte if restart should be performed
 bool isRestartCondition(uint8_t * spi_rx)
 {
-    // Check for restart byte
-    if (spi_rx[0] != START_BYTE_RESTART)
-    {
-        return 0;
-    }
+    return (spi_rx[0] == START_BYTE_RESTART);
+}
 
-    return 1;
+// Check the first byte if a new config is requested
+bool isNewConfigCondition(uint8_t * spi_rx){
+    return (spi_rx[0] == START_BYTE_CONF_PACK);
 }
 
 // Initiate MSP430-controlled power switches
@@ -149,8 +147,6 @@ void initAllPowerSwitches(void)
     // Set Pin 4 to output "SW_EN" (Switch DC/DC: TPS61222)
     // Set Pin 5 to output "HV_EN" (HV DC/DC: LT1945)
     GPIO_setAsOutputPin(GPIO_PORT_P6, GPIO_PIN0 + GPIO_PIN4 + GPIO_PIN5);
-
-    return;
 }
 
 // Init other GPIOs
@@ -162,8 +158,6 @@ void initOtherGpios(void)
     // Configure LED
     P1DIR |= GPIO_PIN_LED_MSP430;
     P1OUT &= ~GPIO_PIN_LED_MSP430;
-
-    return;
 }
 
 bool isBleReady(void)
@@ -193,8 +187,6 @@ void enableOpAmp(void)
     // Enable RX OPA836
     // Set Pin 0 "RxEn" to high
     GPIO_setOutputHighOnPin(GPIO_PORT_P6, GPIO_PIN0);
-
-    return;
 }
 
 // Disable Rx Operational Amplifier
@@ -203,8 +195,6 @@ void disableOpAmp(void)
     // Disable RX OPA836
     // Set Pin 0 "RxEn" to low
     GPIO_setOutputLowOnPin(GPIO_PORT_P6, GPIO_PIN0);
-
-    return;
 }
 
 // Enable HV PCB power supply
@@ -215,8 +205,6 @@ void enableHvPcbSupply(void)
     // just for the US measurements
     // Set Pin 2 "EN HV" to high (power up HV PCB)
     GPIO_setOutputHighOnPin(GPIO_PORT_P2, GPIO_PIN2);
-
-    return;
 }
 
 // Disable HV PCB power supply
@@ -234,8 +222,6 @@ void enableHvPcbDcDc(void)
     // Set Pin 4 "SW_EN" to high (enables the DC/DC TPS61222)
     // Set Pin 5 "HV1_EN" to high (enables the HV DC/DC LT1945)
     GPIO_setOutputHighOnPin(GPIO_PORT_P6, GPIO_PIN4+GPIO_PIN5);
-
-    return;
 }
 
 // Disable DC-DC converters on HV PCB
@@ -245,8 +231,6 @@ void disableHvPcbDcDc(void)
     // Set Pin 4 "SW_EN" to low (disables the DC/DC TPS61222)
     // Set Pin 5 "HV1_EN" to low (disables the HV DC/DC LT1945)
     GPIO_setOutputLowOnPin(GPIO_PORT_P6, GPIO_PIN4 + GPIO_PIN5);
-
-    return;
 }
 
 // Disable only HV DC-DC converter on HV PCB

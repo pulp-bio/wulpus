@@ -16,7 +16,7 @@ Go to: - Getting started with nRF5 SDK and SES (nRF51 & nRF52 Series)
 - Click Tools > License Manager...
 - Select Activate SEGGER Embedded Studio
 - Paste in your license and click on Install License
-Note: After click on "install license", it may take a few hours until the license is activated
+Note: After clicking "Install License", it may take a few hours until the license is activated.
 
 ### Segger J-Link Software and Documentation Pack (V7.56a):  
 `https://www.segger.com/downloads/jlink`

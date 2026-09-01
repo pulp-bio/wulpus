@@ -57,7 +57,7 @@ In a nutshell, to build your own instance of WULPUS, the following steps should 
 1. *PCBs manufacturing and assembly*<br>
    You can find the design files (Altium source files, schematics, bills of materials) under the `hw` folder.
 2. *Flashing MSP430 firmware*<br>
-   You can find the instructions on seting-up the toolchain, compiling the firmware and flashing the MSP430 MCU in the `fw/msp430` folder.
+   You can find the instructions on setting up the toolchain, compiling the firmware and flashing the MSP430 MCU in the `fw/msp430` folder.
 3. *Flashing nRF52 MCU and USB dongle firmware*<br>
    You can find the instructions on setting-up the toolchain, compiling the firmware, flashing the nRF52 MCU and USB dongle in the `fw/nrf52` folder.
 4. *Python dependencies installation on the host PC*<br>
@@ -70,7 +70,7 @@ Please refer to chapter 3 of the [WULPUS User Manual](docs/wulpus_user_manual.pd
 Starting a measurement with WULPUS can be accomplished in three simple steps:
 - Power up the probe, either from the micro-USB connector or from the battery connector
 - Connect the USB dongle to the host PC
-- Activate the Python environent, launch the Jupyter notebook located in `sw` folder, and follow the instructions in the notebook
+- Follow the software instructions in the `sw` folder
 
 # Citation
 If you would like to reference the project, please cite the following paper:
@@ -109,7 +109,7 @@ Thanks to all the people who contributed to the WULPUS platform:
 - [Cédric Hirschi](https://www.linkedin.com/in/c%C3%A9dric-cyril-hirschi-09624021b/) (GUI improvements, Documentation)
 - [Josquin Tille](https://www.linkedin.com/in/josquin-tille-829a341a7/) (Silicone package design, Documentation)
 - [William Bruderer](https://www.linkedin.com/in/william-bruderer-59ba9b26b/) (Documentation)
-
+- [Louis Dod](https://github.com/13Bytes) (GUI Rework)
 
 # License
 The following files are released under Apache License 2.0 (`Apache-2.0`) (see `sw/LICENSE`):
