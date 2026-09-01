@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Acquisition PCB layout changes to improve RF performance
-- Firmware improvements on nRF52 to improved reliability
+- Firmware improvements on nRF52 to improve reliability
 
 ### Changed
 
