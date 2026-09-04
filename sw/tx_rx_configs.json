@@ -1,0 +1,14 @@
+{
+    "configs": [
+        {
+            "config_id": 0,
+            "tx_channels": [
+                0
+            ],
+            "rx_channels": [
+                0
+            ],
+            "optimized_switching": false
+        }
+    ]
+}

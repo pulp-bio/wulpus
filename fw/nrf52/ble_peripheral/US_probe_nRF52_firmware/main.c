@@ -139,6 +139,18 @@ void in_pin_handler(nrf_drv_gpiote_pin_t pin, nrf_gpiote_polarity_t action)
     if (pin == PIN_DATA_READY)
     {
         NRF_SPIM0->RXD.PTR = (uint32_t)&m_rx_buf[buffer_counter*NUMBER_OF_XFERS].buffer[0];
+
+        /* Start every frame from a known state.
+         *
+         * nrf_drv_timer_enable() only issues TASKS_START, and the matching
+         * nrf_drv_timer_disable() issues the deprecated TASKS_SHUTDOWN whose effect
+         * on the COUNTER register is not clearly specified. Clearing both timers
+         * here removes that dependency: the transfer counter is guaranteed to start
+         * this frame at zero, so the burst can never end early, and timer_timer
+         * always waits a full period before the first SPI START. */
+        nrf_drv_timer_clear(&timer_counter);
+        nrf_drv_timer_clear(&timer_timer);
+
         // Enable timer and counter to start the four SPI transactions
         nrf_drv_timer_enable(&timer_timer);
         nrf_drv_timer_enable(&timer_counter);

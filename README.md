@@ -1,6 +1,6 @@
 <img src="docs/images/wulpus_main.png" alt="WULPUS main" width="100%"/>
 
-# WULPUS v1.2.3
+# WULPUS v1.2.4
 ## Wearable Ultra Low-Power Ultrasound
 
 # Introduction
@@ -35,7 +35,7 @@ This repository has the following folders:
     - source code for the nRF52832 MCU of the WULPUS probe, located at `fw/nrf52/ble_peripheral/US_probe_nRF52_firmware`
     - source code for the nRF52840 USB dongle, located at `fw/nrf52/peripheral/US_probe_dongle_firmware`
     - source code for the MSP430 ultrasound MCU, located at `fw/msp430`
-- `sw`, containing the Python code for the WULPUS Graphical User Interface
+- `sw`, containing the Python code for the WULPUS Graphical User Interface (web-based version).
  
 - `hw`, containing the CAD source files for 
     - WULPUS Acquisition PCB (located at `hw/wulpus_acquisition_pcb`)
@@ -49,7 +49,7 @@ This repository has the following folders:
 
 The comprehensive [WULPUS User Manual](docs/wulpus_user_manual.pdf) can be found in the `docs/` folder. It covers everything about WULPUS, from assembly instructions to example measurements and troubleshooting, making the platform user-friendly for everyone, regardless of technical expertise.
 
-# How to reproduce?
+# How to use?
 
 Please find the detailed instructions in chapter 2 of the [WULPUS User Manual](docs/wulpus_user_manual.pdf).
 
@@ -57,11 +57,14 @@ In a nutshell, to build your own instance of WULPUS, the following steps should 
 1. *PCBs manufacturing and assembly*<br>
    You can find the design files (Altium source files, schematics, bills of materials) under the `hw` folder.
 2. *Flashing MSP430 firmware*<br>
-   You can find the instructions on seting-up the toolchain, compiling the firmware and flashing the MSP430 MCU in the `fw/msp430` folder.
+   You can find the instructions on setting up the toolchain, compiling the firmware and flashing the MSP430 MCU in the `fw/msp430` folder.
 3. *Flashing nRF52 MCU and USB dongle firmware*<br>
    You can find the instructions on setting-up the toolchain, compiling the firmware, flashing the nRF52 MCU and USB dongle in the `fw/nrf52` folder.
-4. *Python dependencies installation on the host PC*<br>
-   Follow the instructions in the `sw` folder to install the dependencies.
+4. *GUI installation on the host PC*<br>
+   Choose one of the following interfaces depending on your application:
+   - **BioGUI** *(Recommended for general use & HMI applications)*: Modular PySide6 GUI for acquiring and visualizing bio-signals from different sources. Follow the setup instructions in the [BioGUI repository](https://github.com/pulp-bio/biogui).
+   - **Web-based GUI** *(Recommended for NDT applications & acquisition sequences)*: Features a React/Vite frontend and FastAPI backend. Follow the setup instructions in [`sw/`](sw/).
+   - **Legacy Jupyter Notebook GUI** *(Deprecated / not recommended for new projects)*: Legacy interactive notebooks are located in [`sw/jupyter notebook (legacy)/`](<sw/jupyter notebook (legacy)/>).
 
 # Usage
 
@@ -70,7 +73,7 @@ Please refer to chapter 3 of the [WULPUS User Manual](docs/wulpus_user_manual.pd
 Starting a measurement with WULPUS can be accomplished in three simple steps:
 - Power up the probe, either from the micro-USB connector or from the battery connector
 - Connect the USB dongle to the host PC
-- Activate the Python environent, launch the Jupyter notebook located in `sw` folder, and follow the instructions in the notebook
+- Launch your chosen interface (**[BioGUI repository](https://github.com/pulp-bio/biogui)** or the **Web-based GUI** in [`sw/`](sw/)).
 
 # Citation
 If you would like to reference the project, please cite the following paper:
@@ -97,6 +100,12 @@ If you would like to reference the project, please cite the following paper:
 
 [5] Spacone G, Vostrikov S, Kartsch V, Benatti S, Benini L, Cossettini A. "Tracking of Wrist and Hand Kinematics with Ultra Low Power Wearable A-mode Ultrasound." IEEE Transactions on Biomedical Circuits and Systems. 2024 Sep 23.
 
+[6] Spacone, Giusy, et al. "Wearable and Ultra-Low-Power Fusion of EMG and A-Mode US for Hand-Wrist Kinematic Tracking." 2025 IEEE Biomedical Circuits and Systems Conference (BioCAS). IEEE, 2025.
+
+[7] Spacone, Giusy, et al. "Towards Fully Wearable Muscle Fatigue Assessment with A-mode Ultrasound." 2025 IEEE International Ultrasonics Symposium (IUS). IEEE, 2025.
+
+[8] Spacone, Giusy, et al. "Towards Whole Hand and Wrist Kinematic Tracking with a Wearable A-Mode Ultrasound Probe." IEEE Open Journal of Ultrasonics, Ferroelectrics, and Frequency Control. 2026.
+
 # Authors
 
 The WULPUS system was developed at the [Integrated Systems Laboratory (IIS)](https://iis.ee.ethz.ch/) at ETH Zurich by:
@@ -109,7 +118,7 @@ Thanks to all the people who contributed to the WULPUS platform:
 - [Cédric Hirschi](https://www.linkedin.com/in/c%C3%A9dric-cyril-hirschi-09624021b/) (GUI improvements, Documentation)
 - [Josquin Tille](https://www.linkedin.com/in/josquin-tille-829a341a7/) (Silicone package design, Documentation)
 - [William Bruderer](https://www.linkedin.com/in/william-bruderer-59ba9b26b/) (Documentation)
-
+- [Louis Dod](https://github.com/13Bytes) (GUI Rework)
 
 # License
 The following files are released under Apache License 2.0 (`Apache-2.0`) (see `sw/LICENSE`):
