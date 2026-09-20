@@ -65,7 +65,7 @@ The figure below displays the MUX artifact during an acquisition when a 2.25 MHz
 ![Annotated WULPUS GUI screenshot of the HV MUX artifact.](figures/gui/hv_mux_artifact.png){ width="45%" }
 ![Measurement settings.](figures/gui/hv_mux_artifact_settings_1.png){ width="50%" }
 
-*(a) Annotated WULPUS GUI screenshot. (b) Measurement settings. High voltage multiplexer switching artifact with default settings.*
+*High voltage multiplexer switching artifact with default settings. (a) Annotated WULPUS GUI screenshot. (b) Measurement settings.*
 
 There are three main ways to mitigate and adjust this artifact, which will be described individually in the following subsections.
 
@@ -76,7 +76,7 @@ Since a user can configure the time of switching from TX to RX state (see [Advan
 ![Annotated WULPUS GUI screenshot with early MUX switching.](figures/gui/hv_mux_artifact_2.png){ width="45%" }
 ![Measurement settings for early MUX switching.](figures/gui/hv_mux_art_settings_2.png){ width="50%" }
 
-*(a) Annotated WULPUS GUI screenshot. (b) Measurement settings. High voltage multiplexer switching artifact with early multiplexer switching (**HV-MUX RX start time** = 494 µs).*
+*High voltage multiplexer switching artifact with early multiplexer switching (HV-MUX RX start time = 494 µs). (a) Annotated WULPUS GUI screenshot. (b) Measurement settings.*
 
 The figures demonstrate that early switching shifts the artifact to the left, while the back-scattered echo signals remain on their places on the timeline.
 
@@ -87,7 +87,7 @@ Another way of adjusting the artifact is to tune the **ADC sampling start time**
 ![Annotated WULPUS GUI screenshot with delayed ADC sampling.](figures/gui/hv_mux_artifact_3.png){ width="45%" }
 ![Measurement settings for delayed ADC sampling.](figures/gui/hv_mux_art_settings_3.png){ width="50%" }
 
-*(a) Annotated WULPUS GUI screenshot. (b) Measurement settings. High voltage multiplexer switching artifact with early multiplexer switching and delayed ADC sampling start (**ADC sampling start time** = 509 µs).*
+*High voltage multiplexer switching artifact with early multiplexer switching and delayed ADC sampling start (ADC sampling start time = 509 µs). (a) Annotated WULPUS GUI screenshot. (b) Measurement settings.*
 
 The starting time is set to 509 µs. As the **ADC sampling start time** is set to a later time, the MUX artifact moves to the left. This method doesn't reduce the dimensions of the artifact (duration or amplitude), but tries to reduce the space the artifact takes up in the number of samples we set up. The downside is that if important data were overlaid over the artifact and we removed the artifact entirely by starting the ADC even later, we may omit the important data. This would e.g. be the case if we are measuring shallow arteries, where the first wall has reflections which lie in the duration of the artifact.
 
@@ -109,13 +109,13 @@ Through a rather simple algorithm, WULPUS analyzes the configuration sets for TX
 ![Annotated WULPUS GUI screenshot with optimized switching.](figures/gui/hv_mux_artifact_4.png){ width="45%" }
 ![Measurement settings with optimized switching.](figures/gui/hv_mux_art_settings_4.png){ width="50%" }
 
-*(a) Annotated WULPUS GUI screenshot. (b) Measurement settings. High voltage multiplexer switching artifact with all previous settings and enabled **Optimize Switching** option.*
+*High voltage multiplexer switching artifact with all previous settings and enabled Optimize Switching option. (a) Annotated WULPUS GUI screenshot. (b) Measurement settings.*
 
 As we can see, employing an algorithm for switching optimization further reduces the artifact. At this point, we can safely increase the PGA receive gain to amplify the echo signal. The figure below demonstrates the amplified echoes obtained under the cumulative acquisition settings. Although the artifact is still present in the raw data, the band-pass filtered signal shows four target echoes with high signal to noise ratio.
 
 ![Annotated WULPUS GUI screenshot with increased receive gain.](figures/gui/hv_mux_artifact_5.png){ width="45%" }
 ![Measurement settings with increased receive gain.](figures/gui/hv_mux_art_settings_5.png){ width="50%" }
 
-*(a) Annotated WULPUS GUI screenshot. (b) Measurement settings. High voltage multiplexer switching artifact with all previous settings, enabled **Optimize Switching** option and increased receive gain (18.2 dB).*
+*High voltage multiplexer switching artifact with all previous settings, enabled Optimize Switching option and increased receive gain (18.2 dB). (a) Annotated WULPUS GUI screenshot. (b) Measurement settings.*
 
 Through an employment and combination of the described methods, the switching artifact of the HV multiplexer can be greatly reduced, allowing for accurate data collection.

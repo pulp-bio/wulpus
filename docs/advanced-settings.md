@@ -32,7 +32,7 @@ When setting up configurations, one must consider their experimental setup and t
 
 A user can use either the Python API or a small GUI to program TX/RX configurations. A GUI-based example is provided below. The configuration shown matches the `Transmit only` example visualized later in [Example configurations](#example-configurations).
 
-![The TX/RX configuration GUI. In this example, configuration set 0 is selected, with channels 0, 1, 6 and 7 set to transmit, and no channels selected for receive.](figures/gui/rxtx_configs_gui.png)
+![The TX/RX configuration GUI.](figures/gui/rxtx_configs_gui.png)
 
 *The TX/RX configuration GUI. In this example, configuration set 0 is selected, with channels 0, 1, 6 and 7 set to transmit, and no channels selected for receive.*
 
@@ -60,7 +60,7 @@ The lower part of the GUI contains file management controls. A text box is provi
 
 Three examples of using the TX/RX configurations are visualized below.
 
-![Three examples of using TX/RX configurations where the transmitting channels are indicated in red, the receiving channels in green.](figures/example_meas/txrx_demo.png)
+![Three examples of using TX/RX configurations.](figures/example_meas/txrx_demo.png)
 
 *Three examples of using TX/RX configurations where the transmitting channels are indicated in red, the receiving channels in green.*
 
@@ -88,7 +88,7 @@ A user can potentially program 8 TX/RX configurations where each `n`'th config (
 
 ![The main GUI in B-mode while imaging a carotid artery.](figures/example_meas/B_mode_carotid_GUI.png){ width="80%" }
 
-*The main GUI in B-mode while imaging a carotid artery. A user can activate this mode by clicking on the **Show B-mode** checkbox.*
+*The main GUI in B-mode while imaging a carotid artery. A user can activate this mode by clicking on the Show B-mode checkbox.*
 
 Precisely, the GUI takes data from the `n`'th config set and plots it along the x-axis (depth) at coordinate y=`n` (there are eight discrete y-coordinates). A user thus needs to program eight TX/RX config sets, where for each config set one channel is activated to RX. For the best image quality, we suggest activating all the channels during TX.
 

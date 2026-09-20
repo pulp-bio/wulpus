@@ -20,7 +20,7 @@ This simple example experiment shows how to acquire data in a water bath setup w
 ![Coupling gel on transducer](figures/example_meas/gel_on_trans.jpg){ width="28%" }
 ![Experiment setup](figures/example_meas/setup1.jpg){ width="32%" }
 
-*(a) Experiment materials. (b) Coupling gel on transducer. (c) Experiment setup.*
+*Water bath experiment. (a) Experiment materials. (b) Coupling gel on transducer. (c) Experiment setup.*
 
 We first solder the transducer's wires to the pre-crimped cables, assemble them with the mated mechanical connector (please wire the transducer to channel 8), and then insert the connector into the WULPUS probe. Later, we apply the gel on the transducer as shown in figure (b) and attach the transducer to the water bath using sticky tape as shown in figure (c).
 

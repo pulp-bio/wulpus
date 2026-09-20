@@ -51,7 +51,7 @@ The [WULPUS User Guide](https://pulp-bio.github.io/wulpus/) covers everything ab
 
 # How to use?
 
-Please find the detailed instructions in [Building Your WULPUS](docs/building-your-wulpus.md).
+Please find the detailed instructions in [How to build your own WULPUS probe?](docs/building-your-wulpus.md).
 
 In a nutshell, to build your own instance of WULPUS, the following steps should be completed:
 1. *PCBs manufacturing and assembly*<br>
@@ -68,7 +68,7 @@ In a nutshell, to build your own instance of WULPUS, the following steps should 
 
 # Usage
 
-Please refer to [How to Use the Probe](docs/how-to-get-started.md) for detailed information.
+Please refer to [How to use the probe?](docs/how-to-get-started.md) for detailed information.
 
 Starting a measurement with WULPUS can be accomplished in three simple steps:
 - Power up the probe, either from the micro-USB connector or from the battery connector

@@ -64,7 +64,7 @@ In order to program the MSP430, you need the following components (see figure be
 
 ![Components programming MSP430](figures/setup/components_programming_MSP430.jpg){ width="80%" }
 
-*Components for programming the MSP430.*
+*Components programming MSP430.*
 
 ### Setting up the toolchain
 
@@ -130,7 +130,7 @@ The nRF52 MCU can be programmed with a J-Link Debugger. The following components
 
 ![Components programming nRF52](figures/setup/components_programming_nRF52.jpg){ width="80%" }
 
-*Components for programming the nRF52.*
+*Components programming nRF52.*
 
 ### Setting up the toolchain {#setting-up-the-nrf52-toolchain}
 
@@ -252,10 +252,10 @@ It is highly recommended to wear nitrile gloves throughout these steps, especial
 2. Insert the inner mold part, ensuring the holes on both parts align.
 3. Insert the dowel pins into the holes. Verify proper alignment by ensuring the inner and outer parts make contact at the designated points (see figure below).
 
-![3D printed mold for the WULPUS silicone package.](figures/setup/mold_assembly.jpg){ width="45%" }
+![Mold assembly.](figures/setup/mold_assembly.jpg){ width="45%" }
 ![Assembled mold.](figures/setup/mold_assembly_photo.jpeg){ width="45%" }
 
-*(a) Mold assembly. (b) Assembled mold. 3D printed mold for the WULPUS silicone package.*
+*3D printed mold for the WULPUS silicone package. (a) Mold assembly. (b) Assembled mold.*
 
 #### II. Mixing the Ecoflex™
 
@@ -273,7 +273,7 @@ It is highly recommended to wear nitrile gloves throughout these steps, especial
 ![Mixed EcoFlex components.](figures/setup/ecolflex_mixture.jpeg){ width="45%" }
 ![Degassing the mixture.](figures/setup/ecoflex_degassing.jpeg){ width="45%" }
 
-*(a) Mixed EcoFlex components. (b) Degassing the mixture. Preparing the Ecoflex silicone rubber.*
+*Preparing the Ecoflex silicone rubber. (a) Mixed EcoFlex components. (b) Degassing the mixture.*
 
 #### III. Pouring the Ecoflex™ Mixture
 
@@ -283,7 +283,7 @@ It is highly recommended to wear nitrile gloves throughout these steps, especial
 ![Pouring silicone rubber.](figures/setup/mold_fill.jpeg){ width="55%" }
 ![Poured mold.](figures/setup/mold_filled.jpeg){ width="35%" }
 
-*(a) Pouring silicone rubber. (b) Poured mold. Pouring the Ecoflex mixture into the mold.*
+*Pouring the Ecoflex mixture into the mold. (a) Pouring silicone rubber. (b) Poured mold.*
 
 #### IV. Removing the Sacrificial Parts
 
@@ -295,12 +295,12 @@ It is highly recommended to wear nitrile gloves throughout these steps, especial
 ![Removing the silicone blank.](figures/setup/mold_remove_b.jpeg){ width="30%" }
 ![Extracted silicone blank.](figures/setup/mold_remove_c.jpeg){ width="30%" }
 
-*(a) Removing dowel pins. (b) Removing the silicone blank. (c) Extracted silicone blank.*
+*Removing the silicone blank from the mold. (a) Removing dowel pins. (b) Removing the silicone blank. (c) Extracted silicone blank.*
 
 ![Cutting the transducer connector opening.](figures/setup/mold_cut_openning.jpeg){ width="47%" }
 ![Silicone package and removed plastic insert.](figures/setup/mold_remove_plastic_insert.jpeg){ width="45%" }
 
-*(a) Cutting the transducer connector opening. (b) Silicone package and removed plastic insert.*
+*Preparing the final silicone package. (a) Cutting the transducer connector opening. (b) Silicone package and removed plastic insert.*
 
 ### Producing a Silicone Cap
 
@@ -311,4 +311,4 @@ Follow the same production steps outlined in [Production Steps](#silicone-packag
 ![Silicone cap and mold.](figures/setup/mold_silicone_cap_removed.jpeg){ width="45%" }
 ![Cap inserted into WULPUS.](figures/setup/silicone_cap_inserted.jpeg){ width="45%" }
 
-*(a) Silicone cap and mold. (b) Cap inserted into WULPUS.*
+*Silicone cap for the WULPUS probe. (a) Silicone cap and mold. (b) Cap inserted into WULPUS.*

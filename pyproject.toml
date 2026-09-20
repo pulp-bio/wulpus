@@ -6,6 +6,7 @@ requires-python = ">=3.11"
 
 [dependency-groups]
 dev = [
+    "mkdocs-enumerate-headings-plugin>=0.6",
     "mkdocs-glightbox>=0.4",
     "mkdocs-material>=9.6",
 ]

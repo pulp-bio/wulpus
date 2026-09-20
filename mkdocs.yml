@@ -54,10 +54,16 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - toc:
       permalink: true
+      toc_depth: 3
 
 plugins:
   - search
   - glightbox
+  - enumerate-headings:
+      increment_across_pages: true
+      toc_depth: 3
+      exclude:
+        - index.md
 
 exclude_docs: |
   README.md
@@ -67,10 +73,10 @@ exclude_docs: |
 nav:
   - Home: index.md
   - System Overview: system-overview.md
-  - Building Your WULPUS: building-your-wulpus.md
-  - How to Use the Probe: how-to-get-started.md
+  - "How to build your own WULPUS probe?": building-your-wulpus.md
+  - "How to use the probe?": how-to-get-started.md
   - Advanced Settings: advanced-settings.md
-  - Example Experiments: example-measurements.md
+  - Example experiments: example-measurements.md
   - Troubleshooting: troubleshooting.md
   - Errata: errata.md
-  - Revision History: revision.md
+  - Revision history: revision.md

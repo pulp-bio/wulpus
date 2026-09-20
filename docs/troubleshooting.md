@@ -29,7 +29,7 @@ To test the BLE connectivity of the WULPUS probe, go through the following steps
 ![Advertising packet of WULPUS](figures/troubleshooting/WULPUS_advertising_packet.png){ width="30%" }
 ![Advertising configuration](figures/troubleshooting/advertising_window.jpg){ width="30%" }
 
-*(a) nRF Connect scan for BLE devices. (b) Advertising packet of WULPUS. (c) Advertising configuration.*
+*Troubleshooting with nRF Connect app. (a) nRF Connect scan for BLE devices. (b) Advertising packet of WULPUS. (c) Advertising configuration.*
 
 ### USB Dongle
 

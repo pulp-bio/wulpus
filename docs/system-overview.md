@@ -6,7 +6,7 @@
 
 ## What is the WULPUS probe?
 
-The Wearable Ultra Low-Power Ultrasound (WULPUS) probe is the first open-source ultrasound platform developed for wearable applications. WULPUS was first presented at IUS 2022 [[1]](#references), demonstrating real-time acoustical monitoring of the common carotid artery and gastrocnemius muscle. Further developments presented a WULPUS-based armband for hand gesture recognition [[2]](#references), [[3]](#references), an improved armband for hand movement regression [[4]](#references), and a chest patch for complete cardiorespiratory monitoring [[5]](#references) (i.e., simultaneous respiration and heart rate extraction). The prime objective of the WULPUS platform is to provide a compact, energy-efficient, and wireless solution for ultrasound on-body sensing.
+The Wearable Ultra Low-Power Ultrasound (WULPUS) probe is the first open-source ultrasound platform developed for wearable applications. WULPUS was first presented at IUS 2022 [[1]](#ref-1), demonstrating real-time acoustical monitoring of the common carotid artery and gastrocnemius muscle. Further developments presented a WULPUS-based armband for hand gesture recognition [[2]](#ref-2), [[3]](#ref-3), an improved armband for hand movement regression [[4]](#ref-4), and a chest patch for complete cardiorespiratory monitoring [[5]](#ref-5) (i.e., simultaneous respiration and heart rate extraction). The prime objective of the WULPUS platform is to provide a compact, energy-efficient, and wireless solution for ultrasound on-body sensing.
 
 Unlike other sensing technologies for deep tissue inspection, ultrasound is non-ionizing, making it safe for regular use. It also offers high temporal resolution and is cost-effective. The WULPUS probe amplifies these benefits by being wearable and energy-efficient, aiming at multi-day continuous operation without the need for frequent recharging. Furthermore, WULPUS can be flexibly configured at receive/transmit, and also provides researchers access to raw digitized US data, facilitating algorithm development.
 
@@ -14,7 +14,7 @@ The device is structured with modularity in mind, encompassing an Acquisition PC
 
 WULPUS is not just a hardware device, but a comprehensive solution. It comes with a Python library and GUI for seamless data logging, processing and visualization on a computer. The data acquired can be utilized for automatic analyses, paving the way for developing custom algorithms.
 
-This document aims to assist new users in getting started with the WULPUS system with minimal effort. This chapter offers an overview of the system design. [Building Your WULPUS](building-your-wulpus.md) provides guidance on creating a custom WULPUS probe from scratch, covering the steps from PCB production to firmware flashing and silicone package fabrication. [How to Use the Probe](how-to-get-started.md) walks through the graphical user interface of the WULPUS platform. [Example Experiments](example-measurements.md) leads users through a simple water-bath experiment. [Advanced Settings](advanced-settings.md) describes how to configure the platform for a specific application. Finally, [Troubleshooting](troubleshooting.md) covers common issues, and critical bugs are described in [Errata](errata.md).
+This document aims to assist new users in getting started with the WULPUS system with minimal effort. This chapter offers an overview of the system design. [How to build your own WULPUS probe?](building-your-wulpus.md) provides guidance on creating a custom WULPUS probe from scratch, covering the steps from PCB production to firmware flashing and silicone package fabrication. [How to use the probe?](how-to-get-started.md) walks through the graphical user interface of the WULPUS platform. [Example experiments](example-measurements.md) leads users through a simple water-bath experiment. [Advanced Settings](advanced-settings.md) describes how to configure the platform for a specific application. Finally, troubleshooting common issues is covered in [Troubleshooting](troubleshooting.md), and the critical bugs are described in [Errata](errata.md).
 
 ## Specifications
 
@@ -83,7 +83,7 @@ The figure above offers a comprehensive view of the interactions between the var
 
 ![nRF52840 Dongle from Nordic Semiconductor.](figures/pictures/dongle_top.png){ width="40%" }
 
-*nRF52840 Dongle from Nordic Semiconductor. Image adapted from [[6]](#references).*
+*nRF52840 Dongle from Nordic Semiconductor. Image adapted from [[6]](#ref-6).*
 
 After the probe is done acquiring and sending the data, the dongle comes in. The nRF52840 USB Dongle is a crucial intermediate component in the WULPUS probe design. Its role is to receive, process, and forward the data relayed by the Acquisition PCB to the Host PC for further interpretation and display.
 
@@ -103,11 +103,11 @@ Finally, on the **Host PC**, a WULPUS GUI provides the following functionality t
 
 In essence, the Dongle and the Host PC collectively serve as the endpoint in the WULPUS system. The High-Voltage PCB and Acquisition PCB handle the initial measurements, and these final components ensure the data is appropriately processed, displayed, and stored.
 
-## References
+**References**
 
-1. S. Frey, S. Vostrikov, L. Benini, and A. Cossettini, “WULPUS: a Wearable Ultra Low-Power Ultrasound probe for multi-day monitoring of carotid artery and muscle activity,” in *2022 IEEE International Ultrasonics Symposium (IUS)*, 2022.
-2. S. Vostrikov et al., “Hand gesture recognition via wearable ultra-low power ultrasound and gradient-boosted tree classifiers,” in *2023 IEEE International Ultrasonics Symposium (IUS)*, 2023.
-3. S. Vostrikov, M. Anderegg, L. Benini, and A. Cossettini, “Unsupervised Feature Extraction from Raw Data for Gesture Recognition with Wearable Ultra Low-Power Ultrasound,” *IEEE Transactions on Ultrasonics, Ferroelectrics, and Frequency Control*, 2024.
-4. G. Spacone, S. Vostrikov, V. Kartsch, S. Benatti, L. Benini, and A. Cossettini, “Tracking of Wrist and Hand Kinematics with Ultra Low Power Wearable A-mode Ultrasound,” *IEEE Transactions on Biomedical Circuits and Systems*, 2024.
-5. S. Vostrikov, L. Benini, and A. Cossettini, “Complete Cardiorespiratory Monitoring via Wearable Ultra Low Power Ultrasound,” in *2023 IEEE International Ultrasonics Symposium (IUS)*, 2023.
-6. Nordic Semiconductor, [nRF52840 Dongle](https://www.nordicsemi.com/Products/Development-hardware/nRF52840-Dongle/GetStarted).
+1. <span id="ref-1"></span>S. Frey, S. Vostrikov, L. Benini, and A. Cossettini, “WULPUS: a Wearable Ultra Low-Power Ultrasound probe for multi-day monitoring of carotid artery and muscle activity,” in *2022 IEEE International Ultrasonics Symposium (IUS)*, 2022.
+2. <span id="ref-2"></span>S. Vostrikov et al., “Hand gesture recognition via wearable ultra-low power ultrasound and gradient-boosted tree classifiers,” in *2023 IEEE International Ultrasonics Symposium (IUS)*, 2023.
+3. <span id="ref-3"></span>S. Vostrikov, M. Anderegg, L. Benini, and A. Cossettini, “Unsupervised Feature Extraction from Raw Data for Gesture Recognition with Wearable Ultra Low-Power Ultrasound,” *IEEE Transactions on Ultrasonics, Ferroelectrics, and Frequency Control*, 2024.
+4. <span id="ref-4"></span>G. Spacone, S. Vostrikov, V. Kartsch, S. Benatti, L. Benini, and A. Cossettini, “Tracking of Wrist and Hand Kinematics with Ultra Low Power Wearable A-mode Ultrasound,” *IEEE Transactions on Biomedical Circuits and Systems*, 2024.
+5. <span id="ref-5"></span>S. Vostrikov, L. Benini, and A. Cossettini, “Complete Cardiorespiratory Monitoring via Wearable Ultra Low Power Ultrasound,” in *2023 IEEE International Ultrasonics Symposium (IUS)*, 2023.
+6. <span id="ref-6"></span>Nordic Semiconductor, [nRF52840 Dongle](https://www.nordicsemi.com/Products/Development-hardware/nRF52840-Dongle/GetStarted).
