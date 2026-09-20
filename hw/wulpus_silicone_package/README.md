@@ -19,7 +19,7 @@ The following 3D model can be used with both FDM and SLA printers:
 - `wulpus_silicone_cap_mold.stl`
 
 ## Fabrication Instructions
-For detailed instructions on the fabrication process, refer to the [WULPUS User Manual](../../docs/wulpus_user_manual.pdf).
+For detailed instructions on the fabrication process, refer to the [Silicone Rubber Package](../../docs/building-your-wulpus.md#silicone-rubber-package) section of the user guide.
 
 # License
 The source design files are licensed under the Solderpad v0.51 (`SHL-0.51`) license. For more details, please refer to the `hw/LICENSE` file.

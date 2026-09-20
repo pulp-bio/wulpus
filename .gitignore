@@ -5,8 +5,12 @@ __pycache__/
 .ipynb_checkpoints/
 .vscode
 *.clangd
+.venv/
 sw/.venv
 sw/build/
 sw/dist/
 .uv-cache/
 local-development/
+
+# MkDocs build output
+/site

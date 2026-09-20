@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- GitHub Pages user guide (MkDocs + Material).
+
+### Removed
+- `docs/wulpus_user_manual.pdf` (replaced by the GitHub Pages site).
+
 ## [1.3.0] - 2025-08-28
 
 ### Added
