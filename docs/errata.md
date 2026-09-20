@@ -24,8 +24,8 @@ We recommend replacing at least **R1 and R5** with **0.1 Ohm 1/4W** alternatives
 
 ## Firmware Bugs
 
-None reported so far.
+—
 
 ## Software Bugs
 
-None reported so far.
+—

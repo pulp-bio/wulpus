@@ -10,3 +10,7 @@
 .md-typeset p:has(img) + p:has(> em) {
   text-align: center;
 }
+
+.nowrap {
+  white-space: nowrap;
+}

@@ -112,16 +112,16 @@ After power-up, the WULPUS probe waits for the configuration package to arrive f
 
 | Parameter name | Display name (in GUI) | Description/Note |
 | --- | --- | --- |
-| **Acquisition settings** | | |
+| ***Acquisition settings*** | | |
 | `num_acqs` | Number of acquisitions | *N* acquisitions to collect |
 | `meas_period` | Measuring period [us] | Time between acquisitions |
 | `sampling_freq` | Sampling frequency [Hz] | ADC Sampling frequency |
 | `num_samples` | Number of samples | *K* samples per acquisition |
 | `rx_gain` | RX gain [dB] | Gain of the MSP430 PGA |
-| **Excitation settings** | | |
+| ***Excitation settings*** | | |
 | `pulse_freq` | Pulse frequency [Hz] | Frequency of the pulses |
 | `num_pulses` | Number of pulses | *L* pulses to generate |
-| **Advanced settings** (special time events) | | |
+| ***Advanced settings (special time events)*** | | |
 | `start_hvmuxrx` | HV-MUX RX start time [us] | MUX switches from TX to RX |
 | `dcdc_turnon` | DC-DC turn on time [us] | DC-DC converter is enabled |
 | `start_ppg` | PPG start time [us] | Pulse Generation starts |
