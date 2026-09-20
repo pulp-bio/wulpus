@@ -246,7 +246,7 @@ If a 3D printer is unavailable, you can order the mold from a 3D printing servic
 
 It is highly recommended to wear nitrile gloves throughout these steps, especially when handling the Ecoflex™ silicone rubber.
 
-#### I. Preparing the Mold
+#### Preparing the Mold
 
 1. Coat the walls of the hollow part of the mold with Vaseline.
 2. Insert the inner mold part, ensuring the holes on both parts align.
@@ -255,9 +255,9 @@ It is highly recommended to wear nitrile gloves throughout these steps, especial
 ![Mold assembly.](figures/setup/mold_assembly.jpg){ width="45%" }
 ![Assembled mold.](figures/setup/mold_assembly_photo.jpeg){ width="45%" }
 
-*3D printed mold for the WULPUS silicone package. (a) Mold assembly. (b) Assembled mold.*
+*3D printed mold for the WULPUS silicone package: assembly drawing (left) and assembled mold (right).*
 
-#### II. Mixing the Ecoflex™
+#### Mixing the Ecoflex™
 
 1. Thoroughly pre-mix Parts A and B before starting.
 2. Dispense 10 ml of each part (A and B) into the mixing container (1:1 ratio by volume or weight).
@@ -273,9 +273,9 @@ It is highly recommended to wear nitrile gloves throughout these steps, especial
 ![Mixed EcoFlex components.](figures/setup/ecolflex_mixture.jpeg){ width="45%" }
 ![Degassing the mixture.](figures/setup/ecoflex_degassing.jpeg){ width="45%" }
 
-*Preparing the Ecoflex silicone rubber. (a) Mixed EcoFlex components. (b) Degassing the mixture.*
+*Preparing the Ecoflex silicone rubber: mixed components (left) and degassing (right).*
 
-#### III. Pouring the Ecoflex™ Mixture
+#### Pouring the Ecoflex™ Mixture
 
 1. Secure the mold in a vertical position and slowly pour the Ecoflex mixture until the mold's top surface is reached.
 2. Allow the silicone rubber to cure vertically for approximately four hours.
@@ -283,32 +283,37 @@ It is highly recommended to wear nitrile gloves throughout these steps, especial
 ![Pouring silicone rubber.](figures/setup/mold_fill.jpeg){ width="55%" }
 ![Poured mold.](figures/setup/mold_filled.jpeg){ width="35%" }
 
-*Pouring the Ecoflex mixture into the mold. (a) Pouring silicone rubber. (b) Poured mold.*
+*Pouring the Ecoflex mixture into the mold (left) and the filled mold (right).*
 
-#### IV. Removing the Sacrificial Parts
+#### Removing the Sacrificial Parts
 
-1. Once cured, remove the dowel pins (figure (a) below).
-2. Gently remove the silicone blank from the mold (figures (b) and (c) below).
-3. Cut an opening for the transducer connector as shown in the following figures.
+1. Once cured, remove the dowel pins.
 
-![Removing dowel pins.](figures/setup/mold_remove_a.jpeg){ width="30%" }
-![Removing the silicone blank.](figures/setup/mold_remove_b.jpeg){ width="30%" }
-![Extracted silicone blank.](figures/setup/mold_remove_c.jpeg){ width="30%" }
+    ![Removing the dowel pins.](figures/setup/mold_remove_a.jpeg){ width="40%" }
 
-*Removing the silicone blank from the mold. (a) Removing dowel pins. (b) Removing the silicone blank. (c) Extracted silicone blank.*
+    *Removing the dowel pins.*
 
-![Cutting the transducer connector opening.](figures/setup/mold_cut_openning.jpeg){ width="47%" }
-![Silicone package and removed plastic insert.](figures/setup/mold_remove_plastic_insert.jpeg){ width="45%" }
+2. Gently remove the silicone blank from the mold.
 
-*Preparing the final silicone package. (a) Cutting the transducer connector opening. (b) Silicone package and removed plastic insert.*
+    ![Removing the silicone blank.](figures/setup/mold_remove_b.jpeg){ width="30%" }
+    ![Extracted silicone blank.](figures/setup/mold_remove_c.jpeg){ width="30%" }
+
+    *Removing the silicone blank from the mold (left) and the extracted blank (right).*
+
+3. Cut an opening for the transducer connector as shown below.
+
+    ![Cutting the transducer connector opening.](figures/setup/mold_cut_openning.jpeg){ width="47%" }
+    ![Silicone package and removed plastic insert.](figures/setup/mold_remove_plastic_insert.jpeg){ width="45%" }
+
+    *Cutting the transducer connector opening (left). Silicone package with the plastic insert removed (right).*
 
 ### Producing a Silicone Cap
 
-For additional protection, consider fabricating a simple silicone cap to be inserted between the HV and acquisition PCBs near the transducer connector (figure (b) below). The 3D model for the mold is available in the repository (file `wulpus_silicone_cap_mold.stl`).
+For additional protection, consider fabricating a simple silicone cap to be inserted between the HV and acquisition PCBs near the transducer connector (right photo below). The 3D model for the mold is available in the repository (file `wulpus_silicone_cap_mold.stl`).
 
 Follow the same production steps outlined in [Production Steps](#silicone-package-production-steps), using the figure below as a reference.
 
 ![Silicone cap and mold.](figures/setup/mold_silicone_cap_removed.jpeg){ width="45%" }
 ![Cap inserted into WULPUS.](figures/setup/silicone_cap_inserted.jpeg){ width="45%" }
 
-*Silicone cap for the WULPUS probe. (a) Silicone cap and mold. (b) Cap inserted into WULPUS.*
+*Silicone cap for the WULPUS probe: cap and mold (left), cap inserted into WULPUS (right).*

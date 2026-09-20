@@ -1,0 +1,7 @@
+.md-typeset p:has(img) {
+  text-align: center;
+}
+
+.md-typeset p:has(img) + p:has(> em) {
+  text-align: center;
+}
