@@ -1,6 +1,6 @@
 # Documentation
 
-Markdown sources for the WULPUS GitHub Pages user guide (MkDocs + Material), following the same approach as [BioGUI](https://github.com/pulp-bio/biogui). Photos of the system are in [`images/`](images/).
+Markdown sources for the WULPUS GitHub Pages user guide (MkDocs + Material). Release photos of the hardware are in [`images/`](images/). User-guide figures are in [`figures/`](figures/).
 
 ## Preview the site locally
 

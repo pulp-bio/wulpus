@@ -49,6 +49,8 @@ This repository has the following folders:
 
 The [WULPUS User Guide](https://pulp-bio.github.io/wulpus/) covers everything about WULPUS, from assembly instructions to example measurements and troubleshooting. Markdown sources live in `docs/` (preview locally with `uv run mkdocs serve`; see [`docs/README.md`](docs/README.md)).
 
+The user guide was originally prepared by Sergei Vostrikov, Sebastian Frey, Cedric Hirschi, Josquin Tille, William Bruderer, Luca Benini, and Andrea Cossettini.
+
 # How to use?
 
 Please find the detailed instructions in [How to build your own WULPUS probe?](docs/building-your-wulpus.md).
