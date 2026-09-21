@@ -1,0 +1,15 @@
+[project]
+name = "wulpus-docs"
+version = "0.0.0"
+description = "MkDocs build environment for the WULPUS user guide"
+requires-python = ">=3.11"
+
+[dependency-groups]
+dev = [
+    "mkdocs-enumerate-headings-plugin>=0.6",
+    "mkdocs-glightbox>=0.4",
+    "mkdocs-material>=9.6",
+]
+
+[tool.uv]
+package = false

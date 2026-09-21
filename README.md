@@ -43,15 +43,17 @@ This repository has the following folders:
     - WULPUS Programmer PCBs (located at `hw/wulpus_programmer_pcbs`)
     - WULPUS Silicone Rubber package (located at `hw/wulpus_silicone_package`)
 
-- `docs`, containing the project documentation (e.g., images of the device, user manual, ...)
+- `docs`, containing the project documentation (user guide sources and photos of the device)
 
-# Documentation 
+# Documentation
 
-The comprehensive [WULPUS User Manual](docs/wulpus_user_manual.pdf) can be found in the `docs/` folder. It covers everything about WULPUS, from assembly instructions to example measurements and troubleshooting, making the platform user-friendly for everyone, regardless of technical expertise.
+The [WULPUS User Guide](https://pulp-bio.github.io/wulpus/) covers everything about WULPUS, from assembly instructions to example measurements and troubleshooting. Markdown sources live in `docs/` (preview locally with `uv run mkdocs serve`; see [`docs/README.md`](docs/README.md)).
+
+The user guide was originally prepared by Sergei Vostrikov, Sebastian Frey, Cedric Hirschi, Josquin Tille, William Bruderer, Luca Benini, and Andrea Cossettini.
 
 # How to use?
 
-Please find the detailed instructions in chapter 2 of the [WULPUS User Manual](docs/wulpus_user_manual.pdf).
+Please find the detailed instructions in [How to build your own WULPUS probe?](docs/building-your-wulpus.md).
 
 In a nutshell, to build your own instance of WULPUS, the following steps should be completed:
 1. *PCBs manufacturing and assembly*<br>
@@ -68,7 +70,7 @@ In a nutshell, to build your own instance of WULPUS, the following steps should 
 
 # Usage
 
-Please refer to chapter 3 of the [WULPUS User Manual](docs/wulpus_user_manual.pdf) for detailed information.
+Please refer to [How to use the probe?](docs/how-to-get-started.md) for detailed information.
 
 Starting a measurement with WULPUS can be accomplished in three simple steps:
 - Power up the probe, either from the micro-USB connector or from the battery connector

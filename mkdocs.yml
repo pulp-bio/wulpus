@@ -1,0 +1,85 @@
+site_name: WULPUS User Guide
+site_description: Wearable Ultra Low-Power Ultrasound — user guide
+site_url: https://pulp-bio.github.io/wulpus/
+repo_url: https://github.com/pulp-bio/wulpus
+repo_name: pulp-bio/wulpus
+copyright: Documentation licensed under CC BY 4.0
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - content.code.annotate
+    - navigation.expand
+    - navigation.top
+    - toc.follow
+  icon:
+    repo: fontawesome/brands/github
+    admonition:
+      note: octicons/info-16
+      abstract: octicons/checklist-16
+      info: octicons/info-16
+      tip: octicons/squirrel-16
+      success: octicons/check-16
+      question: octicons/question-16
+      warning: octicons/alert-16
+      failure: octicons/x-circle-16
+      danger: octicons/zap-16
+      bug: octicons/bug-16
+      example: octicons/beaker-16
+      quote: octicons/quote-16
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - attr_list
+  - md_in_html
+  - tables
+  - footnotes
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - toc:
+      permalink: true
+      toc_depth: 3
+
+plugins:
+  - search
+  - glightbox
+  - enumerate-headings:
+      increment_across_pages: true
+      toc_depth: 3
+      exclude:
+        - index.md
+
+exclude_docs: |
+  README.md
+  CHANGELOG.md
+  images/README.md
+
+nav:
+  - Home: index.md
+  - System Overview: system-overview.md
+  - "How to build your own WULPUS probe?": building-your-wulpus.md
+  - "How to use the probe?": how-to-get-started.md
+  - Advanced Settings: advanced-settings.md
+  - Example experiments: example-measurements.md
+  - Troubleshooting: troubleshooting.md
+  - Errata: errata.md
+  - Revision history: revision.md
