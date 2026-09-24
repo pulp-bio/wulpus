@@ -65,7 +65,7 @@ This user guide was prepared at the [Integrated Systems Laboratory (IIS)](https:
 - Josquin Tille — jtille@student.ethz.ch
 - William Bruderer — wbruderer@student.ethz.ch
 - Luca Benini — lbenini@iis.ee.ethz.ch
-- Andrea Cossettini — cossettini.andrea@ethz.ch
+- Andrea Cossettini — cosandre@iis.ee.ethz.ch
 
 ## License
 

@@ -16,9 +16,9 @@ This simple example experiment shows how to acquire data in a water bath setup w
 - Ultrasound Gel.
 - Sticky tape.
 
-![Experiment materials](figures/example_meas/experiment_materials.jpg){ width="32%" }
-![Coupling gel on transducer](figures/example_meas/gel_on_trans.jpg){ width="28%" }
-![Experiment setup](figures/example_meas/setup1.jpg){ width="32%" }
+![Experiment materials](figures/example_meas/experiment_materials.jpg){ width="37%" }
+![Coupling gel on transducer](figures/example_meas/gel_on_trans.jpg){ width="37%" }
+![Experiment setup](figures/example_meas/setup1.jpg){ width="21%" }
 
 *Water bath experiment. (a) Experiment materials. (b) Coupling gel on transducer. (c) Experiment setup.*
 
