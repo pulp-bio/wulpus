@@ -7,11 +7,7 @@ Integrated Systems Laboratory, Department of Information Technology and Electric
 WULPUS is a wearable ultra-low-power open-source ultrasound probe. This guide covers everything about WULPUS, from assembly instructions to example measurements and troubleshooting.
 
 !!! info "GUI documentation is being updated"
-    Most of this guide is a faithful transfer of the previous user guide. The software and example-measurement pages still describe the **legacy Jupyter notebook GUI** in places. A follow-up update will present the current software options:
-
-    - **[BioGUI](https://github.com/pulp-bio/biogui)** — preferred / default
-    - **Web-based React GUI** in [`sw/`](https://github.com/pulp-bio/wulpus/tree/main/sw) — mainly for NDT applications
-    - **Jupyter notebook interface** — legacy
+    [How to use the probe?](how-to-get-started.md) uses **[BioGUI](https://github.com/pulp-bio/biogui)** as the default interface. The Jupyter notebook remains as the legacy option at the end of that chapter. Advanced settings, example experiments, and the MUX-artifact figures still show the legacy notebook GUI. A walkthrough of the web-based React GUI will be added later.
 
 ## Contents
 
@@ -35,12 +31,14 @@ WULPUS is a wearable ultra-low-power open-source ultrasound probe. This guide co
 - [3 How to use the probe?](how-to-get-started.md)
     - [3.1 Hardware requirements](how-to-get-started.md#hardware-requirements)
     - [3.2 Software requirements](how-to-get-started.md#software-requirements)
-    - [3.3 GUI Overview](how-to-get-started.md#gui-overview)
-        - [3.3.1 Connecting to the probe](how-to-get-started.md#connecting-to-the-probe)
-        - [3.3.2 Starting a measurement](how-to-get-started.md#starting-a-measurement)
-        - [3.3.3 Visualizing the data in real-time](how-to-get-started.md#visualizing-the-data-in-real-time)
-        - [3.3.4 Saving and loading the data](how-to-get-started.md#saving-and-loading-the-data)
-    - [3.4 MUX artifact mitigation](how-to-get-started.md#mux-artifact-mitigation)
+        - [3.2.1 Installing BioGUI](how-to-get-started.md#installing-biogui)
+    - [3.3 Using BioGUI](how-to-get-started.md#using-biogui)
+        - [3.3.1 Connecting the probe](how-to-get-started.md#connecting-the-probe)
+        - [3.3.2 Adding a WULPUS data source](how-to-get-started.md#adding-a-wulpus-data-source)
+        - [3.3.3 Starting a measurement](how-to-get-started.md#starting-a-measurement)
+        - [3.3.4 Saving a recording](how-to-get-started.md#saving-a-recording)
+    - [3.4 Legacy Jupyter notebook](how-to-get-started.md#legacy-jupyter-notebook)
+    - [3.5 MUX artifact mitigation](how-to-get-started.md#mux-artifact-mitigation)
 - [4 Advanced Settings](advanced-settings.md)
     - [4.1 Transmit/Receive (TX/RX) configurations](advanced-settings.md#tx-rx-configurations)
     - [4.2 Configuration of Ultrasound Subsystem](advanced-settings.md#configuration-of-ultrasound-subsystem)
