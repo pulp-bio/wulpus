@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1" name="viewport"/>
+<meta content="Wearable Ultra Low-Power Ultrasound — user guide" name="description"/>
+<link href="https://pulp-bio.github.io/wulpus/how-to-get-started/" rel="canonical"/>
+<link href="../building-your-wulpus/" rel="prev"/>
+<link href="../advanced-settings/" rel="next"/>
+<link href="../assets/images/favicon.png" rel="icon"/>
+<meta content="mkdocs-1.6.1, mkdocs-material-9.7.7" name="generator"/>
+<title>How to use the probe? - WULPUS User Guide</title>
+<link href="../assets/stylesheets/main.ec1eaa64.min.css" rel="stylesheet"/>
+<link href="../assets/stylesheets/palette.ab4e12ef.min.css" rel="stylesheet"/>
+<style>:root{--md-admonition-icon--note:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.5%207.75A.75.75%200%200%201%207.25%207h1a.75.75%200%200%201%20.75.75v2.75h.25a.75.75%200%200%201%200%201.5h-2a.75.75%200%200%201%200-1.5h.25v-2h-.25a.75.75%200%200%201-.75-.75M8%206a1%201%200%201%201%200-2%201%201%200%200%201%200%202%22/%3E%3C/svg%3E');--md-admonition-icon--abstract:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M2.5%201.75v11.5c0%20.138.112.25.25.25h3.17a.75.75%200%200%201%200%201.5H2.75A1.75%201.75%200%200%201%201%2013.25V1.75C1%20.784%201.784%200%202.75%200h8.5C12.216%200%2013%20.784%2013%201.75v7.736a.75.75%200%200%201-1.5%200V1.75a.25.25%200%200%200-.25-.25h-8.5a.25.25%200%200%200-.25.25m13.274%209.537zl-4.557%204.45a.75.75%200%200%201-1.055-.008l-1.943-1.95a.75.75%200%200%201%201.062-1.058l1.419%201.425%204.026-3.932a.75.75%200%201%201%201.048%201.074M4.75%204h4.5a.75.75%200%200%201%200%201.5h-4.5a.75.75%200%200%201%200-1.5M4%207.75A.75.75%200%200%201%204.75%207h2a.75.75%200%200%201%200%201.5h-2A.75.75%200%200%201%204%207.75%22/%3E%3C/svg%3E');--md-admonition-icon--info:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.5%207.75A.75.75%200%200%201%207.25%207h1a.75.75%200%200%201%20.75.75v2.75h.25a.75.75%200%200%201%200%201.5h-2a.75.75%200%200%201%200-1.5h.25v-2h-.25a.75.75%200%200%201-.75-.75M8%206a1%201%200%201%201%200-2%201%201%200%200%201%200%202%22/%3E%3C/svg%3E');--md-admonition-icon--tip:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M3.499.75a.75.75%200%200%201%201.5%200v.996C5.9%202.903%206.793%203.65%207.662%204.376l.24.202c-.036-.694.055-1.422.426-2.163C9.1.873%2010.794-.045%2012.622.26%2014.408.558%2016%201.94%2016%204.25c0%201.278-.954%202.575-2.44%202.734l.146.508.065.22c.203.701.412%201.455.476%202.226.142%201.707-.4%203.03-1.487%203.898C11.714%2014.671%2010.27%2015%208.75%2015h-6a.75.75%200%200%201%200-1.5h1.376a4.5%204.5%200%200%201-.563-1.191%203.84%203.84%200%200%201-.05-2.063%204.65%204.65%200%200%201-2.025-.293.75.75%200%200%201%20.525-1.406c1.357.507%202.376-.006%202.698-.318l.009-.01a.747.747%200%200%201%201.06%200%20.75.75%200%200%201-.012%201.074c-.912.92-.992%201.835-.768%202.586.221.74.745%201.337%201.196%201.621H8.75c1.343%200%202.398-.296%203.074-.836.635-.507%201.036-1.31.928-2.602-.05-.603-.216-1.224-.422-1.93l-.064-.221c-.12-.407-.246-.84-.353-1.29a2.4%202.4%200%200%201-.507-.441%203.1%203.1%200%200%201-.633-1.248.75.75%200%200%201%201.455-.364c.046.185.144.436.31.627.146.168.353.305.712.305.738%200%201.25-.615%201.25-1.25%200-1.47-.95-2.315-2.123-2.51-1.172-.196-2.227.387-2.706%201.345-.46.92-.27%201.774.019%203.062l.042.19.01.05c.348.443.666.949.94%201.553a.75.75%200%201%201-1.365.62c-.553-1.217-1.32-1.94-2.3-2.768L6.7%205.527c-.814-.68-1.75-1.462-2.692-2.619a3.7%203.7%200%200%200-1.023.88c-.406.495-.663%201.036-.722%201.508.116.122.306.21.591.239.388.038.797-.06%201.032-.19a.75.75%200%200%201%20.728%201.31c-.515.287-1.23.439-1.906.373-.682-.067-1.473-.38-1.879-1.193L.75%205.677V5.5c0-.984.48-1.94%201.077-2.664.46-.559%201.05-1.055%201.673-1.353z%22/%3E%3C/svg%3E');--md-admonition-icon--success:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M13.78%204.22a.75.75%200%200%201%200%201.06l-7.25%207.25a.75.75%200%200%201-1.06%200L2.22%209.28a.75.75%200%200%201%20.018-1.042.75.75%200%200%201%201.042-.018L6%2010.94l6.72-6.72a.75.75%200%200%201%201.06%200%22/%3E%3C/svg%3E');--md-admonition-icon--question:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M0%208a8%208%200%201%201%2016%200A8%208%200%200%201%200%208m8-6.5a6.5%206.5%200%201%200%200%2013%206.5%206.5%200%200%200%200-13M6.92%206.085h.001a.749.749%200%201%201-1.342-.67c.169-.339.436-.701.849-.977C6.845%204.16%207.369%204%208%204a2.76%202.76%200%200%201%201.637.525c.503.377.863.965.863%201.725%200%20.448-.115.83-.329%201.15-.205.307-.47.513-.692.662-.109.072-.22.138-.313.195l-.006.004a6%206%200%200%200-.26.16%201%201%200%200%200-.276.245.75.75%200%200%201-1.248-.832c.184-.264.42-.489.692-.661q.154-.1.313-.195l.007-.004c.1-.061.182-.11.258-.161a1%201%200%200%200%20.277-.245C8.96%206.514%209%206.427%209%206.25a.61.61%200%200%200-.262-.525A1.27%201.27%200%200%200%208%205.5c-.369%200-.595.09-.74.187a1%201%200%200%200-.34.398M9%2011a1%201%200%201%201-2%200%201%201%200%200%201%202%200%22/%3E%3C/svg%3E');--md-admonition-icon--warning:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M6.457%201.047c.659-1.234%202.427-1.234%203.086%200l6.082%2011.378A1.75%201.75%200%200%201%2014.082%2015H1.918a1.75%201.75%200%200%201-1.543-2.575Zm1.763.707a.25.25%200%200%200-.44%200L1.698%2013.132a.25.25%200%200%200%20.22.368h12.164a.25.25%200%200%200%20.22-.368Zm.53%203.996v2.5a.75.75%200%200%201-1.5%200v-2.5a.75.75%200%200%201%201.5%200M9%2011a1%201%200%201%201-2%200%201%201%200%200%201%202%200%22/%3E%3C/svg%3E');--md-admonition-icon--failure:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M2.344%202.343za8%208%200%200%201%2011.314%2011.314A8.002%208.002%200%200%201%20.234%2010.089a8%208%200%200%201%202.11-7.746m1.06%2010.253a6.5%206.5%200%201%200%209.108-9.275%206.5%206.5%200%200%200-9.108%209.275M6.03%204.97%208%206.94l1.97-1.97a.749.749%200%200%201%201.275.326.75.75%200%200%201-.215.734L9.06%208l1.97%201.97a.749.749%200%200%201-.326%201.275.75.75%200%200%201-.734-.215L8%209.06l-1.97%201.97a.749.749%200%200%201-1.275-.326.75.75%200%200%201%20.215-.734L6.94%208%204.97%206.03a.75.75%200%200%201%20.018-1.042.75.75%200%200%201%201.042-.018%22/%3E%3C/svg%3E');--md-admonition-icon--danger:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M9.504.43a1.516%201.516%200%200%201%202.437%201.713L10.415%205.5h2.123c1.57%200%202.346%201.909%201.22%203.004l-7.34%207.142a1.25%201.25%200%200%201-.871.354h-.302a1.25%201.25%200%200%201-1.157-1.723L5.633%2010.5H3.462c-1.57%200-2.346-1.909-1.22-3.004zm1.047%201.074L3.286%208.571A.25.25%200%200%200%203.462%209H6.75a.75.75%200%200%201%20.694%201.034l-1.713%204.188%206.982-6.793A.25.25%200%200%200%2012.538%207H9.25a.75.75%200%200%201-.683-1.06l2.008-4.418.003-.006-.004-.009-.006-.006-.008-.001q-.005%200-.009.004%22/%3E%3C/svg%3E');--md-admonition-icon--bug:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M4.72.22a.75.75%200%200%201%201.06%200l1%20.999a3.5%203.5%200%200%201%202.441%200l.999-1a.748.748%200%200%201%201.265.332.75.75%200%200%201-.205.729l-.775.776c.616.63.995%201.493.995%202.444v.327q0%20.15-.025.292c.408.14.764.392%201.029.722l1.968-.787a.75.75%200%200%201%20.556%201.392L13%207.258V9h2.25a.75.75%200%200%201%200%201.5H13v.5q-.002.615-.141%201.186l2.17.868a.75.75%200%200%201-.557%201.392l-2.184-.873A5%205%200%200%201%208%2016a5%205%200%200%201-4.288-2.427l-2.183.873a.75.75%200%200%201-.558-1.392l2.17-.868A5%205%200%200%201%203%2011v-.5H.75a.75.75%200%200%201%200-1.5H3V7.258L.971%206.446a.75.75%200%200%201%20.558-1.392l1.967.787c.265-.33.62-.583%201.03-.722a1.7%201.7%200%200%201-.026-.292V4.5c0-.951.38-1.814.995-2.444L4.72%201.28a.75.75%200%200%201%200-1.06m.53%206.28a.75.75%200%200%200-.75.75V11a3.5%203.5%200%201%200%207%200V7.25a.75.75%200%200%200-.75-.75ZM6.173%205h3.654A.17.17%200%200%200%2010%204.827V4.5a2%202%200%201%200-4%200v.327c0%20.096.077.173.173.173%22/%3E%3C/svg%3E');--md-admonition-icon--example:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M5%205.782V2.5h-.25a.75.75%200%200%201%200-1.5h6.5a.75.75%200%200%201%200%201.5H11v3.282l3.666%205.76C15.619%2013.04%2014.543%2015%2012.767%2015H3.233c-1.776%200-2.852-1.96-1.899-3.458Zm-2.4%206.565a.75.75%200%200%200%20.633%201.153h9.534a.75.75%200%200%200%20.633-1.153L12.225%2010.5h-8.45ZM9.5%202.5h-3V6c0%20.143-.04.283-.117.403L4.73%209h6.54L9.617%206.403A.75.75%200%200%201%209.5%206Z%22/%3E%3C/svg%3E');--md-admonition-icon--quote:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2016%2016%22%3E%3Cpath%20d%3D%22M1.75%202.5h10.5a.75.75%200%200%201%200%201.5H1.75a.75.75%200%200%201%200-1.5m4%205h8.5a.75.75%200%200%201%200%201.5h-8.5a.75.75%200%200%201%200-1.5m0%205h8.5a.75.75%200%200%201%200%201.5h-8.5a.75.75%200%200%201%200-1.5M2.5%207.75v6a.75.75%200%200%201-1.5%200v-6a.75.75%200%200%201%201.5%200%22/%3E%3C/svg%3E');}</style>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&amp;display=fallback" rel="stylesheet"/>
+<style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+<link href="../stylesheets/extra.css" rel="stylesheet"/>
+<script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+<link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><script src="../assets/javascripts/glightbox.min.js"></script><style id="glightbox-style">
+            html.glightbox-open { overflow: initial; height: 100%; }
+            .gslide-title { margin-top: 0px; user-select: text; }
+            .gslide-desc { color: #666; user-select: text; }
+            .gslide-image img { background: white; }
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color); }
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color); }
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color); }
+        </style></head>
+<body data-md-color-accent="indigo" data-md-color-primary="indigo" data-md-color-scheme="default" dir="ltr">
+<input autocomplete="off" class="md-toggle" data-md-toggle="drawer" id="__drawer" type="checkbox"/>
+<input autocomplete="off" class="md-toggle" data-md-toggle="search" id="__search" type="checkbox"/>
+<label class="md-overlay" for="__drawer"></label>
+<div data-md-component="skip">
+<a class="md-skip" href="#how-to-use-the-probe">3. 
+          Skip to content
+        </a>
+</div>
+<div data-md-component="announce">
+</div>
+<header class="md-header md-header--shadow" data-md-component="header">
+<nav aria-label="Header" class="md-header__inner md-grid">
+<a aria-label="WULPUS User Guide" class="md-header__button md-logo" data-md-component="logo" href=".." title="WULPUS User Guide">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+<label class="md-header__button md-icon" for="__drawer">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"></path></svg>
+</label>
+<div class="md-header__title" data-md-component="header-title">
+<div class="md-header__ellipsis">
+<div class="md-header__topic">
+<span class="md-ellipsis">
+            WULPUS User Guide
+          </span>
+</div>
+<div class="md-header__topic" data-md-component="header-topic">
+<span class="md-ellipsis">
+            
+              How to use the probe?
+            
+          </span>
+</div>
+</div>
+</div>
+<form class="md-header__option" data-md-component="palette">
+<input aria-label="Switch to dark mode" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="default" id="__palette_0" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_1" hidden="" title="Switch to dark mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+<input aria-label="Switch to light mode" class="md-option" data-md-color-accent="indigo" data-md-color-media="" data-md-color-primary="indigo" data-md-color-scheme="slate" id="__palette_1" name="__palette" type="radio"/>
+<label class="md-header__button md-icon" for="__palette_0" hidden="" title="Switch to light mode">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"></path></svg>
+</label>
+</form>
+<script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+<label class="md-header__button md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+</label>
+<div class="md-search" data-md-component="search" role="dialog">
+<label class="md-search__overlay" for="__search"></label>
+<div class="md-search__inner" role="search">
+<form class="md-search__form" name="search">
+<input aria-label="Search" autocapitalize="off" autocomplete="off" autocorrect="off" class="md-search__input" data-md-component="search-query" name="query" placeholder="Search" required="" spellcheck="false" type="text"/>
+<label class="md-search__icon md-icon" for="__search">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"></path></svg>
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"></path></svg>
+</label>
+<nav aria-label="Search" class="md-search__options">
+<button aria-label="Clear" class="md-search__icon md-icon" tabindex="-1" title="Clear" type="reset">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"></path></svg>
+</button>
+</nav>
+</form>
+<div class="md-search__output">
+<div class="md-search__scrollwrap" data-md-scrollfix="" tabindex="0">
+<div class="md-search-result" data-md-component="search-result">
+<div class="md-search-result__meta">
+            Initializing search
+          </div>
+<ol class="md-search-result__list" role="presentation"></ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="md-header__source">
+<a class="md-source" data-md-component="source" href="https://github.com/pulp-bio/wulpus" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    pulp-bio/wulpus
+  </div>
+</a>
+</div>
+</nav>
+</header>
+<div class="md-container" data-md-component="container">
+<main class="md-main" data-md-component="main">
+<div class="md-main__inner md-grid">
+<div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Navigation" class="md-nav md-nav--primary" data-md-level="0">
+<label class="md-nav__title" for="__drawer">
+<a aria-label="WULPUS User Guide" class="md-nav__button md-logo" data-md-component="logo" href=".." title="WULPUS User Guide">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"></path></svg>
+</a>
+    WULPUS User Guide
+  </label>
+<div class="md-nav__source">
+<a class="md-source" data-md-component="source" href="https://github.com/pulp-bio/wulpus" title="Go to repository">
+<div class="md-source__icon md-icon">
+<svg viewbox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"></path></svg>
+</div>
+<div class="md-source__repository">
+    pulp-bio/wulpus
+  </div>
+</a>
+</div>
+<ul class="md-nav__list" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="..">
+<span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../system-overview/">
+<span class="md-ellipsis">
+    
+  
+    System Overview
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../building-your-wulpus/">
+<span class="md-ellipsis">
+    
+  
+    How to build your own WULPUS probe?
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item md-nav__item--active">
+<input class="md-nav__toggle md-toggle" id="__toc" type="checkbox"/>
+<label class="md-nav__link md-nav__link--active" for="__toc">
+<span class="md-ellipsis">
+    
+  
+    How to use the probe?
+  
+
+    
+  </span>
+<span class="md-nav__icon md-icon"></span>
+</label>
+<a class="md-nav__link md-nav__link--active" href="./">
+<span class="md-ellipsis">
+    
+  
+    How to use the probe?
+  
+
+    
+  </span>
+</a>
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hardware-requirements">3.1 
+<span class="md-ellipsis">
+      
+        Hardware requirements
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#software-requirements">3.2 
+<span class="md-ellipsis">
+      
+        Software requirements
+      
+    </span>
+</a>
+<nav aria-label="Software requirements" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installing-biogui">3.2.1 
+<span class="md-ellipsis">
+      
+        Installing BioGUI
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-biogui">3.3 
+<span class="md-ellipsis">
+      
+        Using BioGUI
+      
+    </span>
+</a>
+<nav aria-label="Using BioGUI" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#connecting-the-probe">3.3.1 
+<span class="md-ellipsis">
+      
+        Connecting the probe
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adding-a-wulpus-data-source">3.3.2 
+<span class="md-ellipsis">
+      
+        Adding a WULPUS data source
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#starting-a-measurement">3.3.3 
+<span class="md-ellipsis">
+      
+        Starting a measurement
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#saving-a-recording">3.3.4 
+<span class="md-ellipsis">
+      
+        Saving a recording
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#legacy-jupyter-notebook">3.4 
+<span class="md-ellipsis">
+      
+        Legacy Jupyter notebook
+      
+    </span>
+</a>
+<nav aria-label="Legacy Jupyter notebook" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#connecting-to-the-probe-legacy">3.4.1 
+<span class="md-ellipsis">
+      
+        Connecting to the probe (legacy)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#starting-a-measurement-legacy">3.4.2 
+<span class="md-ellipsis">
+      
+        Starting a measurement (legacy)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#visualizing-the-data-in-real-time">3.4.3 
+<span class="md-ellipsis">
+      
+        Visualizing the data in real-time
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#saving-and-loading-the-data">3.4.4 
+<span class="md-ellipsis">
+      
+        Saving and loading the data
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#mux-artifact-mitigation">3.5 
+<span class="md-ellipsis">
+      
+        MUX artifact mitigation
+      
+    </span>
+</a>
+<nav aria-label="MUX artifact mitigation" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hv-mux-start-time">3.5.1 
+<span class="md-ellipsis">
+      
+        HV MUX start time
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adc-sampling-start-time">3.5.2 
+<span class="md-ellipsis">
+      
+        ADC sampling start time
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#switching-optimization">3.5.3 
+<span class="md-ellipsis">
+      
+        Switching optimization
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../advanced-settings/">
+<span class="md-ellipsis">
+    
+  
+    Advanced Settings
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../example-measurements/">
+<span class="md-ellipsis">
+    
+  
+    Example experiments
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../troubleshooting/">
+<span class="md-ellipsis">
+    
+  
+    Troubleshooting
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../errata/">
+<span class="md-ellipsis">
+    
+  
+    Errata
+  
+
+    
+  </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="../revision/">
+<span class="md-ellipsis">
+    
+  
+    Revision history
+  
+
+    
+  </span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc">
+<div class="md-sidebar__scrollwrap">
+<div class="md-sidebar__inner">
+<nav aria-label="Table of contents" class="md-nav md-nav--secondary">
+<label class="md-nav__title" for="__toc">
+<span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+<ul class="md-nav__list" data-md-component="toc" data-md-scrollfix="">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hardware-requirements">3.1 
+<span class="md-ellipsis">
+      
+        Hardware requirements
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#software-requirements">3.2 
+<span class="md-ellipsis">
+      
+        Software requirements
+      
+    </span>
+</a>
+<nav aria-label="Software requirements" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#installing-biogui">3.2.1 
+<span class="md-ellipsis">
+      
+        Installing BioGUI
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#using-biogui">3.3 
+<span class="md-ellipsis">
+      
+        Using BioGUI
+      
+    </span>
+</a>
+<nav aria-label="Using BioGUI" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#connecting-the-probe">3.3.1 
+<span class="md-ellipsis">
+      
+        Connecting the probe
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adding-a-wulpus-data-source">3.3.2 
+<span class="md-ellipsis">
+      
+        Adding a WULPUS data source
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#starting-a-measurement">3.3.3 
+<span class="md-ellipsis">
+      
+        Starting a measurement
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#saving-a-recording">3.3.4 
+<span class="md-ellipsis">
+      
+        Saving a recording
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#legacy-jupyter-notebook">3.4 
+<span class="md-ellipsis">
+      
+        Legacy Jupyter notebook
+      
+    </span>
+</a>
+<nav aria-label="Legacy Jupyter notebook" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#connecting-to-the-probe-legacy">3.4.1 
+<span class="md-ellipsis">
+      
+        Connecting to the probe (legacy)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#starting-a-measurement-legacy">3.4.2 
+<span class="md-ellipsis">
+      
+        Starting a measurement (legacy)
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#visualizing-the-data-in-real-time">3.4.3 
+<span class="md-ellipsis">
+      
+        Visualizing the data in real-time
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#saving-and-loading-the-data">3.4.4 
+<span class="md-ellipsis">
+      
+        Saving and loading the data
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#mux-artifact-mitigation">3.5 
+<span class="md-ellipsis">
+      
+        MUX artifact mitigation
+      
+    </span>
+</a>
+<nav aria-label="MUX artifact mitigation" class="md-nav">
+<ul class="md-nav__list">
+<li class="md-nav__item">
+<a class="md-nav__link" href="#hv-mux-start-time">3.5.1 
+<span class="md-ellipsis">
+      
+        HV MUX start time
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#adc-sampling-start-time">3.5.2 
+<span class="md-ellipsis">
+      
+        ADC sampling start time
+      
+    </span>
+</a>
+</li>
+<li class="md-nav__item">
+<a class="md-nav__link" href="#switching-optimization">3.5.3 
+<span class="md-ellipsis">
+      
+        Switching optimization
+      
+    </span>
+</a>
+</li>
+</ul>
+</nav>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<div class="md-content" data-md-component="content">
+<article class="md-content__inner md-typeset">
+<h1 id="how-to-use-the-probe"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.</span> How to use the probe?<a class="headerlink" href="#how-to-use-the-probe" title="Permanent link">¶</a></h1>
+<p>This chapter explains the needed steps to get started with the WULPUS probe.</p>
+<p>The first section focuses on the hardware requirements. The next sections install <a href="https://github.com/pulp-bio/biogui">BioGUI</a> and walk through a first measurement. A short note points to the web GUI, which will be documented later. The Jupyter notebook interface is kept at the end as the legacy option. HV-MUX artifact mitigation is unchanged and still illustrated with the legacy GUI.</p>
+<h2 id="hardware-requirements"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.1</span> Hardware requirements<a class="headerlink" href="#hardware-requirements" title="Permanent link">¶</a></h2>
+<p>To conduct US measurements with WULPUS, you will need the components listed in the following (see figure below).</p>
+<ol>
+<li>Acquisition PCB</li>
+<li>High Voltage PCB</li>
+<li>Your ultrasound transducer (with compatible connector)</li>
+<li>nRF USB Dongle</li>
+<li>Windows (or Linux) computer/laptop with USB port</li>
+<li>Power supply: USB cable/battery/lab supply</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The HV PCB is equipped with a 16-pin <strong>DF52-16S-0.8H</strong> connector. To connect a custom transducer to this connector, the user should utilize a compatible <strong>DF52-16P-0.8C</strong> mating connector, along with pre-crimped <strong>DF52-2832PF1571-28A9-300</strong> cables. The pre-crimped cables should then be directly soldered to the transducer terminals.</p>
+</div>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/pictures/hardware_requirements.png"><img alt="Overview of the hardware components." src="../figures/pictures/hardware_requirements.png" width="80%"/></a></p>
+<p><em>Overview of the hardware components. The image of the USB Dongle is adapted from <a href="https://www.nordicsemi.com/Products/Development-hardware/nRF52840-Dongle/GetStarted">Nordic Semiconductor</a>.</em></p>
+<h2 id="software-requirements"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.2</span> Software requirements<a class="headerlink" href="#software-requirements" title="Permanent link">¶</a></h2>
+<p><strong><a href="https://github.com/pulp-bio/biogui">BioGUI</a></strong> is the preferred interface for general use. It is a separate repository. The WULPUS repository and its Jupyter notebook are not required to run it.</p>
+<p>The web-based React GUI in <a href="https://github.com/pulp-bio/wulpus/tree/main/sw"><code>sw/</code></a> is mainly for NDT applications. A walkthrough will be added later. Until then, follow <a href="https://github.com/pulp-bio/wulpus/blob/main/sw/README.md"><code>sw/README.md</code></a>.</p>
+<h3 id="installing-biogui"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.2.1</span> Installing BioGUI<a class="headerlink" href="#installing-biogui" title="Permanent link">¶</a></h3>
+<ol>
+<li>Install <a href="https://docs.astral.sh/uv/getting-started/installation/">uv</a>.</li>
+<li>
+<p>Clone the BioGUI repository and open that folder:</p>
+<div class="highlight"><pre><span></span><code>git clone https://github.com/pulp-bio/biogui.git
+cd biogui
+</code></pre></div>
+</li>
+<li>
+<p>Install the dependencies and start the application:</p>
+<div class="highlight"><pre><span></span><code>uv sync
+uv run main.py
+</code></pre></div>
+</li>
+</ol>
+<p>The main window opens as shown below. The screenshots in this chapter were taken on Linux. On Windows the window frame looks different. The controls are the same. Further BioGUI features (modules, playback, forwarding) are described in the <a href="https://pulp-bio.github.io/biogui/">BioGUI documentation</a>.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/biogui_main.png"><img alt="BioGUI main window after startup." src="../figures/gui/biogui_main.png"/></a></p>
+<p><em>BioGUI main window after startup.</em></p>
+<h2 id="using-biogui"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.3</span> Using BioGUI<a class="headerlink" href="#using-biogui" title="Permanent link">¶</a></h2>
+<h3 id="connecting-the-probe"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.3.1</span> Connecting the probe<a class="headerlink" href="#connecting-the-probe" title="Permanent link">¶</a></h3>
+<p>Plug the flashed USB dongle into the computer. Then power the WULPUS probe. The onboard LEDs of the dongle indicate whether the Bluetooth connection has been established (see figure below).</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/pictures/dongle_leds.png"><img alt="LED locations on the USB dongle and their indications." src="../figures/pictures/dongle_leds.png" width="80%"/></a></p>
+<p><em>LED locations on the USB dongle and their indications. Note: after running at least one measurement, the green LED does not show the BLE connection status anymore. It just keeps the last state when the stop command arrived.</em></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the dongle did not connect successfully to the probe, consult <a href="../troubleshooting/">Troubleshooting</a>.</p>
+</div>
+<h3 id="adding-a-wulpus-data-source"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.3.2</span> Adding a WULPUS data source<a class="headerlink" href="#adding-a-wulpus-data-source" title="Permanent link">¶</a></h3>
+<p>In the Acquisition tab, click <strong>Add data source</strong>.</p>
+<ol>
+<li>Set <strong>Interface</strong> to <code>wulpus</code>.</li>
+<li>Set <strong>Data source</strong> to <code>Serial port</code>.</li>
+<li>Choose the dongle's serial port. It is not listed as <code>WULPUS_X</code>. Compare the list before and after plugging the dongle in. On Linux it is often a <code>ttyACM</code> device.</li>
+<li>Leave <strong>Baud rate</strong> at <code>115200</code>, unless you have a reason to change it.</li>
+<li>
+<p>Saving is optional. To record, choose an output directory and a file name. You can leave this unset if you only want to look at the live plot.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/biogui_data_source.png"><img alt="Data source configuration for the WULPUS serial port." src="../figures/gui/biogui_data_source.png"/></a></p>
+<p><em>Data source configuration. Interface <code>wulpus</code>, serial port, and baud rate. File saving is optional and is not enabled in this screenshot.</em></p>
+</li>
+<li>
+<p>Choosing <code>wulpus</code> opens <strong>WULPUS Configuration</strong> next, before the signal page. Three tabs cover the probe parameters:</p>
+<ul>
+<li><strong>Basic Settings</strong> — measurement period, pulse frequency and count, sampling frequency, number of samples, RX gain.</li>
+<li><strong>Advanced Timing</strong> — HV-MUX RX start time, PPG start time, ADC turn-on and sampling start, and the other acquisition timestamps.</li>
+<li><strong>TX/RX Configuration</strong> — which channels transmit and receive, and <strong>Optimized Switching</strong>.</li>
+</ul>
+<p>Load a preset or edit the fields, then click <strong>Apply</strong>. The same window can later be reopened from the settings icon next to the data source. What the timing values mean is described in <a href="../advanced-settings/#configuration-of-ultrasound-subsystem">Configuration of Ultrasound Subsystem</a>. TX/RX sets are described in <a href="../advanced-settings/#tx-rx-configurations">Transmit/Receive (TX/RX) configurations</a>.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/biogui_wulpus_basic.png"><img alt="WULPUS basic settings." src="../figures/gui/biogui_wulpus_basic.png"/></a></p>
+<p><em>Basic Settings. The preset in this screenshot is an example.</em></p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/biogui_wulpus_timing.png"><img alt="WULPUS advanced timing." src="../figures/gui/biogui_wulpus_timing.png"/></a></p>
+<p><em>Advanced Timing, including HV-MUX RX start time and ADC sampling start time.</em></p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/biogui_wulpus_txrx.png"><img alt="WULPUS TX/RX configuration." src="../figures/gui/biogui_wulpus_txrx.png"/></a></p>
+<p><em>TX/RX Configuration.</em></p>
+</li>
+<li>
+<p>The signal page comes after that. For a single-channel view, set <strong>Ultrasound mode</strong> to <code>A-mode</code> and enable the traces you want (<strong>Show Raw Data</strong>, <strong>Show Bandpass Filtered Data</strong>, <strong>Show Envelope of Bandpass Filtered Data</strong>). Set the band-pass limits, then click <strong>Finish</strong>.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/biogui_signal_config.png"><img alt="Signal display options for ultrasound." src="../figures/gui/biogui_signal_config.png"/></a></p>
+<p><em>Signal configuration for an A-mode plot.</em></p>
+</li>
+</ol>
+<p>After <strong>Finish</strong>, the dialog closes and the WULPUS serial port shows up under <strong>Data sources</strong>. Nothing is acquired yet, so the plot on the right stays empty until you start streaming.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/biogui_source_added.png"><img alt="WULPUS source added, before streaming." src="../figures/gui/biogui_source_added.png"/></a></p>
+<p><em>WULPUS source added. Streaming has not been started, so the plot is still empty.</em></p>
+<h3 id="starting-a-measurement"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.3.3</span> Starting a measurement<a class="headerlink" href="#starting-a-measurement" title="Permanent link">¶</a></h3>
+<p>Click <strong>Start streaming</strong>. The plot updates with the ultrasound trace. <strong>Stop streaming</strong> ends the acquisition.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/biogui_streaming.png"><img alt="Live A-mode trace in BioGUI." src="../figures/gui/biogui_streaming.png"/></a></p>
+<p><em>A-mode trace while streaming.</em></p>
+<h3 id="saving-a-recording"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.3.4</span> Saving a recording<a class="headerlink" href="#saving-a-recording" title="Permanent link">¶</a></h3>
+<p>Saving is optional. If you set an output directory and file name in the data source dialog before streaming, BioGUI writes the recording there. If you skip that, you still get the live plot. BioGUI does not use the old <code>data_x.npz</code> checkbox from the Jupyter notebook.</p>
+<h2 id="legacy-jupyter-notebook"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.4</span> Legacy Jupyter notebook<a class="headerlink" href="#legacy-jupyter-notebook" title="Permanent link">¶</a></h2>
+<p>The notebook interface still works, but it is not the recommended setup. It lives in the WULPUS repository, not in BioGUI.</p>
+<p>The previous user guide used Anaconda (<code>conda env create -f requirements.yml</code>). That environment file is gone. The repository now uses uv.</p>
+<ol>
+<li>Install <a href="https://docs.astral.sh/uv/getting-started/installation/">uv</a>.</li>
+<li>Clone the WULPUS repository: <a href="https://github.com/pulp-bio/wulpus">https://github.com/pulp-bio/wulpus</a>.</li>
+<li>Open a terminal and go to the <code>sw</code> folder.</li>
+<li>
+<p>Install the Python dependencies, including Jupyter:</p>
+<div class="highlight"><pre><span></span><code>uv sync --extra notebook
+</code></pre></div>
+</li>
+<li>
+<p>Start the notebook server:</p>
+<div class="highlight"><pre><span></span><code>uv run --extra notebook jupyter notebook
+</code></pre></div>
+</li>
+<li>
+<p>In the browser, open <code>jupyter notebook (legacy)</code> and click <strong>wulpus_gui.ipynb</strong>. Follow the notebook until the main GUI is open.</p>
+</li>
+</ol>
+<p>The screenshots below are the original notebook GUI.</p>
+<h3 id="connecting-to-the-probe-legacy"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.4.1</span> Connecting to the probe (legacy)<a class="headerlink" href="#connecting-to-the-probe-legacy" title="Permanent link">¶</a></h3>
+<p>After a successful connection between dongle and probe (see <a href="#connecting-the-probe">3.3.1 Connecting the probe</a>), switch to the main GUI in the Jupyter notebook.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/gui_main_connection.png"><img alt="The connection section of the legacy notebook GUI." src="../figures/gui/gui_main_connection.png"/></a></p>
+<p><em>The connection section of the legacy notebook GUI (highlighted in red).</em></p>
+<ol>
+<li><strong>Scan ports</strong>: scan for serial devices and update the list of ports.</li>
+<li>Use the <strong>Serial port</strong> dropdown to choose the dongle. The name is not <code>WULPUS_X</code>. Compare the list before and after plugging the dongle in.</li>
+<li><strong>Open port</strong>: open the selected serial device.</li>
+</ol>
+<h3 id="starting-a-measurement-legacy"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.4.2</span> Starting a measurement (legacy)<a class="headerlink" href="#starting-a-measurement-legacy" title="Permanent link">¶</a></h3>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>An <strong>acquisition</strong> is a fixed number of samples, spaced by the ADC sampling period. A <strong>measurement</strong> is a set of acquisitions.</p>
+</div>
+<p>Buttons are available only after the COM port is open.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/gui_main_progression.png"><img alt="The measurement section of the legacy notebook GUI." src="../figures/gui/gui_main_progression.png"/></a></p>
+<p><em>The measurement section of the legacy notebook GUI.</em></p>
+<ol>
+<li>Click <strong>Start measurement</strong>.</li>
+<li>Watch the <strong>Progress</strong> bar.</li>
+<li>Click <strong>Stop measurement</strong>, or wait until the programmed number of acquisitions has been collected.</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>After the measurement stops, the green LED keeps its last state. It no longer shows the connection status, and a new measurement can be started with the LED off.</p>
+</div>
+<h3 id="visualizing-the-data-in-real-time"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.4.3</span> Visualizing the data in real-time<a class="headerlink" href="#visualizing-the-data-in-real-time" title="Permanent link">¶</a></h3>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/gui_main_plotting.png"><img alt="The plotting section of the legacy notebook GUI." src="../figures/gui/gui_main_plotting.png"/></a></p>
+<p><em>The plotting section of the legacy notebook GUI.</em></p>
+<ul>
+<li><strong>Show Raw Data</strong>, <strong>Show Filtered Data</strong>, and <strong>Show Envelope</strong> toggle those traces.</li>
+<li><strong>Band pass (MHz)</strong> sets the filter pass band.</li>
+<li><strong>Active RX config</strong> selects which TX/RX configuration is plotted. See <a href="../advanced-settings/#tx-rx-configurations">Transmit/Receive (TX/RX) configurations</a>.</li>
+<li><strong>Show B-Mode</strong> switches between single-channel A-mode and an 8-channel view. See <a href="../advanced-settings/#b-mode">"B-mode" data acquisition and visualization</a>.</li>
+</ul>
+<p>These controls are available while the measurement is running.</p>
+<h3 id="saving-and-loading-the-data"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.4.4</span> Saving and loading the data<a class="headerlink" href="#saving-and-loading-the-data" title="Permanent link">¶</a></h3>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/gui_main_saving.png"><img alt="The saving section of the legacy notebook GUI." src="../figures/gui/gui_main_saving.png"/></a></p>
+<p><em>The saving section of the legacy notebook GUI.</em></p>
+<p><strong>Save data as .npz</strong> writes the raw data next to the notebook as <strong>data_x.npz</strong>. <code>x</code> starts at 0 and increases if that file already exists. Enable the checkbox before the measurement. It turns off again when the measurement ends. Filtered data and the envelope are not saved. The <code>.npz</code> layout is explained in <code>wulpus_gui.ipynb</code>.</p>
+<h2 id="mux-artifact-mitigation"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.5</span> MUX artifact mitigation<a class="headerlink" href="#mux-artifact-mitigation" title="Permanent link">¶</a></h2>
+<p>In order to switch between the TX and RX phases of an acquisition, the WULPUS system uses a high-voltage multiplexer. This multiplexer behaves non-ideally and introduces some charge injection during the switching event, leading to a voltage spike artifact that will be picked up by the ADC during acquisition. The more WULPUS channels are connected to receive, the larger is the artifact.</p>
+<div class="admonition warning">
+<p class="admonition-title">Screenshots show the legacy Jupyter GUI</p>
+<p>The mitigation methods below are still valid. The annotated GUI screenshots come from the previous Jupyter GUI and will be updated to BioGUI later.</p>
+</div>
+<p>The figure below displays the MUX artifact during an acquisition when a 2.25 MHz linear array transducer (we use only 8 channels) was used. Eight channels are excited at transmit and the same 8 channels are activated at receive phase resulting in the largest-possible switching artifact (worst case). The signal was acquired from the vertical nylon scatters (0.1 mm diameter, 10 mm spacing) of the CIRS 040 GSE phantom. To collect the data shown here, the ultrasound-subsystem settings in figure (b) were used.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/hv_mux_artifact.png"><img alt="Annotated WULPUS GUI screenshot of the HV MUX artifact." src="../figures/gui/hv_mux_artifact.png" width="45%"/></a>
+<a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/hv_mux_artifact_settings_1.png"><img alt="Measurement settings." src="../figures/gui/hv_mux_artifact_settings_1.png" width="50%"/></a></p>
+<p><em>High voltage multiplexer switching artifact with default settings. (a) Annotated WULPUS GUI screenshot. (b) Measurement settings.</em></p>
+<p>There are three main ways to mitigate and adjust this artifact, which will be described individually in the following subsections.</p>
+<h3 id="hv-mux-start-time"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.5.1</span> HV MUX start time<a class="headerlink" href="#hv-mux-start-time" title="Permanent link">¶</a></h3>
+<p>Since a user can configure the time of switching from TX to RX state (see <a href="../advanced-settings/#configuration-of-ultrasound-subsystem">Advanced Settings</a> for details), to mitigate the artifact, we can reduce the parameter <strong>HV-MUX RX start time</strong> from the default value of 500 µs to e.g. 494 µs. We should not make this value too low, otherwise switching will intersect with the pulsing event, and the transducers will not be excited.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/hv_mux_artifact_2.png"><img alt="Annotated WULPUS GUI screenshot with early MUX switching." src="../figures/gui/hv_mux_artifact_2.png" width="45%"/></a>
+<a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/hv_mux_art_settings_2.png"><img alt="Measurement settings for early MUX switching." src="../figures/gui/hv_mux_art_settings_2.png" width="50%"/></a></p>
+<p><em>High voltage multiplexer switching artifact with early multiplexer switching (HV-MUX RX start time = 494 µs). (a) Annotated WULPUS GUI screenshot. (b) Measurement settings.</em></p>
+<p>The figures demonstrate that early switching shifts the artifact to the left, while the back-scattered echo signals remain on their places on the timeline.</p>
+<h3 id="adc-sampling-start-time"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.5.2</span> ADC sampling start time<a class="headerlink" href="#adc-sampling-start-time" title="Permanent link">¶</a></h3>
+<p>Another way of adjusting the artifact is to tune the <strong>ADC sampling start time</strong>, such that the ADC only starts sampling after the whole or most of the artifact has passed. Below we compare the acquisitions with two different ADC sample start timings, with the default and with a delayed start.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/hv_mux_artifact_3.png"><img alt="Annotated WULPUS GUI screenshot with delayed ADC sampling." src="../figures/gui/hv_mux_artifact_3.png" width="45%"/></a>
+<a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/hv_mux_art_settings_3.png"><img alt="Measurement settings for delayed ADC sampling." src="../figures/gui/hv_mux_art_settings_3.png" width="50%"/></a></p>
+<p><em>High voltage multiplexer switching artifact with early multiplexer switching and delayed ADC sampling start (ADC sampling start time = 509 µs). (a) Annotated WULPUS GUI screenshot. (b) Measurement settings.</em></p>
+<p>The starting time is set to 509 µs. As the <strong>ADC sampling start time</strong> is set to a later time, the MUX artifact moves to the left. This method doesn't reduce the dimensions of the artifact (duration or amplitude), but tries to reduce the space the artifact takes up in the number of samples we set up. The downside is that if important data were overlaid over the artifact and we removed the artifact entirely by starting the ADC even later, we may omit the important data. This would e.g. be the case if we are measuring shallow arteries, where the first wall has reflections which lie in the duration of the artifact.</p>
+<h3 id="switching-optimization"><span class="enumerate-headings-plugin enumerate-heading-plugin">3.5.3</span> Switching optimization<a class="headerlink" href="#switching-optimization" title="Permanent link">¶</a></h3>
+<p>The other method of reducing the effect of the artifact is by actually trying to reduce the dimensions of the artifact.</p>
+<p>Since the cause of the artifact is the switching, we have to work on it. The simplest idea may be to reduce the amount of times we switch the channels of the multiplexer by analyzing the sets of transmitting/receiving channels and their intersections. This is what we are trying to do with the <strong>Optimized switching</strong> method of the RX/TX config GUI (see figure below).</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/rxtx-config-gui-switching.png"><img alt="Location of the optimized switching choice in the RX/TX configs GUI" src="../figures/gui/rxtx-config-gui-switching.png"/></a></p>
+<p><em>Location of the optimized switching choice in the RX/TX configs GUI.</em></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The RX/TX configuration GUI and its functions are discussed in detail in <a href="../advanced-settings/#programming-tx-rx-configurations-via-gui">Programming TX/RX configurations via GUI</a>.</p>
+</div>
+<p>Through a rather simple algorithm, WULPUS analyzes the configuration sets for TX/RX channels, and tries to pre-configure the states of the switches, so that the amount of switching during a transition from transmit to receive is minimized. The figure below shows an example MUX artifact with optimized switching enabled.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/hv_mux_artifact_4.png"><img alt="Annotated WULPUS GUI screenshot with optimized switching." src="../figures/gui/hv_mux_artifact_4.png" width="45%"/></a>
+<a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/hv_mux_art_settings_4.png"><img alt="Measurement settings with optimized switching." src="../figures/gui/hv_mux_art_settings_4.png" width="50%"/></a></p>
+<p><em>High voltage multiplexer switching artifact with all previous settings and enabled Optimize Switching option. (a) Annotated WULPUS GUI screenshot. (b) Measurement settings.</em></p>
+<p>As we can see, employing an algorithm for switching optimization further reduces the artifact. At this point, we can safely increase the PGA receive gain to amplify the echo signal. The figure below demonstrates the amplified echoes obtained under the cumulative acquisition settings. Although the artifact is still present in the raw data, the band-pass filtered signal shows four target echoes with high signal to noise ratio.</p>
+<p><a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/hv_mux_artifact_5.png"><img alt="Annotated WULPUS GUI screenshot with increased receive gain." src="../figures/gui/hv_mux_artifact_5.png" width="45%"/></a>
+<a class="glightbox" data-desc-position="bottom" data-height="auto" data-type="image" data-width="auto" href="../figures/gui/hv_mux_art_settings_5.png"><img alt="Measurement settings with increased receive gain." src="../figures/gui/hv_mux_art_settings_5.png" width="50%"/></a></p>
+<p><em>High voltage multiplexer switching artifact with all previous settings, enabled Optimize Switching option and increased receive gain (18.2 dB). (a) Annotated WULPUS GUI screenshot. (b) Measurement settings.</em></p>
+<p>Through an employment and combination of the described methods, the switching artifact of the HV multiplexer can be greatly reduced, allowing for accurate data collection.</p>
+</article>
+</div>
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+</div>
+<button class="md-top md-icon" data-md-component="top" hidden="" type="button">
+<svg viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"></path></svg>
+  Back to top
+</button>
+</main>
+<footer class="md-footer">
+<div class="md-footer-meta md-typeset">
+<div class="md-footer-meta__inner md-grid">
+<div class="md-copyright">
+<div class="md-copyright__highlight">
+      Documentation licensed under CC BY 4.0
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" rel="noopener" target="_blank">
+      Material for MkDocs
+    </a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+<div class="md-dialog" data-md-component="dialog">
+<div class="md-dialog__inner md-typeset"></div>
+</div>
+<script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["content.code.copy", "content.code.annotate", "navigation.expand", "navigation.top", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+<script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+<script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
+document$.subscribe(()=>{ lightbox.reload(); });
+</script></body></html>
