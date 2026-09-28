@@ -49,7 +49,7 @@ This repository has the following folders:
 
 The [WULPUS User Guide](https://pulp-bio.github.io/wulpus/) covers everything about WULPUS, from assembly instructions to example measurements and troubleshooting. Markdown sources live in `docs/` (preview locally with `uv run mkdocs serve`; see [`docs/README.md`](docs/README.md)).
 
-The user guide was originally prepared by Sergei Vostrikov, Sebastian Frey, Cedric Hirschi, Josquin Tille, William Bruderer, Luca Benini, and Andrea Cossettini.
+The user guide was originally prepared by Sergei Vostrikov, Sebastian Frey, Cedric Hirschi, Josquin Tille, William Bruderer, Luca Benini, and Andrea Cossettini. The online edition, including the BioGUI chapters, was prepared by [Enzo Baraldi](https://www.linkedin.com/in/enzo-baraldi-951665243).
 
 # How to use?
 
@@ -121,6 +121,7 @@ Thanks to all the people who contributed to the WULPUS platform:
 - [Josquin Tille](https://www.linkedin.com/in/josquin-tille-829a341a7/) (Silicone package design, Documentation)
 - [William Bruderer](https://www.linkedin.com/in/william-bruderer-59ba9b26b/) (Documentation)
 - [Louis Dod](https://github.com/13Bytes) (GUI Rework)
+- [Enzo Baraldi](https://www.linkedin.com/in/enzo-baraldi-951665243) (Documentation)
 
 # License
 The following files are released under Apache License 2.0 (`Apache-2.0`) (see `sw/LICENSE`):

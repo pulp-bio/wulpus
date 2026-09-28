@@ -7,7 +7,7 @@ Integrated Systems Laboratory, Department of Information Technology and Electric
 WULPUS is a wearable ultra-low-power open-source ultrasound probe. This guide covers everything about WULPUS, from assembly instructions to example measurements and troubleshooting.
 
 !!! info "GUI documentation is being updated"
-    [How to use the probe?](how-to-get-started.md) uses **[BioGUI](https://github.com/pulp-bio/biogui)** as the default interface. The Jupyter notebook remains as the legacy option at the end of that chapter. Advanced settings, example experiments, and the MUX-artifact figures still show the legacy notebook GUI. A walkthrough of the web-based React GUI will be added later.
+    [How to use the probe?](how-to-get-started.md) and [Advanced Settings](advanced-settings.md) use **[BioGUI](https://github.com/pulp-bio/biogui)** as the default interface. The Jupyter notebook remains as the legacy option. Example experiments and the MUX-artifact figures still show the legacy notebook GUI. A walkthrough of the web-based React GUI will be added later.
 
 ## Contents
 
@@ -41,6 +41,8 @@ WULPUS is a wearable ultra-low-power open-source ultrasound probe. This guide co
     - [3.5 MUX artifact mitigation](how-to-get-started.md#mux-artifact-mitigation)
 - [4 Advanced Settings](advanced-settings.md)
     - [4.1 Transmit/Receive (TX/RX) configurations](advanced-settings.md#tx-rx-configurations)
+        - [4.1.2 Programming TX/RX configurations in BioGUI](advanced-settings.md#programming-tx-rx-configurations-via-gui)
+        - [4.1.3 Legacy Jupyter notebook](advanced-settings.md#legacy-jupyter-tx-rx-gui)
     - [4.2 Configuration of Ultrasound Subsystem](advanced-settings.md#configuration-of-ultrasound-subsystem)
 - [5 Example experiments](example-measurements.md)
     - [5.1 Water bath](example-measurements.md#water-bath)
@@ -64,6 +66,8 @@ This user guide was prepared at the [Integrated Systems Laboratory (IIS)](https:
 - William Bruderer — wbruderer@student.ethz.ch
 - Luca Benini — lbenini@iis.ee.ethz.ch
 - Andrea Cossettini — cosandre@iis.ee.ethz.ch
+
+The online edition of this guide, including the BioGUI chapters, was prepared by [Enzo Baraldi](https://www.linkedin.com/in/enzo-baraldi-951665243).
 
 ## License
 
